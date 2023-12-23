@@ -93,6 +93,16 @@ func initListTestConvertByteUnit() []testConvertByteUnit {
 			value:   "1AB",
 			wantErr: true,
 		},
+		{
+			name:    "failed empty",
+			value:   "",
+			wantErr: true,
+		},
+		{
+			name:    "failed format",
+			value:   "B1",
+			wantErr: true,
+		},
 	}
 }
 
@@ -141,6 +151,16 @@ func initListTestConvertMegaByteUnit() []testConvertMegaByteUnit {
 		{
 			name:    "failed type",
 			value:   "1AB",
+			wantErr: true,
+		},
+		{
+			name:    "failed empty",
+			value:   "",
+			wantErr: true,
+		},
+		{
+			name:    "failed format",
+			value:   "B1",
 			wantErr: true,
 		},
 	}
@@ -221,8 +241,9 @@ func initListTestConvertToString() []testConvertToString {
 			value: true,
 		},
 		{
-			name:  "success byte",
-			value: []byte{101, 133, 178, 255, 197, 19, 21, 77, 11, 38, 26, 152},
+			name:      "success chan",
+			value:     initChan(),
+			wantEmpty: true,
 		},
 	}
 }
@@ -245,6 +266,10 @@ func initListTestIsNil() []testValueGeneric {
 			name:  "chan",
 			value: initChanNil(),
 		},
+		{
+			name:  "any",
+			value: initEmptyAny(),
+		},
 	}
 }
 
@@ -265,6 +290,10 @@ func initListTestIsNonNil() []testValueGeneric {
 		{
 			name:  "chan",
 			value: initChan(),
+		},
+		{
+			name:  "any",
+			value: initEmptyAny(),
 		},
 	}
 }
@@ -499,6 +528,150 @@ func initListTestIsStructNotEmpty() []testValueGeneric {
 	}
 }
 
+func initListTestIsSliceEmpty() []testValueGeneric {
+	return []testValueGeneric{
+		{
+			name:  "success",
+			value: []any{},
+		},
+		{
+			name:    "failed",
+			value:   "",
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestIsSliceNotEmpty() []testValueGeneric {
+	return []testValueGeneric{
+		{
+			name:  "success",
+			value: []any{"test", 23, 123},
+		},
+		{
+			name:    "failed",
+			value:   "",
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestIsStringEmpty() []testValueGeneric {
+	return []testValueGeneric{
+		{
+			name:  "success",
+			value: *initEmptyPointerString(),
+		},
+		{
+			name:  "success pointer empty",
+			value: initEmptyPointerString(),
+		},
+		{
+			name:    "failed",
+			value:   23,
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestIsStringNotEmpty() []testValueGeneric {
+	return []testValueGeneric{
+		{
+			name:  "success",
+			value: "not empty",
+		},
+		{
+			name:    "failed",
+			value:   23,
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestIsIntEmpty() []testValueGeneric {
+	return []testValueGeneric{
+		{
+			name:  "success",
+			value: 0,
+		},
+		{
+			name:    "failed",
+			value:   "",
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestIsIntNotEmpty() []testValueGeneric {
+	return []testValueGeneric{
+		{
+			name:  "success",
+			value: 23,
+		},
+		{
+			name:    "failed",
+			value:   "",
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestIsFloatEmpty() []testValueGeneric {
+	return []testValueGeneric{
+		{
+			name:  "success",
+			value: 0.0,
+		},
+		{
+			name:    "failed",
+			value:   "",
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestIsFloatNotEmpty() []testValueGeneric {
+	return []testValueGeneric{
+		{
+			name:  "success",
+			value: 23.23,
+		},
+		{
+			name:    "failed",
+			value:   "",
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestIsBoolEmpty() []testValueGeneric {
+	return []testValueGeneric{
+		{
+			name:  "success",
+			value: false,
+		},
+		{
+			name:    "failed",
+			value:   "",
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestIsBoolNotEmpty() []testValueGeneric {
+	return []testValueGeneric{
+		{
+			name:  "success",
+			value: true,
+		},
+		{
+			name:    "failed",
+			value:   "",
+			wantErr: true,
+		},
+	}
+}
+
 func initTestStruct() *testStruct {
 	return &testStruct{
 		Name:      "Foo Bar",
@@ -536,6 +709,15 @@ func initChanNil() chan string {
 
 func initChan() chan string {
 	return make(chan string, 1)
+}
+
+func initEmptyAny() any {
+	var a any
+	return a
+}
+func initEmptyPointerString() *string {
+	var a string
+	return &a
 }
 
 func panicRecovery(t *testing.T, wantErr bool) {

@@ -13,13 +13,10 @@ func ConvertByteUnit(v string) (int, error) {
 	errDefault := errors.New("byte unit mal formatted ex: 100MB")
 	regex := regexp.MustCompile(`^(\d+)\s?(\w+)?$`)
 	match := regex.FindAllStringSubmatch(v, -1)
-	if len(match) < 1 && len(match[0]) < 3 {
+	if len(match) == 0 || len(match[0]) == 0 || len(match[0]) < 3 {
 		return 0, errDefault
 	}
-	vInt, err := strconv.Atoi(match[0][1])
-	if err != nil {
-		return 0, err
-	}
+	vInt, _ := strconv.Atoi(match[0][1])
 	switch match[0][2] {
 	case "B":
 		return vInt, nil
@@ -48,13 +45,10 @@ func ConvertMegaByteUnit(v string) (int, error) {
 	errDefault := errors.New("byte unit mal formatted ex: 100MB")
 	regex := regexp.MustCompile(`^(\d+)\s?(\w+)?$`)
 	match := regex.FindAllStringSubmatch(v, -1)
-	if len(match) < 1 && len(match[0]) < 3 {
+	if len(match) == 0 || len(match[0]) == 0 || len(match[0]) < 3 {
 		return 0, errDefault
 	}
-	vInt, err := strconv.Atoi(match[0][1])
-	if err != nil {
-		return 0, err
-	}
+	vInt, _ := strconv.Atoi(match[0][1])
 	switch match[0][2] {
 	case "MB":
 		return vInt, nil
@@ -71,7 +65,7 @@ func ConvertMegaByteUnit(v string) (int, error) {
 	case "YB":
 		return vInt * int(math.Pow(1024, 6)), nil
 	default:
-		return 0, nil
+		return 0, errDefault
 	}
 }
 
@@ -95,6 +89,8 @@ func convertToStringByType(a any) string {
 		return strconv.Itoa(t)
 	case int8:
 		return strconv.Itoa(int(t))
+	case uint:
+		return strconv.Itoa(int(t))
 	case uint8:
 		return strconv.Itoa(int(t))
 	case int16:
@@ -115,8 +111,6 @@ func convertToStringByType(a any) string {
 		return strconv.FormatFloat(float64(t), 'f', -1, 32)
 	case float64:
 		return strconv.FormatFloat(t, 'f', -1, 64)
-	case []byte:
-		return string(t)
 	case string:
 		return t
 	default:

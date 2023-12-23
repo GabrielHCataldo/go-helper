@@ -120,3 +120,103 @@ func TestIsStructNotEmpty(t *testing.T) {
 		})
 	}
 }
+
+func TestIsSliceEmpty(t *testing.T) {
+	for _, tt := range initListTestIsSliceEmpty() {
+		t.Run(tt.name, func(t *testing.T) {
+			defer panicRecovery(t, tt.wantErr)
+			isEmpty := IsSliceEmpty(tt.value)
+			logger.Info("IsSliceEmpty:", isEmpty)
+		})
+	}
+}
+
+func TestIsSliceNotEmpty(t *testing.T) {
+	for _, tt := range initListTestIsSliceNotEmpty() {
+		t.Run(tt.name, func(t *testing.T) {
+			defer panicRecovery(t, tt.wantErr)
+			isNotEmpty := IsSliceNotEmpty(tt.value)
+			logger.Info("IsSliceNotEmpty:", isNotEmpty)
+		})
+	}
+}
+
+func TestIsStringEmpty(t *testing.T) {
+	for _, tt := range initListTestIsStringEmpty() {
+		t.Run(tt.name, func(t *testing.T) {
+			defer panicRecovery(t, tt.wantErr)
+			isEmpty := IsStringEmpty(tt.value)
+			logger.Info("IsStringEmpty:", isEmpty)
+		})
+	}
+}
+
+func TestIsStringNotEmpty(t *testing.T) {
+	for _, tt := range initListTestIsStringNotEmpty() {
+		t.Run(tt.name, func(t *testing.T) {
+			defer panicRecovery(t, tt.wantErr)
+			isNotEmpty := IsStringNotEmpty(tt.value)
+			logger.Info("IsStringNotEmpty:", isNotEmpty)
+		})
+	}
+}
+
+func TestIsIntEmpty(t *testing.T) {
+	for _, tt := range initListTestIsIntEmpty() {
+		t.Run(tt.name, func(t *testing.T) {
+			defer panicRecovery(t, tt.wantErr)
+			isEmpty := IsIntEmpty(tt.value)
+			logger.Info("IsIntEmpty:", isEmpty)
+		})
+	}
+}
+
+func TestIsIntNotEmpty(t *testing.T) {
+	for _, tt := range initListTestIsIntNotEmpty() {
+		t.Run(tt.name, func(t *testing.T) {
+			defer panicRecovery(t, tt.wantErr)
+			isNotEmpty := IsIntNotEmpty(tt.value)
+			logger.Info("IsIntNotEmpty:", isNotEmpty)
+		})
+	}
+}
+
+func TestIsFloatEmpty(t *testing.T) {
+	for _, tt := range initListTestIsFloatEmpty() {
+		t.Run(tt.name, func(t *testing.T) {
+			defer panicRecovery(t, tt.wantErr)
+			isEmpty := IsFloatEmpty(tt.value)
+			logger.Info("IsFloatEmpty:", isEmpty)
+		})
+	}
+}
+
+func TestIsFloatNotEmpty(t *testing.T) {
+	for _, tt := range initListTestIsFloatNotEmpty() {
+		t.Run(tt.name, func(t *testing.T) {
+			defer panicRecovery(t, tt.wantErr)
+			isNotEmpty := IsFloatNotEmpty(tt.value)
+			logger.Info("IsFloatNotEmpty:", isNotEmpty)
+		})
+	}
+}
+
+func TestIsBoolEmpty(t *testing.T) {
+	for _, tt := range initListTestIsBoolEmpty() {
+		t.Run(tt.name, func(t *testing.T) {
+			defer panicRecovery(t, tt.wantErr)
+			isEmpty := IsBoolEmpty(tt.value)
+			logger.Info("IsBoolEmpty:", isEmpty)
+		})
+	}
+}
+
+func TestIsBoolNotEmpty(t *testing.T) {
+	for _, tt := range initListTestIsBoolNotEmpty() {
+		t.Run(tt.name, func(t *testing.T) {
+			defer panicRecovery(t, tt.wantErr)
+			isNotEmpty := IsBoolNotEmpty(tt.value)
+			logger.Info("IsBoolNotEmpty:", isNotEmpty)
+		})
+	}
+}

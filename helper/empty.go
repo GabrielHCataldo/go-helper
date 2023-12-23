@@ -136,7 +136,7 @@ func IsBoolEmpty(v any) bool {
 }
 
 func IsBoolNotEmpty(v any) bool {
-	return !IsFloatEmpty(v)
+	return !IsBoolEmpty(v)
 }
 
 func isReflectZero(v any) bool {

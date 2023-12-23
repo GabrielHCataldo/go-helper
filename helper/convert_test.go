@@ -26,7 +26,7 @@ func TestConvertMegaByteUnit(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ConvertMegaByteUnit(tt.value)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertMegaByteUnit() error = %v, wantErr %v", err, tt.wantErr)
+				logger.Errorf("ConvertMegaByteUnit() error = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else if err != nil {
 				logger.Info("err expected:", err)
@@ -42,7 +42,7 @@ func TestConvertToString(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result := ConvertToString(tt.value)
 			if (IsEmpty(result)) != tt.wantEmpty {
-				logger.Errorf("ConvertToString() result = %v, wantEmpty %v", result, tt.wantEmpty)
+				logger.Errorf("ConvertToString() result = %v, wantEmpty = %v", result, tt.wantEmpty)
 				t.Fail()
 			} else {
 				logger.Info("result:", result)
