@@ -23,9 +23,11 @@ func Validate() *validator.Validate {
 	_ = customValidate.RegisterValidation("bcrypt", validateBcrypt)
 	_ = customValidate.RegisterValidation("postal_code", validatePostalCode)
 	_ = customValidate.RegisterValidation("bearer", validateBearer)
-	_ = customValidate.RegisterValidation("before_now", validateBirthDate) // todo -> desenvolver
-	_ = customValidate.RegisterValidation("after_now", validateBirthDate)  // todo -> desenvolver
-	_ = customValidate.RegisterValidation("date_now", validateBirthDate)   // todo -> desenvolver
+	_ = customValidate.RegisterValidation("before_now", validateBirthDate)      // todo -> desenvolver
+	_ = customValidate.RegisterValidation("before_date_now", validateBirthDate) // todo -> desenvolver
+	_ = customValidate.RegisterValidation("after_now", validateBirthDate)       // todo -> desenvolver
+	_ = customValidate.RegisterValidation("after_date_now", validateBirthDate)  // todo -> desenvolver
+	_ = customValidate.RegisterValidation("date_now", validateBirthDate)        // todo -> desenvolver
 	_ = customValidate.RegisterValidation("cpfcnpj", validateCpfCnpj)
 	return customValidate
 }
