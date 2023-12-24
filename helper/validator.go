@@ -17,7 +17,8 @@ func Validate() *validator.Validate {
 	}
 	customValidate = validator.New()
 	_ = customValidate.RegisterValidation("enum", validateEnum)
-	_ = customValidate.RegisterValidation("phone", validatePhone)
+	_ = customValidate.RegisterValidation("phone_us", validatePhoneUs)
+	_ = customValidate.RegisterValidation("phone_br", validatePhoneBr)
 	_ = customValidate.RegisterValidation("full_name", validateFullName)
 	_ = customValidate.RegisterValidation("bcrypt", validateBcrypt)
 	_ = customValidate.RegisterValidation("postal_code", validatePostalCode)
@@ -29,8 +30,12 @@ func Validate() *validator.Validate {
 	return customValidate
 }
 
-func validatePhone(fl validator.FieldLevel) bool {
-	return IsPhoneNumber(fl.Field().String())
+func validatePhoneBr(fl validator.FieldLevel) bool {
+	return IsPhoneNumber(fl.Field().String(), "BR")
+}
+
+func validatePhoneUs(fl validator.FieldLevel) bool {
+	return IsPhoneNumber(fl.Field().String(), "US")
 }
 
 func validateFullName(fl validator.FieldLevel) bool {

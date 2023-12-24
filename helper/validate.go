@@ -8,7 +8,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net"
 	"net/url"
-	"reflect"
 	"regexp"
 	"strings"
 	"time"
@@ -19,18 +18,10 @@ func IsUrl(v string) bool {
 	return err == nil
 }
 
-func IsPhoneNumber(v string) bool {
-	num, err := phonenumbers.Parse(v, "")
-	if err == nil {
-		return phonenumbers.IsValidNumber(num)
-	}
-	return false
-}
-
-func IsPhoneNumberPerRegion(v, defaultRegion string) bool {
+func IsPhoneNumber(v, defaultRegion string) bool {
 	num, err := phonenumbers.Parse(v, defaultRegion)
 	if err == nil {
-		return phonenumbers.IsValidNumberForRegion(num, defaultRegion)
+		return phonenumbers.IsValidNumber(num)
 	}
 	return false
 }
@@ -55,11 +46,7 @@ func IsPostalCode(v string) bool {
 	if !IsString(v) {
 		panic("value type is not string")
 	}
-	elem := reflect.ValueOf(v)
-	if IsPointer(v) || IsInterface(v) {
-		elem = elem.Elem()
-	}
-	s := elem.String()
+	s := GetRealValue(v).(string)
 	var postalCodes []map[string]string
 	_ = GetFileJson("../postal-codes.json", &postalCodes)
 	for _, postalCode := range postalCodes {
@@ -78,11 +65,7 @@ func IsPostalCodePerCountry(v any, countryIso string) bool {
 	if !IsString(v) {
 		panic("value type is not string")
 	}
-	elem := reflect.ValueOf(v)
-	if IsPointer(v) || IsInterface(v) {
-		elem = elem.Elem()
-	}
-	s := elem.String()
+	s := GetRealValue(v).(string)
 	var postalCodes []map[string]string
 	_ = GetFileJson("./postal-codes.json", &postalCodes)
 	for _, postalCode := range postalCodes {
@@ -107,15 +90,12 @@ func IsObjectID(ID *string) bool {
 }
 
 func IsBase64(v any) bool {
-	if IsString(v) {
-		elem := reflect.ValueOf(v)
-		if IsPointer(v) || IsInterface(v) {
-			elem = elem.Elem()
-		}
-		regex := regexp.MustCompile(`^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$`)
-		return regex.MatchString(elem.String())
+	if !IsString(v) {
+		return false
 	}
-	return false
+	str := GetRealValue(v).(string)
+	regex := regexp.MustCompile(`^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$`)
+	return regex.MatchString(str)
 }
 
 func IsPrivateIP(v string) bool {

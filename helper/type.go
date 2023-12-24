@@ -37,7 +37,7 @@ func IsJson(v any) bool {
 		t = t.Elem()
 	}
 	switch t.Kind() {
-	case reflect.Struct, reflect.Map:
+	case reflect.Struct, reflect.Map, reflect.Slice, reflect.Array:
 		return true
 	default:
 		return false

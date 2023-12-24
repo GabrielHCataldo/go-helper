@@ -7,7 +7,7 @@ import (
 
 func TestFormatPhoneNumber(t *testing.T) {
 	s := "47997576130"
-	result := FormatPhoneNumber(s)
+	result := FormatPhoneNumber(s, "BR")
 	logger.Info("FormatPhoneNumber:", result)
 }
 
@@ -41,6 +41,18 @@ func TestFormatFloat64(t *testing.T) {
 	logger.Info("FormatFloat64:", result)
 }
 
+func TestFormatEFloat32(t *testing.T) {
+	f := 1.23
+	result := FormatEFloat32(float32(f))
+	logger.Info("FormatEFloat32:", result)
+}
+
+func TestFormatEFloat64(t *testing.T) {
+	f := 12.23
+	result := FormatEFloat64(f)
+	logger.Info("FormatEFloat64:", result)
+}
+
 func TestFormatMoney(t *testing.T) {
 	f := 12.23
 	result := FormatMoney(f, 2, "R$ ", ".", ",")
@@ -55,30 +67,30 @@ func TestFormatPercentage(t *testing.T) {
 
 func TestHideCpf(t *testing.T) {
 	s := "02104996643"
-	result := HideCpf(s)
+	result := HideCpf(s, true)
 	logger.Info("HideCpf:", result)
 }
 
 func TestHideCnpj(t *testing.T) {
 	s := "45991590000108"
-	result := HideCnpj(s)
+	result := HideCnpj(s, false)
 	logger.Info("HideCnpj:", result)
 }
 
 func TestHidePhoneNumber(t *testing.T) {
 	s := "47997576130"
-	result := HidePhoneNumber(s)
+	result := HidePhoneNumber(s, "BR", true)
 	logger.Info("HidePhoneNumber:", result)
 }
 
 func TestHidePhoneNumberNational(t *testing.T) {
 	s := "47997576130"
-	result := HidePhoneNumberNational(s, "BR")
+	result := HidePhoneNumberNational(s, "BR", false)
 	logger.Info("HidePhoneNumberNational:", result)
 }
 
 func TestHideEmail(t *testing.T) {
 	s := "gabrielcataldo@gmail.com"
-	result := HideEmail(s)
+	result := HideEmail(s, false)
 	logger.Info("HideEmail:", result)
 }

@@ -9,6 +9,24 @@ import (
 	"strings"
 )
 
+func IsNumeric(v any) bool {
+	if !IsString(v) {
+		panic("value type is not a string")
+	}
+	s := GetRealValue(v).(string)
+	regex := regexp.MustCompile(`^[0-9]+$`)
+	return regex.MatchString(s)
+}
+
+func IsLetter(v any) bool {
+	if !IsString(v) {
+		panic("value type is not a string")
+	}
+	s := GetRealValue(v).(string)
+	regex := regexp.MustCompile(`^[A-Za-z]+$`)
+	return regex.MatchString(s)
+}
+
 func GetFirstLastName(v string) string {
 	split := strings.Split(v, " ")
 	firstName := split[0]

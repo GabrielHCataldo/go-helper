@@ -9,6 +9,7 @@ import (
 	"strconv"
 )
 
+// ConvertByteUnit convert byte unit text to int ex: 1KB = 1024
 func ConvertByteUnit(v string) (int, error) {
 	errDefault := errors.New("byte unit mal formatted ex: 100MB")
 	regex := regexp.MustCompile(`^(\d+)\s?(\w+)?$`)
@@ -41,6 +42,7 @@ func ConvertByteUnit(v string) (int, error) {
 	}
 }
 
+// ConvertMegaByteUnit convert megabyte unit text to int ex: 1GB = 1024
 func ConvertMegaByteUnit(v string) (int, error) {
 	errDefault := errors.New("byte unit mal formatted ex: 100MB")
 	regex := regexp.MustCompile(`^(\d+)\s?(\w+)?$`)
@@ -69,6 +71,7 @@ func ConvertMegaByteUnit(v string) (int, error) {
 	}
 }
 
+// ConvertToString convert any value to beautiful string
 func ConvertToString(a any) string {
 	v := reflect.ValueOf(a)
 	if v.Type().Kind() == reflect.Pointer {
@@ -81,6 +84,15 @@ func ConvertToString(a any) string {
 	default:
 		return convertToStringByType(a)
 	}
+}
+
+// GetRealValue get real value by any, if pointer or interface return value non pointer or interface
+func GetRealValue(v any) any {
+	elem := reflect.ValueOf(v)
+	if IsPointer(v) || IsInterface(v) {
+		elem = elem.Elem()
+	}
+	return elem.Interface()
 }
 
 func convertToStringByType(a any) string {
