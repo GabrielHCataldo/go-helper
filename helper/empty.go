@@ -2,7 +2,6 @@ package helper
 
 import (
 	"reflect"
-	"regexp"
 	"strings"
 )
 
@@ -97,8 +96,7 @@ func IsStringEmpty(v any) bool {
 	if IsPointer(v) || IsInterface(v) {
 		elem = elem.Elem()
 	}
-	regex := regexp.MustCompile(`\s+`)
-	str := strings.TrimSpace(regex.ReplaceAllString(elem.String(), ""))
+	str := strings.TrimSpace(CleanAllRepeatSpace(elem.String()))
 	return len(str) == 0
 }
 

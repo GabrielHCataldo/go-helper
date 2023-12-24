@@ -32,6 +32,18 @@ func FormatCpf(v string) string {
 	return v
 }
 
+func FormatCnpj(v string) string {
+	if IsCnpj(v) {
+		cnpj := cpfcnpj.NewCNPJ(cpfcnpj.Clean(v))
+		return cnpj.String()
+	}
+	return v
+}
+
+func FormatFloat32(v float32) string {
+	return strconv.FormatFloat(float64(v), 'f', -1, 32)
+}
+
 func FormatFloat64(v float64) string {
 	return strconv.FormatFloat(v, 'f', -1, 64)
 }
@@ -54,18 +66,10 @@ func HideCpf(v string) string {
 	return v
 }
 
-func FormatCnpj(v string) string {
-	if IsCnpj(v) {
-		cnpj := cpfcnpj.NewCNPJ(cpfcnpj.Clean(v))
-		return cnpj.String()
-	}
-	return v
-}
-
 func HideCnpj(v string) string {
 	//45.991.590/0001-08 to 45.991.590/****-**
 	if IsCpf(v) {
-		formatValue := FormatCpf(v)
+		formatValue := FormatCnpj(v)
 		return formatValue[0:10] + "/****-**"
 	}
 	return v

@@ -11,12 +11,12 @@ import (
 
 func GetFirstLastName(v string) string {
 	split := strings.Split(v, " ")
-	if len(split) == 0 {
+	if IsEmpty(split) {
 		return v
 	}
 	firstName := split[0]
 	lastName := split[len(split)-1]
-	if firstName != lastName {
+	if IsNotEmpty(lastName) && firstName != lastName {
 		return firstName + " " + lastName
 	}
 	return firstName
@@ -38,11 +38,11 @@ func GetFileJson(uri string, dest any) error {
 	return json.Unmarshal(bytes, dest)
 }
 
-func RandomNumber(min, max int) string {
+func RandomNumberStr(min, max int) string {
 	return strconv.Itoa(rand.Intn(min-max+1) + min)
 }
 
-func ReplaceAllRepeatSpace(v string) string {
+func CleanAllRepeatSpace(v string) string {
 	regex := regexp.MustCompile(` +`)
 	regex2 := regexp.MustCompile(`^\s+|\s+$|\s+[\r\t\f\v]`)
 	v = regex.ReplaceAllString(v, " ")

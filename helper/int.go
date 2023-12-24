@@ -1,5 +1,9 @@
 package helper
 
+import (
+	"math/rand"
+)
+
 func MinInt(v, min int) int {
 	if v < min {
 		return min
@@ -40,4 +44,8 @@ func MaxInt64(v, max int64) int64 {
 		return max
 	}
 	return v
+}
+
+func RandomNumber(min, max int) int {
+	return rand.Intn(min-max+1) + min
 }

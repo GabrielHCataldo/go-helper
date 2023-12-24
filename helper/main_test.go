@@ -36,6 +36,25 @@ type testValueGeneric struct {
 	wantErr bool
 }
 
+type testIntMinMax struct {
+	name  string
+	value int
+	min   int
+	max   int
+}
+
+type testStringValue struct {
+	name    string
+	value   string
+	wantErr bool
+}
+
+type testFile struct {
+	name    string
+	uri     string
+	wantErr bool
+}
+
 func initListTestConvertByteUnit() []testConvertByteUnit {
 	return []testConvertByteUnit{
 		{
@@ -668,6 +687,79 @@ func initListTestIsBoolNotEmpty() []testValueGeneric {
 			name:    "failed",
 			value:   "",
 			wantErr: true,
+		},
+	}
+}
+
+func initListTestIntMin() []testIntMinMax {
+	return []testIntMinMax{
+		{
+			name:  "value",
+			min:   0,
+			value: 1,
+		},
+		{
+			name:  "min",
+			min:   0,
+			value: -1,
+		},
+	}
+}
+
+func initListTestIntMax() []testIntMinMax {
+	return []testIntMinMax{
+		{
+			name:  "value",
+			max:   3,
+			value: 2,
+		},
+		{
+			name:  "max",
+			max:   3,
+			value: 4,
+		},
+	}
+}
+
+func initListTestGetFirstLastName() []testStringValue {
+	return []testStringValue{
+		{
+			name:  "full",
+			value: "Gabriel Cataldo",
+		},
+		{
+			name:  "partial",
+			value: "Gabriel",
+		},
+		{
+			name:  "empty",
+			value: "",
+		},
+	}
+}
+
+func initListTestGetFileString() []testFile {
+	return []testFile{
+		{
+			name: "success",
+			uri:  "postal-codes.json",
+		},
+		{
+			name: "failed",
+			uri:  "",
+		},
+	}
+}
+
+func initListTestGetFileJson() []testFile {
+	return []testFile{
+		{
+			name: "success",
+			uri:  "postal-codes.json",
+		},
+		{
+			name: "failed",
+			uri:  "",
 		},
 	}
 }
