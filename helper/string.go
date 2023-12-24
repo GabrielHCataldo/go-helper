@@ -11,9 +11,6 @@ import (
 
 func GetFirstLastName(v string) string {
 	split := strings.Split(v, " ")
-	if IsEmpty(split) {
-		return v
-	}
 	firstName := split[0]
 	lastName := split[len(split)-1]
 	if IsNotEmpty(lastName) && firstName != lastName {
@@ -39,7 +36,7 @@ func GetFileJson(uri string, dest any) error {
 }
 
 func RandomNumberStr(min, max int) string {
-	return strconv.Itoa(rand.Intn(min-max+1) + min)
+	return strconv.Itoa(rand.Intn(MinInt(min-max, 1)+1) + min)
 }
 
 func CleanAllRepeatSpace(v string) string {

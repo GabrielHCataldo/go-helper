@@ -47,5 +47,5 @@ func MaxInt64(v, max int64) int64 {
 }
 
 func RandomNumber(min, max int) int {
-	return rand.Intn(min-max+1) + min
+	return rand.Intn(MinInt(min-max, 1)+1) + min
 }

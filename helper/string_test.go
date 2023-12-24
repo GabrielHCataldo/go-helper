@@ -33,7 +33,7 @@ func TestGetFileString(t *testing.T) {
 func TestGetFileJson(t *testing.T) {
 	for _, tt := range initListTestGetFileJson() {
 		t.Run(tt.name, func(t *testing.T) {
-			var dest map[string]any
+			var dest []map[string]any
 			err := GetFileJson(tt.uri, &dest)
 			if (err != nil) != tt.wantErr {
 				logger.Errorf("GetFileJson() error = %v, wantErr %v", err, tt.wantErr)
@@ -48,7 +48,7 @@ func TestGetFileJson(t *testing.T) {
 }
 
 func TestRandomNumberStr(t *testing.T) {
-	result := RandomNumberStr(0, 100)
+	result := RandomNumberStr(1, 100)
 	logger.Info("RandomNumberStr:", result)
 }
 

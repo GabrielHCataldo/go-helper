@@ -60,6 +60,6 @@ func TestMaxInt64(t *testing.T) {
 }
 
 func TestRandomNumber(t *testing.T) {
-	result := RandomNumber(0, 100)
+	result := RandomNumber(1, 100)
 	logger.Info("RandomNumber:", result)
 }

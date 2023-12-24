@@ -742,11 +742,12 @@ func initListTestGetFileString() []testFile {
 	return []testFile{
 		{
 			name: "success",
-			uri:  "postal-codes.json",
+			uri:  "../postal-codes.json",
 		},
 		{
-			name: "failed",
-			uri:  "",
+			name:    "failed",
+			uri:     "",
+			wantErr: true,
 		},
 	}
 }
@@ -755,11 +756,12 @@ func initListTestGetFileJson() []testFile {
 	return []testFile{
 		{
 			name: "success",
-			uri:  "postal-codes.json",
+			uri:  "../postal-codes.json",
 		},
 		{
-			name: "failed",
-			uri:  "",
+			name:    "failed",
+			uri:     "",
+			wantErr: true,
 		},
 	}
 }

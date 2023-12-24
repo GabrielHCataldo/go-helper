@@ -61,7 +61,7 @@ func IsPostalCode(v string) bool {
 	}
 	s := elem.String()
 	var postalCodes []map[string]string
-	_ = GetFileJson("postal-codes.json", &postalCodes)
+	_ = GetFileJson("../postal-codes.json", &postalCodes)
 	for _, postalCode := range postalCodes {
 		regexStr := postalCode["Regex"]
 		if IsNotEmpty(regexStr) {
@@ -84,7 +84,7 @@ func IsPostalCodePerCountry(v any, countryIso string) bool {
 	}
 	s := elem.String()
 	var postalCodes []map[string]string
-	_ = GetFileJson("postal-codes.json", &postalCodes)
+	_ = GetFileJson("./postal-codes.json", &postalCodes)
 	for _, postalCode := range postalCodes {
 		if postalCode["ISO"] == countryIso {
 			regexStr := postalCode["Regex"]
