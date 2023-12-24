@@ -29,7 +29,7 @@ func FormatPhoneNumberNational(v, defaultRegion string) string {
 // FormatCpf format string to cpf if valid ex: 02104996642 -> 021.049.966-43
 func FormatCpf(v string) string {
 	if IsCpf(v) {
-		cpf := cpfcnpj.NewCPF(cpfcnpj.Clean(v))
+		cpf := cpfcnpj.NewCPF(v)
 		v = cpf.String()
 	}
 	return v
@@ -38,7 +38,7 @@ func FormatCpf(v string) string {
 // FormatCnpj format string to cnpj if valid ex: 45991590000108 -> 45.991.590/0001-08
 func FormatCnpj(v string) string {
 	if IsCnpj(v) {
-		cnpj := cpfcnpj.NewCNPJ(cpfcnpj.Clean(v))
+		cnpj := cpfcnpj.NewCNPJ(v)
 		v = cnpj.String()
 	}
 	return v
