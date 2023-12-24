@@ -1,6 +1,9 @@
 package helper
 
-import "reflect"
+import (
+	"reflect"
+	"time"
+)
 
 func IsPointer(v any) bool {
 	t := reflect.TypeOf(v)
@@ -190,4 +193,15 @@ func IsBool(v any) bool {
 		t = t.Elem()
 	}
 	return t.Kind() == reflect.Bool
+}
+
+func IsTime(v any) bool {
+	t := reflect.TypeOf(v)
+	vr := reflect.ValueOf(v)
+	if IsPointer(v) {
+		t = t.Elem()
+		vr = vr.Elem()
+	}
+	_, ok := vr.Interface().(time.Time)
+	return t.Kind() == reflect.Struct && ok
 }

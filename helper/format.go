@@ -7,11 +7,12 @@ import (
 	"strconv"
 )
 
-// FormatPhoneNumber format string to international phone number ex: 47997576130 -> +55 47 99757-6130
+// FormatPhoneNumber format string to international phone number if valid value string
+// ex: 47997576130 -> +55 47 99757-6130
 func FormatPhoneNumber(v, defaultRegion string) string {
 	num, err := phonenumbers.Parse(v, defaultRegion)
 	if err == nil {
-		return phonenumbers.Format(num, phonenumbers.INTERNATIONAL)
+		v = phonenumbers.Format(num, phonenumbers.INTERNATIONAL)
 	}
 	return v
 }
@@ -20,7 +21,7 @@ func FormatPhoneNumber(v, defaultRegion string) string {
 func FormatPhoneNumberNational(v, defaultRegion string) string {
 	num, err := phonenumbers.Parse(v, defaultRegion)
 	if err == nil {
-		return phonenumbers.Format(num, phonenumbers.NATIONAL)
+		v = phonenumbers.Format(num, phonenumbers.NATIONAL)
 	}
 	return v
 }
@@ -29,7 +30,7 @@ func FormatPhoneNumberNational(v, defaultRegion string) string {
 func FormatCpf(v string) string {
 	if IsCpf(v) {
 		cpf := cpfcnpj.NewCPF(cpfcnpj.Clean(v))
-		return cpf.String()
+		v = cpf.String()
 	}
 	return v
 }
