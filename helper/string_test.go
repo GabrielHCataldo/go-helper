@@ -5,9 +5,28 @@ import (
 	"testing"
 )
 
+func TestIsNumeric(t *testing.T) {
+	for _, tt := range initListTestIsNumeric() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsNumeric(tt.value)
+			logger.Info("IsNumeric:", result)
+		})
+	}
+}
+
+func TestIsLetter(t *testing.T) {
+	for _, tt := range initListTestIsLetter() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsLetter(tt.value)
+			logger.Info("IsLetter:", result)
+		})
+	}
+}
+
 func TestGetFirstLastName(t *testing.T) {
 	for _, tt := range initListTestGetFirstLastName() {
 		t.Run(tt.name, func(t *testing.T) {
+			defer panicRecovery(t, tt.wantErr)
 			result := GetFirstLastName(tt.value)
 			logger.Info("GetFirstLastName:", result)
 		})

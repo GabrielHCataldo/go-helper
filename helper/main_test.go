@@ -12,25 +12,13 @@ type testStruct struct {
 	Balance   float64
 }
 
-type testConvertByteUnit struct {
+type testGenericValues struct {
 	name    string
-	value   string
+	value   []any
 	wantErr bool
 }
 
-type testConvertMegaByteUnit struct {
-	name    string
-	value   string
-	wantErr bool
-}
-
-type testConvertToString struct {
-	name      string
-	value     any
-	wantEmpty bool
-}
-
-type testValueGeneric struct {
+type testGenericValue struct {
 	name    string
 	value   any
 	wantErr bool
@@ -43,20 +31,14 @@ type testIntMinMax struct {
 	max   int
 }
 
-type testStringValue struct {
-	name    string
-	value   string
-	wantErr bool
-}
-
 type testFile struct {
 	name    string
 	uri     string
 	wantErr bool
 }
 
-func initListTestConvertByteUnit() []testConvertByteUnit {
-	return []testConvertByteUnit{
+func initListTestConvertByteUnit() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:    "success B",
 			value:   "1B",
@@ -125,8 +107,8 @@ func initListTestConvertByteUnit() []testConvertByteUnit {
 	}
 }
 
-func initListTestConvertMegaByteUnit() []testConvertMegaByteUnit {
-	return []testConvertMegaByteUnit{
+func initListTestConvertMegaByteUnit() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:    "success MB",
 			value:   "1MB",
@@ -185,8 +167,8 @@ func initListTestConvertMegaByteUnit() []testConvertMegaByteUnit {
 	}
 }
 
-func initListTestConvertToString() []testConvertToString {
-	return []testConvertToString{
+func initListTestConvertToString() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success string",
 			value: "test",
@@ -260,15 +242,98 @@ func initListTestConvertToString() []testConvertToString {
 			value: true,
 		},
 		{
-			name:      "success chan",
-			value:     initChan(),
-			wantEmpty: true,
+			name:    "success chan",
+			value:   initChan(),
+			wantErr: true,
 		},
 	}
 }
 
-func initListTestIsNil() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestConvertToTime() []testGenericValue {
+	return []testGenericValue{
+		{
+			name:    "string",
+			value:   "test",
+			wantErr: true,
+		},
+		{
+			name:    "struct",
+			value:   *initTestStruct(),
+			wantErr: true,
+		},
+		{
+			name:    "pointer struct",
+			value:   initTestStruct(),
+			wantErr: true,
+		},
+		{
+			name:    "slice",
+			value:   []int{12, 23, 45, 456, 467578},
+			wantErr: true,
+		},
+		{
+			name:    "map",
+			value:   *initTestMap(),
+			wantErr: true,
+		},
+		{
+			name:  "int",
+			value: 21129380912381,
+		},
+		{
+			name:  "int8",
+			value: int8(21),
+		},
+		{
+			name:  "int16",
+			value: int16(21233),
+		},
+		{
+			name:  "int32",
+			value: int32(2112312312),
+		},
+		{
+			name:  "int64",
+			value: int64(912380912312),
+		},
+		{
+			name:  "uint",
+			value: uint(21),
+		},
+		{
+			name:  "uint8",
+			value: uint8(21),
+		},
+		{
+			name:  "uint16",
+			value: uint16(21232),
+		},
+		{
+			name:  "uint32",
+			value: uint32(2112312312),
+		},
+		{
+			name:  "uint64",
+			value: uint64(9123809),
+		},
+		{
+			name:  "float32",
+			value: float32(122132134324534523.63),
+		},
+		{
+			name:  "float64",
+			value: 12123129318230234.1293821,
+		},
+		{
+			name:    "bool",
+			value:   true,
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestIsNil() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "pointer",
 			value: initTestStruct(),
@@ -292,8 +357,8 @@ func initListTestIsNil() []testValueGeneric {
 	}
 }
 
-func initListTestIsNonNil() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsNonNil() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "pointer",
 			value: initPointerNil(),
@@ -317,8 +382,8 @@ func initListTestIsNonNil() []testValueGeneric {
 	}
 }
 
-func initListTestIsEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "string",
 			value: "",
@@ -374,8 +439,8 @@ func initListTestIsEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsNotEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsNotEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "string",
 			value: "test",
@@ -427,8 +492,8 @@ func initListTestIsNotEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsPointerNil() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsPointerNil() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: initPointerNil(),
@@ -441,8 +506,8 @@ func initListTestIsPointerNil() []testValueGeneric {
 	}
 }
 
-func initListTestIsPointerNonNil() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsPointerNonNil() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: initTestStruct(),
@@ -455,8 +520,8 @@ func initListTestIsPointerNonNil() []testValueGeneric {
 	}
 }
 
-func initListTestIsJsonEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsJsonEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success struct",
 			value: testStruct{},
@@ -473,8 +538,8 @@ func initListTestIsJsonEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsJsonNotEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsJsonNotEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success struct",
 			value: *initTestStruct(),
@@ -491,8 +556,8 @@ func initListTestIsJsonNotEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsMapEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsMapEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: map[string]any{},
@@ -505,8 +570,8 @@ func initListTestIsMapEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsMapNotEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsMapNotEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: *initTestMap(),
@@ -519,8 +584,8 @@ func initListTestIsMapNotEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsStructEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsStructEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: testStruct{},
@@ -533,8 +598,8 @@ func initListTestIsStructEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsStructNotEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsStructNotEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: *initTestStruct(),
@@ -547,8 +612,8 @@ func initListTestIsStructNotEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsSliceEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsSliceEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: []any{},
@@ -561,8 +626,8 @@ func initListTestIsSliceEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsSliceNotEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsSliceNotEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: []any{"test", 23, 123},
@@ -575,8 +640,8 @@ func initListTestIsSliceNotEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsStringEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsStringEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: *initEmptyPointerString(),
@@ -593,8 +658,8 @@ func initListTestIsStringEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsStringNotEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsStringNotEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: "not empty",
@@ -607,8 +672,8 @@ func initListTestIsStringNotEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsIntEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsIntEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: 0,
@@ -621,8 +686,8 @@ func initListTestIsIntEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsIntNotEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsIntNotEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: 23,
@@ -635,8 +700,8 @@ func initListTestIsIntNotEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsFloatEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsFloatEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: 0.0,
@@ -649,8 +714,8 @@ func initListTestIsFloatEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsFloatNotEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsFloatNotEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: 23.23,
@@ -663,8 +728,8 @@ func initListTestIsFloatNotEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsBoolEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsBoolEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: false,
@@ -677,8 +742,8 @@ func initListTestIsBoolEmpty() []testValueGeneric {
 	}
 }
 
-func initListTestIsBoolNotEmpty() []testValueGeneric {
-	return []testValueGeneric{
+func initListTestIsBoolNotEmpty() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "success",
 			value: true,
@@ -687,6 +752,59 @@ func initListTestIsBoolNotEmpty() []testValueGeneric {
 			name:    "failed",
 			value:   "",
 			wantErr: true,
+		},
+	}
+}
+
+func initListTestIsNumeric() []testGenericValue {
+	return []testGenericValue{
+		{
+			name:  "success",
+			value: "123",
+		},
+		{
+			name:  "failed",
+			value: true,
+		},
+	}
+}
+
+func initListTestIsLetter() []testGenericValue {
+	return []testGenericValue{
+		{
+			name:  "success",
+			value: "letter",
+		},
+		{
+			name:  "failed",
+			value: 123,
+		},
+	}
+}
+
+func initListTestEquals() []testGenericValues {
+	mapTest := initTestMap()
+	structTest := initTestStruct()
+	return []testGenericValues{
+		{
+			name:  "string",
+			value: []any{"test", "test"},
+		},
+		{
+			name:  "struct",
+			value: []any{structTest, structTest},
+		},
+		{
+			name:  "map",
+			value: []any{mapTest, mapTest},
+		},
+		{
+			name:  "int",
+			value: []any{12, 12},
+		},
+		{
+			name:  "not equals",
+			value: []any{"test", "test", 12},
 		},
 	}
 }
@@ -721,8 +839,8 @@ func initListTestIntMax() []testIntMinMax {
 	}
 }
 
-func initListTestGetFirstLastName() []testStringValue {
-	return []testStringValue{
+func initListTestGetFirstLastName() []testGenericValue {
+	return []testGenericValue{
 		{
 			name:  "full",
 			value: "Gabriel Cataldo",
@@ -734,6 +852,60 @@ func initListTestGetFirstLastName() []testStringValue {
 		{
 			name:  "empty",
 			value: "",
+		},
+		{
+			name:    "failed",
+			value:   true,
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestTime() []testGenericValues {
+	return []testGenericValues{
+		{
+			name: "after",
+			value: []any{
+				time.Date(2030, 12, 1, 0, 0, 0, 0, time.Local),
+				time.Date(2020, 12, 1, 0, 0, 0, 0, time.Local),
+			},
+		},
+		{
+			name: "before",
+			value: []any{
+				time.Date(2020, 12, 1, 0, 0, 0, 0, time.Local),
+				time.Date(2030, 12, 1, 0, 0, 0, 0, time.Local),
+			},
+		},
+		{
+			name: "now",
+			value: []any{
+				time.Now(),
+				time.Now(),
+			},
+		},
+		{
+			name: "today",
+			value: []any{
+				time.Now(),
+				time.Now(),
+			},
+		},
+		{
+			name: "failed value type a",
+			value: []any{
+				"string value",
+				time.Now(),
+			},
+			wantErr: true,
+		},
+		{
+			name: "failed value type b",
+			value: []any{
+				time.Now(),
+				"string value",
+			},
+			wantErr: true,
 		},
 	}
 }
@@ -776,9 +948,10 @@ func initTestStruct() *testStruct {
 }
 
 func initTestMap() *map[string]any {
+	now := time.Now()
 	return &map[string]any{
 		"string": "test",
-		"time":   time.Now(),
+		"time":   now,
 		"slice":  []string{"foobar@gmail.com", "foobar2@hotmail.com"},
 		"float":  231.123,
 		"struct": initTestStruct(),

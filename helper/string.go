@@ -10,25 +10,23 @@ import (
 )
 
 func IsNumeric(v any) bool {
-	if !IsString(v) {
-		panic("value type is not a string")
-	}
-	s := GetRealValue(v).(string)
+	s := ConvertToString(v)
 	regex := regexp.MustCompile(`^[0-9]+$`)
 	return regex.MatchString(s)
 }
 
 func IsLetter(v any) bool {
-	if !IsString(v) {
-		panic("value type is not a string")
-	}
-	s := GetRealValue(v).(string)
+	s := ConvertToString(v)
 	regex := regexp.MustCompile(`^[A-Za-z]+$`)
 	return regex.MatchString(s)
 }
 
-func GetFirstLastName(v string) string {
-	split := strings.Split(v, " ")
+func GetFirstLastName(v any) string {
+	if !IsString(v) {
+		panic("value type is not a string")
+	}
+	s := GetRealValue(v).(string)
+	split := strings.Split(s, " ")
 	firstName := split[0]
 	lastName := split[len(split)-1]
 	if IsNotEmpty(lastName) && firstName != lastName {

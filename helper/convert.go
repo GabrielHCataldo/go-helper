@@ -7,13 +7,15 @@ import (
 	"reflect"
 	"regexp"
 	"strconv"
+	"time"
 )
 
 // ConvertByteUnit convert byte unit text to int ex: 1KB = 1024
-func ConvertByteUnit(v string) (int, error) {
+func ConvertByteUnit(v any) (int, error) {
+	s := ConvertToString(v)
 	errDefault := errors.New("byte unit mal formatted ex: 100MB")
 	regex := regexp.MustCompile(`^(\d+)\s?(\w+)?$`)
-	match := regex.FindAllStringSubmatch(v, -1)
+	match := regex.FindAllStringSubmatch(s, -1)
 	if len(match) == 0 || len(match[0]) == 0 || len(match[0]) < 3 {
 		return 0, errDefault
 	}
@@ -43,10 +45,11 @@ func ConvertByteUnit(v string) (int, error) {
 }
 
 // ConvertMegaByteUnit convert megabyte unit text to int ex: 1GB = 1024
-func ConvertMegaByteUnit(v string) (int, error) {
+func ConvertMegaByteUnit(a any) (int, error) {
+	s := ConvertToString(a)
 	errDefault := errors.New("byte unit mal formatted ex: 100MB")
 	regex := regexp.MustCompile(`^(\d+)\s?(\w+)?$`)
-	match := regex.FindAllStringSubmatch(v, -1)
+	match := regex.FindAllStringSubmatch(s, -1)
 	if len(match) == 0 || len(match[0]) == 0 || len(match[0]) < 3 {
 		return 0, errDefault
 	}
@@ -82,7 +85,24 @@ func ConvertToString(a any) string {
 		b, _ := json.Marshal(v.Interface())
 		return string(b)
 	default:
-		return convertToStringByType(a)
+		return convertToStringByType(v.Interface())
+	}
+}
+
+// ConvertToTime convert any value to time
+func ConvertToTime(a any) (time.Time, error) {
+	v := reflect.ValueOf(a)
+	if v.Type().Kind() == reflect.Pointer {
+		v = v.Elem()
+	}
+	switch v.Kind() {
+	case reflect.Struct, reflect.Map, reflect.Slice, reflect.Array:
+		if t, ok := v.Interface().(time.Time); ok {
+			return t, nil
+		}
+		return time.Time{}, errors.New("error type to parse time: " + reflect.TypeOf(a).Kind().String())
+	default:
+		return convertToTimeByType(v.Interface())
 	}
 }
 
@@ -127,5 +147,38 @@ func convertToStringByType(a any) string {
 		return t
 	default:
 		return ""
+	}
+}
+
+func convertToTimeByType(a any) (time.Time, error) {
+	switch t := a.(type) {
+	case int:
+		return time.Unix(int64(t), 0), nil
+	case int8:
+		return time.Unix(int64(t), 0), nil
+	case uint:
+		return time.Unix(int64(t), 0), nil
+	case uint8:
+		return time.Unix(int64(t), 0), nil
+	case int16:
+		return time.Unix(int64(t), 0), nil
+	case uint16:
+		return time.Unix(int64(t), 0), nil
+	case int32:
+		return time.Unix(int64(t), 0), nil
+	case uint32:
+		return time.Unix(int64(t), 0), nil
+	case int64:
+		return time.Unix(t, 0), nil
+	case uint64:
+		return time.Unix(int64(t), 0), nil
+	case float32:
+		return time.Unix(int64(t), 0), nil
+	case float64:
+		return time.Unix(int64(t), 0), nil
+	case string:
+		return time.Parse(time.RFC3339, t)
+	default:
+		return time.Time{}, errors.New("error type to parse time: " + reflect.TypeOf(a).Kind().String())
 	}
 }

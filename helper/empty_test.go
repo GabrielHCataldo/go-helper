@@ -14,11 +14,29 @@ func TestIsNil(t *testing.T) {
 	}
 }
 
-func TestIsNotNil(t *testing.T) {
+func TestIsNonNil(t *testing.T) {
 	for _, tt := range initListTestIsNonNil() {
 		t.Run(tt.name, func(t *testing.T) {
 			empty := IsNonNil(tt.value)
 			logger.Info("IsNonNil:", empty)
+		})
+	}
+}
+
+func TestAllNil(t *testing.T) {
+	for _, tt := range initListTestIsNil() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := AllNil(tt.value)
+			logger.Info("AllNil:", result)
+		})
+	}
+}
+
+func TestAllNonNil(t *testing.T) {
+	for _, tt := range initListTestIsNonNil() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := AllNonNil(tt.value)
+			logger.Info("AllNonNil:", result)
 		})
 	}
 }
@@ -37,6 +55,24 @@ func TestIsNotEmpty(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			empty := IsNotEmpty(tt.value)
 			logger.Info("IsNotEmpty:", empty)
+		})
+	}
+}
+
+func TestAllEmpty(t *testing.T) {
+	for _, tt := range initListTestIsEmpty() {
+		t.Run(tt.name, func(t *testing.T) {
+			empty := AllEmpty(tt.value)
+			logger.Info("AllEmpty:", empty)
+		})
+	}
+}
+
+func TestAllNotEmpty(t *testing.T) {
+	for _, tt := range initListTestIsNotEmpty() {
+		t.Run(tt.name, func(t *testing.T) {
+			empty := AllNotEmpty(tt.value)
+			logger.Info("AllNotEmpty:", empty)
 		})
 	}
 }

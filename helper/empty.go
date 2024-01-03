@@ -21,6 +21,21 @@ func IsNonNil(v any) bool {
 	return !IsNil(v)
 }
 
+// AllNil check all values are nil
+func AllNil(v ...any) bool {
+	for _, a := range v {
+		if !IsNil(a) {
+			return false
+		}
+	}
+	return true
+}
+
+// AllNonNil check all values are not nil
+func AllNonNil(v ...any) bool {
+	return !AllNil(v...)
+}
+
 // IsEmpty check value is empty
 func IsEmpty(v any) bool {
 	return isReflectZero(v)
@@ -29,6 +44,21 @@ func IsEmpty(v any) bool {
 // IsNotEmpty check value is not empty
 func IsNotEmpty(v any) bool {
 	return !IsEmpty(v)
+}
+
+// AllEmpty check all values are empty
+func AllEmpty(v ...any) bool {
+	for _, a := range v {
+		if !IsEmpty(a) {
+			return false
+		}
+	}
+	return true
+}
+
+// AllNotEmpty check all values are not empty
+func AllNotEmpty(v ...any) bool {
+	return !AllEmpty(v...)
 }
 
 // IsPointerNil check value pointer is nil

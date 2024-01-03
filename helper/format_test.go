@@ -94,3 +94,9 @@ func TestHideEmail(t *testing.T) {
 	result := HideEmail(s, false)
 	logger.Info("HideEmail:", result)
 }
+
+func TestMaskStartOrEndOfString(t *testing.T) {
+	s := "g"
+	result := MaskStartOrEndOfString(s, '*', true)
+	logger.Info("MaskStartOrEndOfString:", result)
+}

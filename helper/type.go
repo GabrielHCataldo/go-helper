@@ -203,5 +203,5 @@ func IsTime(v any) bool {
 		vr = vr.Elem()
 	}
 	_, ok := vr.Interface().(time.Time)
-	return t.Kind() == reflect.Struct && ok
+	return ok
 }

@@ -96,7 +96,7 @@ func HideCpf(v string, maskStart bool) string {
 
 // HideCnpj formats and partially hides the value ex: 45991590000108 to 45.991.590/****-**
 func HideCnpj(v string, maskStart bool) string {
-	if IsCpf(v) {
+	if IsCnpj(v) {
 		formatValue := FormatCnpj(v)
 		v = formatValue
 	}

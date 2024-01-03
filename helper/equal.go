@@ -2,15 +2,28 @@ package helper
 
 import "reflect"
 
-// Equals compare value a and b if are equals return true, otherwise return false
-func Equals(a, b any) bool {
-	ra := reflect.ValueOf(a)
-	rb := reflect.ValueOf(b)
-	if IsPointer(a) {
-		ra = ra.Elem()
+// Equals compare values if are equals return true, otherwise return false
+func Equals(a ...any) bool {
+	a2 := a
+	for _, v := range a {
+		for _, v2 := range a2 {
+			rv := reflect.ValueOf(v)
+			rv2 := reflect.ValueOf(v2)
+			if IsPointer(v) {
+				rv = rv.Elem()
+			}
+			if IsPointer(v2) {
+				rv2 = rv2.Elem()
+			}
+			if ConvertToString(rv.Interface()) != ConvertToString(rv2.Interface()) {
+				return false
+			}
+		}
 	}
-	if IsPointer(b) {
-		rb = rb.Elem()
-	}
-	return ra.Interface() != rb.Interface()
+	return true
+}
+
+// NotEquals compare values if aren't equals return true, otherwise return false
+func NotEquals(a ...any) bool {
+	return !Equals(a...)
 }

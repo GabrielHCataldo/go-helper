@@ -41,8 +41,22 @@ func TestConvertToString(t *testing.T) {
 	for _, tt := range initListTestConvertToString() {
 		t.Run(tt.name, func(t *testing.T) {
 			result := ConvertToString(tt.value)
-			if (IsEmpty(result)) != tt.wantEmpty {
-				logger.Errorf("ConvertToString() result = %v, wantEmpty = %v", result, tt.wantEmpty)
+			if (IsEmpty(result)) != tt.wantErr {
+				logger.Errorf("ConvertToString() result = %v, wantEmpty = %v", result, tt.wantErr)
+				t.Fail()
+			} else {
+				logger.Info("result:", result)
+			}
+		})
+	}
+}
+
+func TestConvertToTime(t *testing.T) {
+	for _, tt := range initListTestConvertToTime() {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := ConvertToTime(tt.value)
+			if (err != nil) != tt.wantErr {
+				logger.Errorf("ConvertToString() result = %v, wantEmpty = %v", result, tt.wantErr)
 				t.Fail()
 			} else {
 				logger.Info("result:", result)
