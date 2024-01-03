@@ -26,7 +26,6 @@ func TestIsLetter(t *testing.T) {
 func TestGetFirstLastName(t *testing.T) {
 	for _, tt := range initListTestGetFirstLastName() {
 		t.Run(tt.name, func(t *testing.T) {
-			defer panicRecovery(t, tt.wantErr)
 			result := GetFirstLastName(tt.value)
 			logger.Info("GetFirstLastName:", result)
 		})

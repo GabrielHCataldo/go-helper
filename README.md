@@ -48,6 +48,64 @@ For more details on the examples, visit [All examples link](https://github/Gabri
 
 ### Empty and nil validation
 
+Para verificacoes empty podemos inserir qualquer valor de qualquer tipo, veja os exemplos:
+
+- struct
+
+```go
+package main
+
+import (
+	"github.com/GabrielHCataldo/go-helper/helper"
+	"github.com/GabrielHCataldo/go-logger/logger"
+	"time"
+)
+
+type exampleStruct struct {
+	Name      string
+	BirthDate time.Time
+	Map       map[string]any
+}
+
+func main() {
+	nStruct := exampleStruct{}
+	isEmpty := helper.IsEmpty(nStruct)
+	logger.Info("struct is empty?", isEmpty)
+	nStruct.Name = "test name"
+	isNotEmpty := helper.IsNotEmpty(nStruct)
+	logger.Info("struct is not empty?", isNotEmpty)
+}
+```
+
+Outputs:
+
+    [INFO 2024/01/03 20:03:06] main.go:18: struct is empty? true
+    [INFO 2024/01/03 20:03:06] main.go:21: struct is not empty? true
+
+- slice:
+
+```go
+```
+
+Outputs:
+
+- map
+
+```go
+```
+
+Outputs:
+
+- string
+
+```go
+```
+
+Outputs:
+
+Veja outros tipos de valores como exemplos acessando
+o [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go)
+
 ### Convert
 
 ### Format
@@ -56,10 +114,16 @@ For more details on the examples, visit [All examples link](https://github/Gabri
 
 ### For more examples
 
-- [Producer](https://github/GabrielHCataldo/go-helper/blob/main/_example/consumer/main.go)
-- [Consumer](https://github/GabrielHCataldo/go-helper/blob/main/_example/consumer/main.go)
-- [Queue](https://github/GabrielHCataldo/go-helper/blob/main/_example/queue/main.go)
-- [Message](https://github/GabrielHCataldo/go-helper/blob/main/_example/message/main.go)
+- [Empty](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go)
+- [Equal](https://github/GabrielHCataldo/go-helper/blob/main/_example/equal/main.go)
+- [Float](https://github/GabrielHCataldo/go-helper/blob/main/_example/float/main.go)
+- [Format](https://github/GabrielHCataldo/go-helper/blob/main/_example/format/main.go)
+- [Int](https://github/GabrielHCataldo/go-helper/blob/main/_example/int/main.go)
+- [String](https://github/GabrielHCataldo/go-helper/blob/main/_example/string/main.go)
+- [Time](https://github/GabrielHCataldo/go-helper/blob/main/_example/time/main.go)
+- [Type](https://github/GabrielHCataldo/go-helper/blob/main/_example/type/main.go)
+- [Validate](https://github/GabrielHCataldo/go-helper/blob/main/_example/validate/main.go)
+- [Validator](https://github/GabrielHCataldo/go-helper/blob/main/_example/validator/main.go)
 
 How to contribute
 ------

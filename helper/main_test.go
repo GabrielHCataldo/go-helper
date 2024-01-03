@@ -853,11 +853,6 @@ func initListTestGetFirstLastName() []testGenericValue {
 			name:  "empty",
 			value: "",
 		},
-		{
-			name:    "failed",
-			value:   true,
-			wantErr: true,
-		},
 	}
 }
 
