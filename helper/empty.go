@@ -132,7 +132,7 @@ func IsStringEmpty(v any) bool {
 		panic("value type is not a string")
 	}
 	str := GetRealValue(v).(string)
-	str = strings.TrimSpace(CleanAllRepeatSpace(str))
+	str = strings.TrimSpace(CleanAllRepeatSpaces(str))
 	return len(str) == 0
 }
 

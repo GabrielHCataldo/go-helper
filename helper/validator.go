@@ -6,6 +6,7 @@ import (
 
 var customValidate *validator.Validate
 
+// Validate persist custom validator.Validate
 func Validate() *validator.Validate {
 	if customValidate == nil {
 		customValidate = validator.New()

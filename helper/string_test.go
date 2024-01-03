@@ -71,8 +71,8 @@ func TestRandomNumberStr(t *testing.T) {
 	logger.Info("RandomNumberStr:", result)
 }
 
-func TestCleanAllRepeatSpace(t *testing.T) {
+func TestCleanAllRepeatSpaces(t *testing.T) {
 	s := "Test text string  if   spaces repeat"
-	result := CleanAllRepeatSpace(s)
-	logger.Info("CleanAllRepeatSpace:", result)
+	result := CleanAllRepeatSpaces(s)
+	logger.Info("CleanAllRepeatSpaces:", result)
 }
