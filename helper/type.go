@@ -18,7 +18,7 @@ func IsFunc(v any) bool {
 	return t.Kind() == reflect.Func
 }
 
-func IsChannel(v any) bool {
+func IsChan(v any) bool {
 	t := reflect.TypeOf(v)
 	if IsPointer(v) {
 		t = t.Elem()
@@ -39,12 +39,7 @@ func IsJson(v any) bool {
 	if IsPointer(v) {
 		t = t.Elem()
 	}
-	switch t.Kind() {
-	case reflect.Struct, reflect.Map, reflect.Slice, reflect.Array:
-		return true
-	default:
-		return false
-	}
+	return t.Kind() == reflect.Struct || t.Kind() == reflect.Map || t.Kind() == reflect.Slice || t.Kind() == reflect.Array
 }
 
 func IsMap(v any) bool {
@@ -68,12 +63,7 @@ func IsSlice(v any) bool {
 	if IsPointer(v) {
 		t = t.Elem()
 	}
-	switch t.Kind() {
-	case reflect.Slice, reflect.Array:
-		return true
-	default:
-		return false
-	}
+	return t.Kind() == reflect.Slice || t.Kind() == reflect.Array
 }
 
 func IsString(v any) bool {
@@ -89,12 +79,8 @@ func IsInt(v any) bool {
 	if IsPointer(v) {
 		t = t.Elem()
 	}
-	switch t.Kind() {
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return true
-	default:
-		return false
-	}
+	return t.Kind() == reflect.Int || t.Kind() == reflect.Int8 || t.Kind() == reflect.Int16 ||
+		t.Kind() == reflect.Int32 || t.Kind() == reflect.Int64
 }
 
 func IsInt8(v any) bool {
@@ -134,12 +120,8 @@ func IsUint(v any) bool {
 	if IsPointer(v) {
 		t = t.Elem()
 	}
-	switch t.Kind() {
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		return true
-	default:
-		return false
-	}
+	return t.Kind() == reflect.Uint || t.Kind() == reflect.Uint8 || t.Kind() == reflect.Uint16 ||
+		t.Kind() == reflect.Uint32 || t.Kind() == reflect.Uint64
 }
 
 func IsUint8(v any) bool {
@@ -179,12 +161,23 @@ func IsFloat(v any) bool {
 	if IsPointer(v) {
 		t = t.Elem()
 	}
-	switch t.Kind() {
-	case reflect.Float32, reflect.Float64:
-		return true
-	default:
-		return false
+	return t.Kind() == reflect.Float32 || t.Kind() == reflect.Float64
+}
+
+func IsFloat32(v any) bool {
+	t := reflect.TypeOf(v)
+	if IsPointer(v) {
+		t = t.Elem()
 	}
+	return t.Kind() == reflect.Float32
+}
+
+func IsFloat64(v any) bool {
+	t := reflect.TypeOf(v)
+	if IsPointer(v) {
+		t = t.Elem()
+	}
+	return t.Kind() == reflect.Float64
 }
 
 func IsBool(v any) bool {

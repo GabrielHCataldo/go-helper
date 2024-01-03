@@ -5,6 +5,24 @@ import (
 	"testing"
 )
 
+func TestConvertToPointer(t *testing.T) {
+	v := "string text"
+	result := ConvertToPointer(v)
+	logger.Info("ConvertToPointer:", result)
+}
+
+func TestConvertToObjectId(t *testing.T) {
+	v := ""
+	result := ConvertToObjectId(v)
+	logger.Info("ConvertToObjectId:", result)
+}
+
+func TestConvertToObjectIdWithErr(t *testing.T) {
+	v := ""
+	result, err := ConvertToObjectIdWithErr(v)
+	logger.Info("ConvertToObjectId:", result, "err:", err)
+}
+
 func TestConvertByteUnit(t *testing.T) {
 	for _, tt := range initListTestConvertByteUnit() {
 		t.Run(tt.name, func(t *testing.T) {

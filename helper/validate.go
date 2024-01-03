@@ -1,154 +1,131 @@
 package helper
 
 import (
-	"fmt"
 	"github.com/go-playground/validator/v10"
 	"github.com/klassmann/cpfcnpj"
 	"github.com/nyaruka/phonenumbers"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"net"
+	"golang.org/x/crypto/bcrypt"
 	"net/url"
 	"regexp"
 	"strings"
-	"time"
 )
 
-func IsUrl(v string) bool {
-	_, err := url.ParseRequestURI(v)
+func IsUrl(v any) bool {
+	s := ConvertToString(v)
+	_, err := url.ParseRequestURI(s)
 	return err == nil
 }
 
-func IsPhoneNumber(v, defaultRegion string) bool {
-	num, err := phonenumbers.Parse(v, defaultRegion)
-	if err == nil {
-		return phonenumbers.IsValidNumber(num)
-	}
-	return false
+func IsPhoneNumber(v any, defaultRegion string) bool {
+	s := ConvertToString(v)
+	num, _ := phonenumbers.Parse(s, defaultRegion)
+	return num != nil && phonenumbers.IsValidNumber(num)
 }
 
-func IsEmail(v string) bool {
+func IsEmail(v any) bool {
+	s := ConvertToString(v)
 	validate := validator.New()
-	if err := validate.Var(v, "email,max=180"); err == nil {
-		return true
-	}
-	return false
+	err := validate.Var(s, "email,max=180")
+	return err == nil
 }
 
-func IsCpf(v string) bool {
-	return cpfcnpj.ValidateCPF(cpfcnpj.Clean(v))
+func IsCpf(v any) bool {
+	s := ConvertToString(v)
+	return cpfcnpj.ValidateCPF(s)
 }
 
-func IsCnpj(v string) bool {
-	return cpfcnpj.ValidateCNPJ(cpfcnpj.Clean(v))
+func IsCnpj(v any) bool {
+	s := ConvertToString(v)
+	return cpfcnpj.ValidateCNPJ(s)
 }
 
-func IsPostalCode(v string) bool {
-	if !IsString(v) {
-		panic("value type is not string")
-	}
-	s := GetRealValue(v).(string)
+func IsPostalCode(v any) bool {
+	s := ConvertToString(v)
 	var postalCodes []map[string]string
 	_ = GetFileJson("../postal-codes.json", &postalCodes)
+	matched := false
 	for _, postalCode := range postalCodes {
 		regexStr := postalCode["Regex"]
 		if IsNotEmpty(regexStr) {
 			regex := regexp.MustCompile(regexStr)
 			if regex.MatchString(s) {
-				return true
+				matched = true
+				break
 			}
 		}
 	}
-	return false
+	return matched
 }
 
 func IsPostalCodePerCountry(v any, countryIso string) bool {
-	if !IsString(v) {
-		panic("value type is not string")
-	}
-	s := GetRealValue(v).(string)
+	s := ConvertToString(v)
 	var postalCodes []map[string]string
-	_ = GetFileJson("./postal-codes.json", &postalCodes)
+	_ = GetFileJson("../postal-codes.json", &postalCodes)
+	matched := false
 	for _, postalCode := range postalCodes {
-		if postalCode["ISO"] == countryIso {
+		if IsEmpty(countryIso) || postalCode["ISO"] == countryIso {
 			regexStr := postalCode["Regex"]
 			if IsEmpty(regexStr) {
-				return true
+				matched = true
+			} else {
+				regex := regexp.MustCompile(regexStr)
+				matched = regex.MatchString(s)
 			}
-			regex := regexp.MustCompile(regexStr)
-			return regex.MatchString(s)
 		}
 	}
-	return false
+	return matched
 }
 
-func IsObjectID(ID *string) bool {
-	if ID != nil {
-		_, err := primitive.ObjectIDFromHex(*ID)
-		return err == nil
-	}
-	return false
+func IsObjectId(v any) bool {
+	s := ConvertToString(v)
+	_, err := primitive.ObjectIDFromHex(s)
+	return err == nil
 }
 
 func IsBase64(v any) bool {
-	if !IsString(v) {
-		return false
-	}
-	str := GetRealValue(v).(string)
+	s := ConvertToString(v)
 	regex := regexp.MustCompile(`^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$`)
-	return regex.MatchString(str)
+	return regex.MatchString(s)
 }
 
-func IsPrivateIP(v string) bool {
-	var privateIPBlocks []*net.IPNet
-	for _, cidr := range []string{
-		"127.0.0.0/8",
-		"10.0.0.0/8",
-		"172.16.0.0/12",
-		"192.168.0.0/16",
-		"169.254.0.0/16",
-		"::1/128",
-		"fe80::/10",
-		"fc00::/7",
-	} {
-		_, block, err := net.ParseCIDR(cidr)
-		if err != nil {
-			panic(fmt.Errorf("parse error on %q: %v", cidr, err))
-		}
-		privateIPBlocks = append(privateIPBlocks, block)
-	}
-
-	ip := net.ParseIP(v)
-	if ip.IsLoopback() || ip.IsLinkLocalUnicast() || ip.IsLinkLocalMulticast() {
-		return true
-	}
-	for _, block := range privateIPBlocks {
-		if block.Contains(ip) {
-			return true
-		}
-	}
-	return false
+func IsBCrypt(v any) bool {
+	s := ConvertToString(v)
+	cost, err := bcrypt.Cost([]byte(s))
+	return err == nil && cost == bcrypt.DefaultCost
 }
 
-func ValidateFullName(v string) bool {
+func IsBearer(v any) bool {
+	const bearer = "Bearer "
+	s := ConvertToString(v)
+	splitAuthorization := strings.Split(s, bearer)
+	return len(splitAuthorization) != 2 && splitAuthorization[0] == bearer
+}
+
+func ValidateFullName(v any) bool {
+	s := ConvertToString(v)
 	regex := regexp.MustCompile(`^([a-zA-Z]{2,}\s[a-zA-Z]+'?-?[a-zA-Z]+\s?([a-zA-Z]+)?)`)
-	return regex.MatchString(v)
+	return regex.MatchString(s)
 }
 
-func ValidateBirthDate(values time.Time) bool {
-	return time.Now().After(values)
+func ValidateBirthDate(v any) bool {
+	return IsBeforeDateToday(v)
 }
 
-func ValidateIOSDeviceID(v string) bool {
+func ValidateIosDeviceId(v any) bool {
+	s := ConvertToString(v)
 	regex := regexp.MustCompile(`[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}`)
-	return regex.MatchString(v)
+	return regex.MatchString(s)
 }
 
-func ValidateAndroidDeviceID(v string) bool {
+func ValidateAndroidDeviceId(v any) bool {
+	s := ConvertToString(v)
 	regex := regexp.MustCompile(`[0-9a-fA-F]`)
-	return regex.MatchString(v)
+	return regex.MatchString(s)
 }
 
-func ValidateMobilePlatform(v string) bool {
-	platform := strings.ToLower(v)
+func ValidateMobilePlatform(v any) bool {
+	s := ConvertToString(v)
+	platform := strings.ToLower(s)
 	return platform == "android" || platform == "ios" || platform == "iphone os"
 }

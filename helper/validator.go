@@ -2,33 +2,31 @@ package helper
 
 import (
 	"github.com/go-playground/validator/v10"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"golang.org/x/crypto/bcrypt"
-	"reflect"
-	"strings"
-	"time"
 )
 
 var customValidate *validator.Validate
 
 func Validate() *validator.Validate {
-	if customValidate != nil {
-		return customValidate
+	if customValidate == nil {
+		customValidate = validator.New()
+		_ = customValidate.RegisterValidation("enum", validateEnum)
+		_ = customValidate.RegisterValidation("phone_us", validatePhoneUs)
+		_ = customValidate.RegisterValidation("phone_br", validatePhoneBr)
+		_ = customValidate.RegisterValidation("full_name", validateFullName)
+		_ = customValidate.RegisterValidation("bcrypt", validateBcrypt)
+		_ = customValidate.RegisterValidation("postal_code", validatePostalCode)
+		_ = customValidate.RegisterValidation("bearer", validateBearer)
+		_ = customValidate.RegisterValidation("before_now", validateBeforeNow)
+		_ = customValidate.RegisterValidation("before_today", validateBeforeToday)
+		_ = customValidate.RegisterValidation("after_now", validateAfterNow)
+		_ = customValidate.RegisterValidation("after_today", validateAfterToday)
+		_ = customValidate.RegisterValidation("today", validateToday)
+		_ = customValidate.RegisterValidation("now", validateNow)
+		_ = customValidate.RegisterValidation("full_now", validateFullNow)
+		_ = customValidate.RegisterValidation("cpf", validateCpf)
+		_ = customValidate.RegisterValidation("cnpj", validateCnpj)
+		_ = customValidate.RegisterValidation("cpfcnpj", validateCpfCnpj)
 	}
-	customValidate = validator.New()
-	_ = customValidate.RegisterValidation("enum", validateEnum)
-	_ = customValidate.RegisterValidation("phone_us", validatePhoneUs)
-	_ = customValidate.RegisterValidation("phone_br", validatePhoneBr)
-	_ = customValidate.RegisterValidation("full_name", validateFullName)
-	_ = customValidate.RegisterValidation("bcrypt", validateBcrypt)
-	_ = customValidate.RegisterValidation("postal_code", validatePostalCode)
-	_ = customValidate.RegisterValidation("bearer", validateBearer)
-	_ = customValidate.RegisterValidation("before_now", validateBirthDate)      // todo -> desenvolver
-	_ = customValidate.RegisterValidation("before_date_now", validateBirthDate) // todo -> desenvolver
-	_ = customValidate.RegisterValidation("after_now", validateBirthDate)       // todo -> desenvolver
-	_ = customValidate.RegisterValidation("after_date_now", validateBirthDate)  // todo -> desenvolver
-	_ = customValidate.RegisterValidation("date_now", validateBirthDate)        // todo -> desenvolver
-	_ = customValidate.RegisterValidation("cpfcnpj", validateCpfCnpj)
 	return customValidate
 }
 
@@ -45,43 +43,59 @@ func validateFullName(fl validator.FieldLevel) bool {
 }
 
 func validateBcrypt(fl validator.FieldLevel) bool {
-	cost, err := bcrypt.Cost([]byte(fl.Field().String()))
-	if err != nil {
-		return false
-	}
-	return cost == bcrypt.DefaultCost
+	return IsBCrypt(fl.Field().Interface())
 }
 
 func validateBearer(fl validator.FieldLevel) bool {
-	const bearer = "Bearer "
-	splitAuthorization := strings.Split(fl.Field().String(), bearer)
-	if len(splitAuthorization) != 2 {
-		return false
-	}
-	return splitAuthorization[0] == bearer
+	return IsBearer(fl.Field().Interface())
 }
 
-func validateBirthDate(fl validator.FieldLevel) bool {
-	var timeValidate time.Time
-	if fl.Field().Kind() == reflect.String {
-		t, err := time.Parse(time.RFC3339, fl.Field().String())
-		if err != nil {
-			return false
-		}
-		timeValidate = t
-	} else {
-		datetime, ok := fl.Field().Interface().(primitive.DateTime)
-		if !ok {
-			return false
-		}
-		timeValidate = datetime.Time()
-	}
-	return ValidateBirthDate(timeValidate)
+func validateBeforeNow(fl validator.FieldLevel) bool {
+	timeValidate, err := ConvertToTime(fl.Field().Interface())
+	return err == nil && IsBeforeNow(timeValidate)
+}
+
+func validateBeforeToday(fl validator.FieldLevel) bool {
+	timeValidate, err := ConvertToTime(fl.Field().Interface())
+	return err == nil && IsBeforeDateToday(timeValidate)
+}
+
+func validateAfterNow(fl validator.FieldLevel) bool {
+	timeValidate, err := ConvertToTime(fl.Field().Interface())
+	return err == nil && IsAfterNow(timeValidate)
+}
+
+func validateAfterToday(fl validator.FieldLevel) bool {
+	timeValidate, err := ConvertToTime(fl.Field().Interface())
+	return err == nil && IsAfterDateToday(timeValidate)
+}
+
+func validateToday(fl validator.FieldLevel) bool {
+	timeValidate, err := ConvertToTime(fl.Field().Interface())
+	return err == nil && IsToday(timeValidate)
+}
+
+func validateNow(fl validator.FieldLevel) bool {
+	timeValidate, err := ConvertToTime(fl.Field().Interface())
+	return err == nil && IsNow(timeValidate)
+}
+
+func validateFullNow(fl validator.FieldLevel) bool {
+	timeValidate, err := ConvertToTime(fl.Field().Interface())
+	return err == nil && IsFullNow(timeValidate)
+}
+
+func validateCpf(fl validator.FieldLevel) bool {
+	return IsCpf(fl.Field().Interface())
+}
+
+func validateCnpj(fl validator.FieldLevel) bool {
+	return IsCnpj(fl.Field().Interface())
 }
 
 func validateCpfCnpj(fl validator.FieldLevel) bool {
-	s := fl.Field().String()
-	return IsCpf(s) || IsCnpj(s)
+	a := fl.Field().Interface()
+	return IsCpf(a) || IsCnpj(a)
 }
 
 func validatePostalCode(fl validator.FieldLevel) bool {

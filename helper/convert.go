@@ -3,12 +3,31 @@ package helper
 import (
 	"encoding/json"
 	"errors"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"math"
 	"reflect"
 	"regexp"
 	"strconv"
 	"time"
 )
+
+// ConvertToPointer convert any value to pointer
+func ConvertToPointer[T any](t T) *T {
+	return &t
+}
+
+// ConvertToObjectId convert any value to primitive.ObjectID, if err return empty value, check using primitive.NilObjectID
+func ConvertToObjectId(a any) primitive.ObjectID {
+	s := ConvertToString(a)
+	r, _ := primitive.ObjectIDFromHex(s)
+	return r
+}
+
+// ConvertToObjectIdWithErr convert any value to primitive.ObjectID
+func ConvertToObjectIdWithErr(a any) (primitive.ObjectID, error) {
+	s := ConvertToString(a)
+	return primitive.ObjectIDFromHex(s)
+}
 
 // ConvertByteUnit convert byte unit text to int ex: 1KB = 1024
 func ConvertByteUnit(v any) (int, error) {
