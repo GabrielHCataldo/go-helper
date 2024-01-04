@@ -15,7 +15,9 @@ func Equal(a ...any) bool {
 			if IsPointer(v2) {
 				rv2 = rv2.Elem()
 			}
-			if ConvertToString(rv.Interface()) != ConvertToString(rv2.Interface()) {
+			s, _ := ConvertToString(rv.Interface())
+			s2, _ := ConvertToString(rv2.Interface())
+			if s != s2 {
 				return false
 			}
 		}

@@ -3,7 +3,7 @@ Go Helper
 <!--suppress ALL -->
 <img align="right" src="gopher-helper.png" alt="">
 
-[![Project status](https://img.shields.io/badge/version-v1.0.1-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.0.5)
+[![Project status](https://img.shields.io/badge/version-v1.0.2-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.0.2)
 [![Go Report Card](https://goreportcard.com/badge/github.com/GabrielHCataldo/go-helper)](https://goreportcard.com/report/github.com/GabrielHCataldo/go-helper)
 [![Coverage Status](https://coveralls.io/repos/GabrielHCataldo/go-helper/badge.svg?branch=main&service=github)](https://coveralls.io/github/GabrielHCataldo/go-helper?branch=main)
 [![Open Source Helpers](https://www.codetriage.com/gabrielhcataldo/go-helper/badges/users.svg)](https://www.codetriage.com/gabrielhcataldo/go-helper)
@@ -243,26 +243,31 @@ import (
 func main() {
     var a any = map[string]any{}
     
+    // for negative use IsNotMap
     isMap := helper.IsMap(a)
     logger.Info("is map?", isMap)
     
     a = "value1"
-    
+
+    // for negative use IsNotString
     isString := helper.IsString(a)
     logger.Info("is string?", isString)
     
     a = 12
-    
+	
+    // for negative use IsNotInt
     isInt := helper.IsInt(a)
     logger.Info("is int?", isInt)
     
     a = true
-    
+
+    // for negative use IsNotBool
     isBool := helper.IsBool(a)
     logger.Info("is bool?", isBool)
     
     a = time.Now()
-    
+
+    // for negative use IsNotTime
     isTime := helper.IsTime(a)
     logger.Info("is time?", isTime)
 }

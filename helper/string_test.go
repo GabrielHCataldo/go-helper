@@ -23,6 +23,96 @@ func TestIsLetter(t *testing.T) {
 	}
 }
 
+func TestIsStringJson(t *testing.T) {
+	for _, tt := range initListTestIsStringJson() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsStringJson(tt.value)
+			logger.Info("IsStringJson:", result)
+		})
+	}
+}
+
+func TestIsNotStringJson(t *testing.T) {
+	for _, tt := range initListTestIsStringJson() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsNotStringJson(tt.value)
+			logger.Info("IsNotStringJson:", result)
+		})
+	}
+}
+
+func TestIsStringInt(t *testing.T) {
+	for _, tt := range initListTestIsStringInt() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsStringInt(tt.value)
+			logger.Info("IsStringInt:", result)
+		})
+	}
+}
+
+func TestIsNotStringInt(t *testing.T) {
+	for _, tt := range initListTestIsStringInt() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsNotStringInt(tt.value)
+			logger.Info("IsNotStringInt:", result)
+		})
+	}
+}
+
+func TestIsStringBool(t *testing.T) {
+	for _, tt := range initListTestIsStringBool() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsStringBool(tt.value)
+			logger.Info("IsStringBool:", result)
+		})
+	}
+}
+
+func TestIsNotStringBool(t *testing.T) {
+	for _, tt := range initListTestIsStringBool() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsNotStringBool(tt.value)
+			logger.Info("IsNotStringBool:", result)
+		})
+	}
+}
+
+func TestIsStringFloat(t *testing.T) {
+	for _, tt := range initListTestIsStringFloat() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsStringFloat(tt.value)
+			logger.Info("IsStringFloat:", result)
+		})
+	}
+}
+
+func TestIsNotStringFloat(t *testing.T) {
+	for _, tt := range initListTestIsStringFloat() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsNotStringFloat(tt.value)
+			logger.Info("IsNotStringFloat:", result)
+		})
+	}
+}
+
+func TestIsStringTime(t *testing.T) {
+	for _, tt := range initListTestIsStringTime() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsStringTime(tt.value)
+			logger.Info("IsStringTime:", result)
+		})
+	}
+}
+
+func TestIsNotStringTime(t *testing.T) {
+	for _, tt := range initListTestIsStringTime() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsNotStringTime(tt.value)
+			logger.Info("IsNotStringTime:", result)
+		})
+	}
+}
+
 func TestGetFirstLastName(t *testing.T) {
 	for _, tt := range initListTestGetFirstLastName() {
 		t.Run(tt.name, func(t *testing.T) {

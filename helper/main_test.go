@@ -24,6 +24,13 @@ type testGenericValue struct {
 	wantErr bool
 }
 
+type testGenericDestValue struct {
+	name    string
+	value   any
+	dest    any
+	wantErr bool
+}
+
 type testIntMinMax struct {
 	name  string
 	value int
@@ -242,14 +249,269 @@ func initListTestConvertToString() []testGenericValue {
 			value: true,
 		},
 		{
-			name:    "success chan",
+			name:  "success bytes",
+			value: []byte{116, 114, 117, 101},
+		},
+		{
+			name:  "success time",
+			value: time.Now(),
+		},
+		{
+			name:    "failed",
 			value:   initChan(),
+			wantErr: true,
+		},
+		{
+			name:    "failed invalid",
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestConvertToInt() []testGenericValue {
+	return []testGenericValue{
+		{
+			name:    "failed string",
+			value:   "test",
+			wantErr: true,
+		},
+		{
+			name:    "failed struct",
+			value:   *initTestStruct(),
+			wantErr: true,
+		},
+		{
+			name:    "failed pointer struct",
+			value:   initTestStruct(),
+			wantErr: true,
+		},
+		{
+			name:    "failed slice",
+			value:   []int{12, 23, 45, 456, 467578},
+			wantErr: true,
+		},
+		{
+			name:    "failed map",
+			value:   *initTestMap(),
+			wantErr: true,
+		},
+		{
+			name:  "success int",
+			value: 21,
+		},
+		{
+			name:  "success int8",
+			value: int8(21),
+		},
+		{
+			name:  "success int16",
+			value: int16(21232),
+		},
+		{
+			name:  "success int32",
+			value: int32(2112312312),
+		},
+		{
+			name:  "success int64",
+			value: int64(9123809),
+		},
+		{
+			name:  "success uint",
+			value: uint(21),
+		},
+		{
+			name:  "success uint8",
+			value: uint8(21),
+		},
+		{
+			name:  "success uint16",
+			value: uint16(21232),
+		},
+		{
+			name:  "success uint32",
+			value: uint32(2112312312),
+		},
+		{
+			name:  "success uint64",
+			value: uint64(9123809),
+		},
+		{
+			name:  "success float32",
+			value: float32(12.23),
+		},
+		{
+			name:  "success float64",
+			value: 12.23,
+		},
+		{
+			name:    "failed bool",
+			value:   true,
+			wantErr: true,
+		},
+		{
+			name:    "failed bytes",
+			value:   []byte{},
+			wantErr: true,
+		},
+		{
+			name:    "failed time",
+			value:   time.Now(),
+			wantErr: true,
+		},
+		{
+			name:  "success string int",
+			value: "234",
+		},
+		{
+			name:  "success string float",
+			value: "234.23",
+		},
+		{
+			name:    "failed string bool",
+			value:   "true",
+			wantErr: true,
+		},
+		{
+			name:    "failed",
+			value:   initChan(),
+			wantErr: true,
+		},
+		{
+			name:    "failed invalid",
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestConvertToBool() []testGenericValue {
+	return []testGenericValue{
+		{
+			name:    "failed string",
+			value:   "test",
+			wantErr: true,
+		},
+		{
+			name:    "failed struct",
+			value:   *initTestStruct(),
+			wantErr: true,
+		},
+		{
+			name:    "failed pointer struct",
+			value:   initTestStruct(),
+			wantErr: true,
+		},
+		{
+			name:    "failed slice",
+			value:   []int{12, 23, 45, 456, 467578},
+			wantErr: true,
+		},
+		{
+			name:    "failed map",
+			value:   *initTestMap(),
+			wantErr: true,
+		},
+		{
+			name:    "failed int",
+			value:   21,
+			wantErr: true,
+		},
+		{
+			name:    "failed int8",
+			value:   int8(21),
+			wantErr: true,
+		},
+		{
+			name:    "failed int16",
+			value:   int16(21232),
+			wantErr: true,
+		},
+		{
+			name:    "failed int32",
+			value:   int32(2112312312),
+			wantErr: true,
+		},
+		{
+			name:    "failed int64",
+			value:   int64(9123809),
+			wantErr: true,
+		},
+		{
+			name:    "failed uint",
+			value:   uint(21),
+			wantErr: true,
+		},
+		{
+			name:    "failed uint8",
+			value:   uint8(21),
+			wantErr: true,
+		},
+		{
+			name:    "failed uint16",
+			value:   uint16(21232),
+			wantErr: true,
+		},
+		{
+			name:    "failed uint32",
+			value:   uint32(2112312312),
+			wantErr: true,
+		},
+		{
+			name:    "failed uint64",
+			value:   uint64(9123809),
+			wantErr: true,
+		},
+		{
+			name:    "failed float32",
+			value:   float32(12.23),
+			wantErr: true,
+		},
+		{
+			name:    "failed float64",
+			value:   12.23,
+			wantErr: true,
+		},
+		{
+			name:  "success bool",
+			value: true,
+		},
+		{
+			name:    "failed bytes",
+			value:   []byte{},
+			wantErr: true,
+		},
+		{
+			name:    "failed time",
+			value:   time.Now(),
+			wantErr: true,
+		},
+		{
+			name:    "failed string int",
+			value:   "234",
+			wantErr: true,
+		},
+		{
+			name:    "failed string float",
+			value:   "234.23",
+			wantErr: true,
+		},
+		{
+			name:  "success string bool",
+			value: "true",
+		},
+		{
+			name:    "failed",
+			value:   initChan(),
+			wantErr: true,
+		},
+		{
+			name:    "failed invalid",
 			wantErr: true,
 		},
 	}
 }
 
 func initListTestConvertToTime() []testGenericValue {
+	t := time.Now()
 	return []testGenericValue{
 		{
 			name:    "string",
@@ -325,8 +587,164 @@ func initListTestConvertToTime() []testGenericValue {
 			value: 12123129318230234.1293821,
 		},
 		{
+			name:  "time layout",
+			value: t.Format(time.Layout),
+		},
+		{
+			name:  "time ansic",
+			value: t.Format(time.ANSIC),
+		},
+		{
+			name:  "time unixDate",
+			value: t.Format(time.UnixDate),
+		},
+		{
+			name:  "time rubyDate",
+			value: t.Format(time.RubyDate),
+		},
+		{
+			name:  "time rfc822",
+			value: t.Format(time.RFC822),
+		},
+		{
+			name:  "time rfc822z",
+			value: t.Format(time.RFC822Z),
+		},
+		{
+			name:  "time rfc850",
+			value: t.Format(time.RFC850),
+		},
+		{
+			name:  "time rfc1123",
+			value: t.Format(time.RFC1123),
+		},
+		{
+			name:  "time rfc1123z",
+			value: t.Format(time.RFC1123Z),
+		},
+		{
+			name:  "time rfc3339",
+			value: t.Format(time.RFC3339),
+		},
+		{
+			name:  "time rfc3339nano",
+			value: t.Format(time.RFC3339Nano),
+		},
+		{
+			name:  "time kitchen",
+			value: t.Format(time.Kitchen),
+		},
+		{
+			name:  "time stamp",
+			value: t.Format(time.Stamp),
+		},
+		{
+			name:  "time stampMilli",
+			value: t.Format(time.StampMilli),
+		},
+		{
+			name:  "time stampMicro",
+			value: t.Format(time.StampMicro),
+		},
+		{
+			name:  "time stampNano",
+			value: t.Format(time.StampNano),
+		},
+		{
+			name:  "time dateTime",
+			value: t.Format(time.DateTime),
+		},
+		{
+			name:  "time dateOnly",
+			value: t.Format(time.DateOnly),
+		},
+		{
+			name:  "time timeOnly",
+			value: t.Format(time.TimeOnly),
+		},
+		{
 			name:    "bool",
 			value:   true,
+			wantErr: true,
+		},
+		{
+			name:    "failed nil",
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestConvertStringToDest() []testGenericDestValue {
+	var s string
+	var i int
+	var f float64
+	var b bool
+	var st testStruct
+	var m map[string]any
+	var sl []any
+	var tm time.Time
+
+	var valueStr = "test value string"
+	return []testGenericDestValue{
+		{
+			name:  "success string",
+			value: &valueStr,
+			dest:  &s,
+		},
+		{
+			name:  "success struct",
+			value: "{\"Name\":\"Foo Bar\",\"BirthDate\":\"2024-01-04T18:57:02.438015-03:00\",\"Emails\":[\"foobar@gmail.com\",\"foobar2@hotmail.com\"],\"Balance\":231.123}",
+			dest:  &st,
+		},
+		{
+			name:  "success slice",
+			value: "[12, 23, 45, 456, 467578]",
+			dest:  &sl,
+		},
+		{
+			name:  "success map",
+			value: "{\"float\":231.123,\"slice\":[\"foobar@gmail.com\",\"foobar2@hotmail.com\"],\"string\":\"test\",\"struct\":{\"Name\":\"Foo Bar\",\"BirthDate\":\"2024-01-04T18:57:02.438039-03:00\",\"Emails\":[\"foobar@gmail.com\",\"foobar2@hotmail.com\"],\"Balance\":231.123},\"time\":\"2024-01-04T18:57:02.438037-03:00\"}",
+			dest:  &m,
+		},
+		{
+			name:  "success int",
+			value: "213",
+			dest:  &i,
+		},
+		{
+			name:  "success float",
+			value: "12.23",
+			dest:  &f,
+		},
+		{
+			name:  "success bool",
+			value: "true",
+			dest:  &b,
+		},
+		{
+			name:  "success time",
+			value: "2024-01-04T19:37:29.087202-03:00",
+			dest:  &tm,
+		},
+		{
+			name:    "failed",
+			value:   initChan(),
+			wantErr: true,
+		},
+		{
+			name:    "failed dest invalid",
+			value:   valueStr,
+			dest:    initChanPointer(),
+			wantErr: true,
+		},
+		{
+			name:    "failed value nil",
+			wantErr: true,
+		},
+		{
+			name:    "failed not pointer",
+			value:   "true",
+			dest:    b,
 			wantErr: true,
 		},
 	}
@@ -782,6 +1200,71 @@ func initListTestIsLetter() []testGenericValue {
 	}
 }
 
+func initListTestIsStringJson() []testGenericValue {
+	return []testGenericValue{
+		{
+			name:  "success",
+			value: "{\"Name\":\"Foo Bar\",\"BirthDate\":\"2024-01-04T20:00:31.570313-03:00\",\"Emails\":[\"foobar@gmail.com\",\"foobar2@hotmail.com\"],\"Balance\":231.123}",
+		},
+		{
+			name:  "failed",
+			value: 123,
+		},
+	}
+}
+
+func initListTestIsStringInt() []testGenericValue {
+	return []testGenericValue{
+		{
+			name:  "success",
+			value: "123",
+		},
+		{
+			name:  "failed",
+			value: 123,
+		},
+	}
+}
+
+func initListTestIsStringBool() []testGenericValue {
+	return []testGenericValue{
+		{
+			name:  "success",
+			value: "false",
+		},
+		{
+			name:  "failed",
+			value: 123,
+		},
+	}
+}
+
+func initListTestIsStringFloat() []testGenericValue {
+	return []testGenericValue{
+		{
+			name:  "success",
+			value: "12.32",
+		},
+		{
+			name:  "failed",
+			value: 123,
+		},
+	}
+}
+
+func initListTestIsStringTime() []testGenericValue {
+	return []testGenericValue{
+		{
+			name:  "success",
+			value: time.Now().Format(time.RFC1123Z),
+		},
+		{
+			name:  "failed",
+			value: 123,
+		},
+	}
+}
+
 func initListTestEquals() []testGenericValues {
 	mapTest := initTestMap()
 	structTest := initTestStruct()
@@ -971,6 +1454,11 @@ func initChanNil() chan string {
 
 func initChan() chan string {
 	return make(chan string, 1)
+}
+
+func initChanPointer() *chan string {
+	c := make(chan string, 1)
+	return &c
 }
 
 func initEmptyAny() any {

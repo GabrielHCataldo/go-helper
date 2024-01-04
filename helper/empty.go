@@ -49,7 +49,7 @@ func IsNotEmpty(v any) bool {
 // AllEmpty check all values are empty
 func AllEmpty(v ...any) bool {
 	for _, a := range v {
-		if !IsEmpty(a) {
+		if IsNotEmpty(a) {
 			return false
 		}
 	}
@@ -63,7 +63,7 @@ func AllNotEmpty(v ...any) bool {
 
 // IsPointerNil check value pointer is nil
 func IsPointerNil(v any) bool {
-	if !IsPointer(v) {
+	if IsNotPointer(v) {
 		panic("value type is not a pointer")
 	}
 	return isReflectNil(v)
@@ -76,7 +76,7 @@ func IsPointerNonNil(v any) bool {
 
 // IsJsonEmpty check value struct, map or slice is empty
 func IsJsonEmpty(v any) bool {
-	if !IsJson(v) {
+	if IsNotJson(v) {
 		panic("value type is not struct, map or slice")
 	}
 	return isReflectZero(v)
@@ -89,7 +89,7 @@ func IsJsonNotEmpty(v any) bool {
 
 // IsMapEmpty check value map is empty
 func IsMapEmpty(v any) bool {
-	if !IsMap(v) {
+	if IsNotMap(v) {
 		panic("value type is not a map")
 	}
 	return isReflectZero(v)
@@ -102,7 +102,7 @@ func IsMapNotEmpty(v any) bool {
 
 // IsStructEmpty check value struct is empty
 func IsStructEmpty(v any) bool {
-	if !IsStruct(v) {
+	if IsNotStruct(v) {
 		panic("value type is not a struct")
 	}
 	return isReflectZero(v)
@@ -115,7 +115,7 @@ func IsStructNotEmpty(v any) bool {
 
 // IsSliceEmpty check value slice is empty
 func IsSliceEmpty(v any) bool {
-	if !IsSlice(v) {
+	if IsNotSlice(v) {
 		panic("value type is not a slice or array")
 	}
 	return isReflectZero(v)
@@ -128,7 +128,7 @@ func IsSliceNotEmpty(v any) bool {
 
 // IsStringEmpty check value string is empty (value blank return true)
 func IsStringEmpty(v any) bool {
-	if !IsString(v) {
+	if IsNotString(v) {
 		panic("value type is not a string")
 	}
 	str := GetRealValue(v).(string)
@@ -143,7 +143,7 @@ func IsStringNotEmpty(v any) bool {
 
 // IsIntEmpty check value int is empty
 func IsIntEmpty(v any) bool {
-	if !IsInt(v) {
+	if IsNotInt(v) {
 		panic("value type is not a int")
 	}
 	return isReflectZero(v)
@@ -156,7 +156,7 @@ func IsIntNotEmpty(v any) bool {
 
 // IsFloatEmpty check value float is empty
 func IsFloatEmpty(v any) bool {
-	if !IsFloat(v) {
+	if IsNotFloat(v) {
 		panic("value type is not a float")
 	}
 	return isReflectZero(v)
@@ -169,7 +169,7 @@ func IsFloatNotEmpty(v any) bool {
 
 // IsBoolEmpty check value bool is empty
 func IsBoolEmpty(v any) bool {
-	if !IsBool(v) {
+	if IsNotBool(v) {
 		panic("value type is not a bool")
 	}
 	return isReflectZero(v)

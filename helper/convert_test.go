@@ -58,12 +58,54 @@ func TestConvertMegaByteUnit(t *testing.T) {
 func TestConvertToString(t *testing.T) {
 	for _, tt := range initListTestConvertToString() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := ConvertToString(tt.value)
-			if (IsEmpty(result)) != tt.wantErr {
-				logger.Errorf("ConvertToString() result = %v, wantEmpty = %v", result, tt.wantErr)
+			result, err := ConvertToString(tt.value)
+			if (err != nil) != tt.wantErr {
+				logger.Errorf("ConvertToString() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else {
-				logger.Info("result:", result)
+				logger.Info("result:", result, "err:", err)
+			}
+		})
+	}
+}
+
+func TestConvertToInt(t *testing.T) {
+	for _, tt := range initListTestConvertToInt() {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := ConvertToInt(tt.value)
+			if (err != nil) != tt.wantErr {
+				logger.Errorf("ConvertToInt() err = %v, wantErr = %v", err, tt.wantErr)
+				t.Fail()
+			} else {
+				logger.Info("result:", result, "err:", err)
+			}
+		})
+	}
+}
+
+func TestConvertToFloat(t *testing.T) {
+	for _, tt := range initListTestConvertToInt() {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := ConvertToFloat(tt.value)
+			if (err != nil) != tt.wantErr {
+				logger.Errorf("ConvertToFloat() err = %v, wantErr = %v", err, tt.wantErr)
+				t.Fail()
+			} else {
+				logger.Info("result:", result, "err:", err)
+			}
+		})
+	}
+}
+
+func TestConvertToBool(t *testing.T) {
+	for _, tt := range initListTestConvertToBool() {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := ConvertToBool(tt.value)
+			if (err != nil) != tt.wantErr {
+				logger.Errorf("ConvertToBool() err = %v, wantErr = %v", err, tt.wantErr)
+				t.Fail()
+			} else {
+				logger.Info("result:", result, "err:", err)
 			}
 		})
 	}
@@ -74,10 +116,38 @@ func TestConvertToTime(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ConvertToTime(tt.value)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertToString() result = %v, wantEmpty = %v", result, tt.wantErr)
+				logger.Errorf("ConvertToString() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else {
 				logger.Info("result:", result)
+			}
+		})
+	}
+}
+
+func TestConvertToBytes(t *testing.T) {
+	for _, tt := range initListTestConvertToString() {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := ConvertToBytes(tt.value)
+			if (err != nil) != tt.wantErr {
+				logger.Errorf("ConvertToBytes() err = %v, wantErr = %v", err, tt.wantErr)
+				t.Fail()
+			} else {
+				logger.Info("result:", result, "error:", err)
+			}
+		})
+	}
+}
+
+func TestConvertToDest(t *testing.T) {
+	for _, tt := range initListTestConvertStringToDest() {
+		t.Run(tt.name, func(t *testing.T) {
+			err := ConvertToDest(tt.value, tt.dest)
+			if (err != nil) != tt.wantErr {
+				logger.Errorf("ConvertToDest() err = %v, wantErr = %v", err, tt.wantErr)
+				t.Fail()
+			} else {
+				logger.Info("result:", tt.dest, "error:", err)
 			}
 		})
 	}
