@@ -46,7 +46,7 @@ Usability and documentation
 **IMPORTANT**: Always check the documentation in the structures and functions fields.
 For more details on the examples, visit [All examples link](https://github/GabrielHCataldo/go-helper/blob/main/_example)
 
-### Empty and Nil validations
+### Empty validate
 
 For empty checks we can insert any value of any type, see the examples:
 
@@ -160,6 +160,8 @@ Outputs:
 
 See other types of values as examples by accessing
 the [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go).
+
+### Nil validate
 
 ### Convert
 
