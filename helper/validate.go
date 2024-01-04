@@ -6,6 +6,7 @@ import (
 	"github.com/nyaruka/phonenumbers"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
+	"net"
 	"net/url"
 	"regexp"
 	"strings"
@@ -111,6 +112,36 @@ func IsBearer(v any) bool {
 	s := ConvertToString(v)
 	splitAuthorization := strings.Split(s, bearer)
 	return len(splitAuthorization) != 2 && splitAuthorization[0] == bearer
+}
+
+// IsPrivateIP check value is private ip
+func IsPrivateIP(v any) bool {
+	s := ConvertToString(v)
+	var privateIPBlocks []*net.IPNet
+	for _, cidr := range []string{
+		"127.0.0.0/8",    // IPv4
+		"10.0.0.0/8",     // RFC1918
+		"172.16.0.0/12",  // RFC1918
+		"192.168.0.0/16", // RFC1918
+		"169.254.0.0/16", // RFC3927 link-local
+		"::1/128",        // IPv6
+		"fe80::/10",      // IPv6 link-local
+		"fc00::/7",       // IPv6 unique local addr
+	} {
+		_, block, _ := net.ParseCIDR(cidr)
+		if block != nil {
+			privateIPBlocks = append(privateIPBlocks, block)
+		}
+	}
+	ip := net.ParseIP(s)
+	result := ip.IsLoopback() || ip.IsLinkLocalUnicast() || ip.IsLinkLocalMulticast()
+	for _, block := range privateIPBlocks {
+		if block.Contains(ip) {
+			result = true
+			break
+		}
+	}
+	return result
 }
 
 // ValidateFullName If value contains first name and last name return true, otherwise return false

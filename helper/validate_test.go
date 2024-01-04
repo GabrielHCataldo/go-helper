@@ -78,6 +78,12 @@ func TestIsBearer(t *testing.T) {
 	logger.Info("IsBearer:", result)
 }
 
+func TestIsPrivateIP(t *testing.T) {
+	v := "127.0.0.1"
+	result := IsPrivateIP(v)
+	logger.Info("IsPrivateIP:", result)
+}
+
 func TestValidateFullName(t *testing.T) {
 	v := ""
 	result := ValidateFullName(v)
