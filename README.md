@@ -20,13 +20,15 @@ The go-helper project came to facilitate the use of validations, conversions, fo
 incredible flexibility and simple to use. Below we list some implemented features:
 
 - No more using != or == nil, use better described functions for that.
-- No more using len to check if it is empty or not.
-- Use robust validation functions ready to be used.
-- Check all possible types of values in a simple and intuitive way.
-- Check single or multiple values if they are empty, null, the same, etc. without having to write lines and lines of
+- You don't need to use more lens to check if it is empty or not.
+- Use robust validation functions out of the box.
+- Check all types of possible values in a simple and intuitive way.
+- Check single or multiple values if they are empty, null, equal, etc. without having to write lines and lines of
   code.
-- Use new structure validations easily.
-- Help us to be the best and most complete golang utility library and help the community.
+- Easy and intuitive rounding.
+- Format and Convert for you to use in the best way in your projects.
+- Use new framework validations easily.
+- Help us be the best and most complete golang utility library and help the community.
 
 Installation
 ------------
@@ -49,8 +51,6 @@ For more details on the examples, visit [All examples link](https://github/Gabri
 ### Empty validate
 
 For empty checks we can insert any value of any type, see the examples:
-
-- #### STRUCT
 
 ```go
 package main
