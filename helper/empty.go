@@ -16,23 +16,23 @@ func IsNil(v any) bool {
 	}
 }
 
-// IsNonNil check value is not nil
-func IsNonNil(v any) bool {
+// IsNotNil check value is not nil
+func IsNotNil(v any) bool {
 	return !IsNil(v)
 }
 
 // AllNil check all values are nil
 func AllNil(v ...any) bool {
 	for _, a := range v {
-		if !IsNil(a) {
+		if IsNotNil(a) {
 			return false
 		}
 	}
 	return true
 }
 
-// AllNonNil check all values are not nil
-func AllNonNil(v ...any) bool {
+// AllNotNil check all values are not nil
+func AllNotNil(v ...any) bool {
 	return !AllNil(v...)
 }
 
@@ -192,7 +192,7 @@ func isReflectZero(v any) bool {
 	} else if IsMap(v) {
 		return len(elem.MapKeys()) == 0
 	}
-	return elem.IsZero() || IsNil(v)
+	return !elem.IsValid() || elem.IsZero() || IsNil(v)
 }
 
 func isReflectNil(v any) bool {

@@ -14,11 +14,11 @@ func TestIsNil(t *testing.T) {
 	}
 }
 
-func TestIsNonNil(t *testing.T) {
-	for _, tt := range initListTestIsNonNil() {
+func TestIsNotNil(t *testing.T) {
+	for _, tt := range initListTestIsNotNil() {
 		t.Run(tt.name, func(t *testing.T) {
-			empty := IsNonNil(tt.value)
-			logger.Info("IsNonNil:", empty)
+			empty := IsNotNil(tt.value)
+			logger.Info("IsNotNil:", empty)
 		})
 	}
 }
@@ -32,11 +32,11 @@ func TestAllNil(t *testing.T) {
 	}
 }
 
-func TestAllNonNil(t *testing.T) {
-	for _, tt := range initListTestIsNonNil() {
+func TestAllNotNil(t *testing.T) {
+	for _, tt := range initListTestIsNotNil() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := AllNonNil(tt.value)
-			logger.Info("AllNonNil:", result)
+			result := AllNotNil(tt.value)
+			logger.Info("AllNotNil:", result)
 		})
 	}
 }

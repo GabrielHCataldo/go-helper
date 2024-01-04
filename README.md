@@ -72,8 +72,8 @@ func main() {
     isEmpty := helper.IsEmpty(nStruct)
     logger.Info("struct is empty?", isEmpty)
     nStruct.Name = "test name"
-    isNotEmpty := helper.IsNotEmpty(nStruct)
-    logger.Info("struct is not empty?", isNotEmpty)
+    isNotEmpty := helper.IsNotEmpty(&nStruct)
+    logger.Info("pointer struct is not empty?", isNotEmpty)
 }
 ```
 
@@ -82,7 +82,7 @@ Outputs:
     [INFO 2024/01/03 20:03:06] main.go:18: struct is empty? true
     [INFO 2024/01/03 20:03:06] main.go:21: struct is not empty? true
 
-- #### SLICE
+You can validate multiple values simultaneously, whether they are empty or not, see:
 
 ```go
 package main
@@ -93,81 +93,188 @@ import (
 )
 
 func main() {
-    nSlice := []any{}
-    isEmpty := helper.IsEmpty(nSlice)
-    logger.Info("slice is empty?", isEmpty)
-    nSlice = append(nSlice, "test")
-    isNotEmpty := helper.IsNotEmpty(nSlice)
-    logger.Info("slice is not empty?", isNotEmpty)
+    var anyPointer *any
+    var nMap map[string]any
+    var nSlice []any
+    var nString string
+    var nInt int
+    var nFloat float64
+    var nBool bool
+   
+    allEmpty := helper.AllEmpty(anyPointer, nMap, nSlice, nString, nInt, nFloat, nBool)
+    logger.Info("all are empty?", allEmpty)
+   
+    anyPointer = helper.ConvertToPointer(any("value string"))
+    nMap = map[string]any{
+      "test": "value",
+    }
+    nString = "value"
+    nInt = 1
+    nFloat = 1.0
+    nBool = true
+    nSlice = append(nSlice, any("value"))
+   
+    allNotEmpty := helper.AllNotEmpty(anyPointer, nMap, nString, nInt, nFloat, nBool)
+    logger.Info("all are not empty?", allNotEmpty)
 }
 ```
 
 Outputs:
 
-    [INFO 2024/01/03 20:52:20] main.go:12: slice is empty? true
-    [INFO 2024/01/03 20:52:20] main.go:15: slice is not empty? true
-
-
-- #### MAP AND POINTER MAP
-
-```go
-package main
-
-import (
-    "github.com/GabrielHCataldo/go-helper/helper"
-    "github.com/GabrielHCataldo/go-logger/logger"
-)
-
-func main() {
-    nMap := map[string]any{}
-    isEmpty := helper.IsEmpty(&nMap)
-    logger.Info("pointer map is empty?", isEmpty)
-    nMap["test"] = "value string"
-    isNotEmpty := helper.IsNotEmpty(nMap)
-    logger.Info("map is not empty?", isNotEmpty)
-}
-```
-
-Outputs:
-
-    [INFO 2024/01/03 20:58:44] main.go:12: pointer map is empty? true
-    [INFO 2024/01/03 20:58:44] main.go:15: pointer map is not empty? true
-
-- #### STRING
-
-```go
-package main
-
-import (
-    "github.com/GabrielHCataldo/go-helper/helper"
-    "github.com/GabrielHCataldo/go-logger/logger"
-)
-
-func main() {
-    nBlankString := "  "
-    isEmpty := helper.IsEmpty(nBlankString)
-    logger.Info("string is empty?", isEmpty)
-    nBlankString = "test name"
-    isNotEmpty := helper.IsNotEmpty(nBlankString)
-    logger.Info("string is not empty?", isNotEmpty)
-}
-```
-
-Outputs:
-
-    [INFO 2024/01/03 20:48:24] main.go:12: string is empty? true
-    [INFO 2024/01/03 20:48:24] main.go:15: string is not empty? true
+    [INFO 2024/01/04 05:09:56] main.go:17: all are empty? true
+    [INFO 2024/01/04 05:09:56] main.go:27: all are not empty? true
 
 See other types of values as examples by accessing
 the [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go).
 
 ### Nil validate
+Validating the "nil" value is simple, but be careful, as
+only the types **Pointer**, **Map**, **Chan**, **Interface**, **Slice** and **Array**
+can have a nil value in go, see an example below:
 
-### Convert
+```go
+package main
 
-### Format
+import (
+    "github.com/GabrielHCataldo/go-helper/helper"
+    "github.com/GabrielHCataldo/go-logger/logger"
+)
 
-### Validate
+func main() {
+    var anyPointer *any
+    isNil := helper.IsNil(anyPointer)
+    logger.Info("pointer is nil?", isNil)
+    anyPointer = helper.ConvertToPointer(any("value string"))
+    isNotNil := helper.IsNotNil(anyPointer)
+    logger.Info("pointer is not nil?", isNotNil)
+}
+```
+
+Outputs:
+
+    [INFO 2024/01/04 05:01:57] main.go:12: pointer is nil? true
+    [INFO 2024/01/04 05:01:57] main.go:15: pointer is not nil? true
+
+You can also be validating multiple values simultaneously, see the example below:
+
+```go
+package main
+
+import (
+    "github.com/GabrielHCataldo/go-helper/helper"
+    "github.com/GabrielHCataldo/go-logger/logger"
+)
+
+func main() {
+    var anyPointer *any
+    var nMap map[string]any
+    var nSlice []any
+    var nChan chan struct{}
+    var nInterface interface{}
+    
+    allNil := helper.AllNil(anyPointer, nMap, nSlice, nChan, nInterface)
+    logger.Info("all are nil?", allNil)
+    
+    anyPointer = helper.ConvertToPointer(any("value string"))
+    nMap = map[string]any{}
+    nSlice = append(nSlice, any("value"))
+    nChan = make(chan struct{}, 1)
+    nInterface = "value"
+    
+    allNotNil := helper.AllNotNil(anyPointer, nMap, nSlice, nChan, nInterface)
+    logger.Info("all are not nil?", allNotNil)
+}
+```
+
+Outputs
+
+    [INFO 2024/01/04 05:19:48] main.go:17: all are nil? true
+    [INFO 2024/01/04 05:19:48] main.go:26: all are not nil? true
+
+See other types of values as examples by accessing
+the [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go).
+
+### Equal
+Checking equals is very simple, and works for any type and number 
+of parameters entered, if it is **Pointer**, go-helper will obtain the
+real value for comparison, see one of the examples:
+
+```go
+package main
+
+import (
+    "github.com/GabrielHCataldo/go-helper/helper"
+    "github.com/GabrielHCataldo/go-logger/logger"
+)
+
+func main() {
+    s1 := "value"
+    s2 := "value"
+    s3 := "value"
+    s4 := "value"
+    
+    equals := helper.Equal(s1, s2, s3, s4)
+    logger.Info("equals?", equals)
+    
+    s1 = "value1"
+    
+    notEquals := helper.NotEqual(s1, s2, s3, s4)
+    logger.Info("not equals?", notEquals)
+}
+```
+
+Outputs:
+
+    [INFO 2024/01/04 05:32:42] main.go:15: equals? true
+    [INFO 2024/01/04 05:32:42] main.go:20: not equals? true
+
+### Type
+With go-helper it is very simple to know the type of your variable, see the example:
+
+```go
+package main
+
+import (
+    "github.com/GabrielHCataldo/go-helper/helper"
+    "github.com/GabrielHCataldo/go-logger/logger"
+    "time"
+)
+
+func main() {
+    var a any = map[string]any{}
+    
+    isMap := helper.IsMap(a)
+    logger.Info("is map?", isMap)
+    
+    a = "value1"
+    
+    isString := helper.IsString(a)
+    logger.Info("is string?", isString)
+    
+    a = 12
+    
+    isInt := helper.IsInt(a)
+    logger.Info("is int?", isInt)
+    
+    a = true
+    
+    isBool := helper.IsBool(a)
+    logger.Info("is bool?", isBool)
+    
+    a = time.Now()
+    
+    isTime := helper.IsTime(a)
+    logger.Info("is time?", isTime)
+}
+```
+
+Outputs:
+
+    [INFO 2024/01/04 05:47:38] main.go:13: is map? true
+    [INFO 2024/01/04 05:47:38] main.go:18: is string? true
+    [INFO 2024/01/04 05:47:38] main.go:23: is int? true
+    [INFO 2024/01/04 05:47:38] main.go:28: is bool? true
+    [INFO 2024/01/04 05:47:38] main.go:33: is time? true
 
 ### For more examples
 

@@ -357,7 +357,7 @@ func initListTestIsNil() []testGenericValue {
 	}
 }
 
-func initListTestIsNonNil() []testGenericValue {
+func initListTestIsNotNil() []testGenericValue {
 	return []testGenericValue{
 		{
 			name:  "pointer",
