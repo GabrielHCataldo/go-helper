@@ -185,7 +185,14 @@ func isReflectZero(v any) bool {
 	if IsPointer(v) || IsInterface(v) {
 		elem = elem.Elem()
 	}
-	return !elem.IsValid() || elem.IsZero()
+	if IsString(v) {
+		return len(strings.TrimSpace(CleanAllRepeatSpaces(elem.String()))) == 0
+	} else if IsSlice(v) {
+		return elem.Len() == 0
+	} else if IsMap(v) {
+		return len(elem.MapKeys()) == 0
+	}
+	return elem.IsZero() || IsNil(v)
 }
 
 func isReflectNil(v any) bool {
