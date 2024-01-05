@@ -215,7 +215,7 @@ func SimpleConvertToTime(a any) time.Time {
 func ConvertToBytes(a any) ([]byte, error) {
 	if IsNil(a) {
 		return []byte{}, errors.New("error convert to bool: value is nil")
-	} else if IsJson(a) && IsNotBytes(a) {
+	} else if IsJson(a) && IsNotError(a) && IsNotBytes(a) {
 		return json.Marshal(a)
 	} else {
 		s, err := ConvertToString(a)
@@ -241,29 +241,29 @@ func ConvertToDest(a, dest any) error {
 		v = v.Elem()
 	}
 	vInterface := v.Interface()
-	reflectDest := reflect.ValueOf(dest)
+	rDest := reflect.ValueOf(dest)
 	if IsJson(dest) {
 		b, _ := ConvertToBytes(a)
 		return json.Unmarshal(b, dest)
 	} else if IsInt(dest) {
 		i, err := ConvertToInt(vInterface)
-		reflectDest.Elem().Set(reflect.ValueOf(i))
+		rDest.Elem().Set(reflect.ValueOf(i))
 		return err
 	} else if IsFloat(dest) {
 		f, err := ConvertToFloat(vInterface)
-		reflectDest.Elem().Set(reflect.ValueOf(f))
+		rDest.Elem().Set(reflect.ValueOf(f))
 		return err
 	} else if IsBool(dest) {
 		b, err := ConvertToBool(vInterface)
-		reflectDest.Elem().Set(reflect.ValueOf(b))
+		rDest.Elem().Set(reflect.ValueOf(b))
 		return err
 	} else if IsString(dest) {
 		s, err := ConvertToString(vInterface)
-		reflectDest.Elem().Set(reflect.ValueOf(s))
+		rDest.Elem().Set(reflect.ValueOf(s))
 		return err
 	} else if IsTime(dest) {
 		tm, err := ConvertToTime(vInterface)
-		reflectDest.Elem().Set(reflect.ValueOf(tm))
+		rDest.Elem().Set(reflect.ValueOf(tm))
 		return err
 	} else {
 		return errors.New("error convert to dest: unknown value dest")

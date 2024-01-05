@@ -60,13 +60,11 @@ func IsNotInterface(a any) bool {
 
 // IsJson If value is struct, map, slice or array return true, otherwise return false
 func IsJson(a any) bool {
-	v := reflect.ValueOf(a)
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
-		v = v.Elem()
 		t = t.Elem()
 	}
-	if IsError(a) || IsTime(a) {
+	if (IsError(a) && IsNotStringJson(a.(error).Error())) || IsTime(a) {
 		return false
 	}
 	return t != nil && (t.Kind() == reflect.Struct || t.Kind() == reflect.Map || t.Kind() == reflect.Slice ||
