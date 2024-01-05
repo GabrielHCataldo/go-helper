@@ -16,22 +16,21 @@ func ConvertToPointer[T any](t T) *T {
 	return &t
 }
 
-// ConvertToObjectId convert any value to primitive.ObjectID, if err return empty value, check using primitive.NilObjectID
-func ConvertToObjectId(a any) primitive.ObjectID {
-	s, _ := ConvertToString(a)
-	r, _ := primitive.ObjectIDFromHex(s)
-	return r
-}
-
-// ConvertToObjectIdWithErr convert any value to primitive.ObjectID
-func ConvertToObjectIdWithErr(a any) (primitive.ObjectID, error) {
+// ConvertToObjectId convert any value to primitive.ObjectID
+func ConvertToObjectId(a any) (primitive.ObjectID, error) {
 	s, _ := ConvertToString(a)
 	return primitive.ObjectIDFromHex(s)
 }
 
+// SimpleConvertToObjectId convert any value to primitive.ObjectID, if err return empty value, check using primitive.NilObjectID
+func SimpleConvertToObjectId(a any) primitive.ObjectID {
+	r, _ := ConvertToObjectId(a)
+	return r
+}
+
 // ConvertByteUnit convert byte unit text to int ex: 1KB = 1024
-func ConvertByteUnit(v any) (int, error) {
-	s, _ := ConvertToString(v)
+func ConvertByteUnit(a any) (int, error) {
+	s, _ := ConvertToString(a)
 	errDefault := errors.New("byte unit mal formatted ex: 100MB")
 	regex := regexp.MustCompile(`^(\d+)\s?(\w+)?$`)
 	match := regex.FindAllStringSubmatch(s, -1)
@@ -61,6 +60,12 @@ func ConvertByteUnit(v any) (int, error) {
 	default:
 		return 0, errDefault
 	}
+}
+
+// SimpleConvertByteUnit convert byte unit text to int ex: 1KB = 1024, if err return empty value
+func SimpleConvertByteUnit(a any) int {
+	r, _ := ConvertByteUnit(a)
+	return r
 }
 
 // ConvertMegaByteUnit convert megabyte unit text to int ex: 1GB = 1024
@@ -93,6 +98,12 @@ func ConvertMegaByteUnit(a any) (int, error) {
 	}
 }
 
+// SimpleConvertMegaByteUnit convert megabyte unit text to int ex: 1GB = 1024, if err return empty value
+func SimpleConvertMegaByteUnit(a any) int {
+	r, _ := ConvertMegaByteUnit(a)
+	return r
+}
+
 // ConvertToString convert any value to beautiful string
 func ConvertToString(a any) (string, error) {
 	if IsNil(a) {
@@ -114,6 +125,12 @@ func ConvertToString(a any) (string, error) {
 	}
 }
 
+// SimpleConvertToString convert any value to beautiful string, if err return empty value
+func SimpleConvertToString(a any) string {
+	s, _ := ConvertToString(a)
+	return s
+}
+
 // ConvertToInt convert any value to int
 func ConvertToInt(a any) (int, error) {
 	if IsNil(a) {
@@ -124,6 +141,12 @@ func ConvertToInt(a any) (int, error) {
 		v = v.Elem()
 	}
 	return convertToIntByType(v.Interface())
+}
+
+// SimpleConvertToInt convert any value to int, if err return empty value
+func SimpleConvertToInt(a any) int {
+	i, _ := ConvertToInt(a)
+	return i
 }
 
 // ConvertToFloat convert any value to float
@@ -138,6 +161,12 @@ func ConvertToFloat(a any) (float64, error) {
 	return convertToFloatByType(v.Interface())
 }
 
+// SimpleConvertToFloat convert any value to float, if err return empty value
+func SimpleConvertToFloat(a any) float64 {
+	f, _ := ConvertToFloat(a)
+	return f
+}
+
 // ConvertToBool convert any value to float
 func ConvertToBool(a any) (bool, error) {
 	if IsNil(a) {
@@ -148,6 +177,12 @@ func ConvertToBool(a any) (bool, error) {
 		v = v.Elem()
 	}
 	return convertToBoolByType(v.Interface())
+}
+
+// SimpleConvertToBool convert any value to float, if err return empty value
+func SimpleConvertToBool(a any) bool {
+	b, _ := ConvertToBool(a)
+	return b
 }
 
 // ConvertToTime convert any value to time
@@ -170,7 +205,13 @@ func ConvertToTime(a any) (time.Time, error) {
 	}
 }
 
-// ConvertToBytes convert any value to float
+// SimpleConvertToTime convert any value to time, if err return empty value
+func SimpleConvertToTime(a any) time.Time {
+	t, _ := ConvertToTime(a)
+	return t
+}
+
+// ConvertToBytes convert any value to bytes
 func ConvertToBytes(a any) ([]byte, error) {
 	if IsNil(a) {
 		return []byte{}, errors.New("error convert to bool: value is nil")
@@ -180,6 +221,12 @@ func ConvertToBytes(a any) ([]byte, error) {
 		s, err := ConvertToString(a)
 		return []byte(s), err
 	}
+}
+
+// SimpleConvertToBytes convert any value to bytes, if err return empty value
+func SimpleConvertToBytes(a any) []byte {
+	bs, _ := ConvertToBytes(a)
+	return bs
 }
 
 // ConvertToDest convert value to dest param
@@ -223,10 +270,10 @@ func ConvertToDest(a, dest any) error {
 	}
 }
 
-// GetRealValue get real value by any, if pointer or interface return value non pointer or interface
-func GetRealValue(v any) any {
-	elem := reflect.ValueOf(v)
-	if IsPointer(v) || IsInterface(v) {
+// getRealValue get real value by any, if pointer or interface return value non pointer or interface
+func getRealValue(a any) any {
+	elem := reflect.ValueOf(a)
+	if IsPointer(a) || IsInterface(a) {
 		elem = elem.Elem()
 	}
 	return elem.Interface()

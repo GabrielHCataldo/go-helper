@@ -2,6 +2,7 @@ package helper
 
 import (
 	"encoding/json"
+	"fmt"
 	"math/rand"
 	"os"
 	"regexp"
@@ -10,82 +11,82 @@ import (
 )
 
 // IsNumeric check any value is numeric, ex: v any is int return true, if string numeric return true, if bool return false.
-func IsNumeric(v any) bool {
-	s, _ := ConvertToString(v)
+func IsNumeric(a any) bool {
+	s, _ := ConvertToString(a)
 	regex := regexp.MustCompile(`^[0-9]+$`)
 	return regex.MatchString(s)
 }
 
 // IsLetter check any value is letter, ex: v any is int return false, if string letter return true, if bool return true.
-func IsLetter(v any) bool {
-	s, _ := ConvertToString(v)
+func IsLetter(a any) bool {
+	s, _ := ConvertToString(a)
 	regex := regexp.MustCompile(`^[A-Za-z]+$`)
 	return regex.MatchString(s)
 }
 
 // IsStringJson check if string value is json return true, otherwise return false.
-func IsStringJson(v any) bool {
-	s, _ := ConvertToString(v)
+func IsStringJson(a any) bool {
+	s, _ := ConvertToString(a)
 	var js json.RawMessage
 	return json.Unmarshal([]byte(s), &js) == nil
 }
 
 // IsNotStringJson check if string value is not json return true, otherwise return false.
-func IsNotStringJson(v any) bool {
-	return !IsStringJson(v)
+func IsNotStringJson(a any) bool {
+	return !IsStringJson(a)
 }
 
 // IsStringInt check if string value is int return true, otherwise return false.
-func IsStringInt(v any) bool {
-	s, _ := ConvertToString(v)
+func IsStringInt(a any) bool {
+	s, _ := ConvertToString(a)
 	_, err := strconv.Atoi(s)
 	return err == nil
 }
 
 // IsNotStringInt check if string value is not int return true, otherwise return false.
-func IsNotStringInt(v any) bool {
-	return !IsStringInt(v)
+func IsNotStringInt(a any) bool {
+	return !IsStringInt(a)
 }
 
 // IsStringBool check if string value is bool return true, otherwise return false.
-func IsStringBool(v any) bool {
-	s, _ := ConvertToString(v)
+func IsStringBool(a any) bool {
+	s, _ := ConvertToString(a)
 	_, err := strconv.ParseBool(s)
 	return err == nil
 }
 
 // IsNotStringBool check if string value is not bool return true, otherwise return false.
-func IsNotStringBool(v any) bool {
-	return !IsStringBool(v)
+func IsNotStringBool(a any) bool {
+	return !IsStringBool(a)
 }
 
 // IsStringFloat check if string value is float return true, otherwise return false.
-func IsStringFloat(v any) bool {
-	s, _ := ConvertToString(v)
+func IsStringFloat(a any) bool {
+	s, _ := ConvertToString(a)
 	_, err := strconv.ParseFloat(s, 64)
 	return err == nil
 }
 
 // IsNotStringFloat check if string value is not float return true, otherwise return false.
-func IsNotStringFloat(v any) bool {
-	return !IsStringFloat(v)
+func IsNotStringFloat(a any) bool {
+	return !IsStringFloat(a)
 }
 
 // IsStringTime check if string value is time return true, otherwise return false.
-func IsStringTime(v any) bool {
-	s, _ := ConvertToString(v)
+func IsStringTime(a any) bool {
+	s, _ := ConvertToString(a)
 	_, err := ConvertToTime(s)
 	return err == nil
 }
 
 // IsNotStringTime check if string value is not time return true, otherwise return false.
-func IsNotStringTime(v any) bool {
-	return !IsStringTime(v)
+func IsNotStringTime(a any) bool {
+	return !IsStringTime(a)
 }
 
 // GetFirstLastName get first and last name by string value or string pointer, ex: Gabriel Henrique Cataldo -> Gabriel Cataldo.
-func GetFirstLastName(v any) string {
-	s, _ := ConvertToString(v)
+func GetFirstLastName(a any) string {
+	s, _ := ConvertToString(a)
 	split := strings.Split(s, " ")
 	firstName := split[0]
 	lastName := split[len(split)-1]
@@ -125,4 +126,16 @@ func CleanAllRepeatSpaces(v string) string {
 	v = regex.ReplaceAllString(v, " ")
 	v = regex2.ReplaceAllString(v, "")
 	return v
+}
+
+// Sprintln get all values convert to text string
+func Sprintln(a ...any) string {
+	var ac []any
+	for _, v := range a {
+		s := SimpleConvertToString(v)
+		if IsNotEmpty(s) {
+			ac = append(ac, s)
+		}
+	}
+	return strings.TrimRight(fmt.Sprintln(ac...), "\n")
 }

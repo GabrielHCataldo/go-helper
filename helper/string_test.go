@@ -165,3 +165,7 @@ func TestCleanAllRepeatSpaces(t *testing.T) {
 	result := CleanAllRepeatSpaces(s)
 	logger.Info("CleanAllRepeatSpaces:", result)
 }
+
+func TestSprintln(t *testing.T) {
+	logger.Info("Sprintln:", Sprintln("test string value:", 2, "with bool:", true, "with struct:", initTestStruct()))
+}

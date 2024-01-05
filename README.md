@@ -3,7 +3,7 @@ Go Helper
 <!--suppress ALL -->
 <img align="right" src="gopher-helper.png" alt="">
 
-[![Project status](https://img.shields.io/badge/version-v1.0.2-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.0.2)
+[![Project status](https://img.shields.io/badge/version-v1.0.3-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.0.3)
 [![Go Report Card](https://goreportcard.com/badge/github.com/GabrielHCataldo/go-helper)](https://goreportcard.com/report/github.com/GabrielHCataldo/go-helper)
 [![Coverage Status](https://coveralls.io/repos/GabrielHCataldo/go-helper/badge.svg?branch=main&service=github)](https://coveralls.io/github/GabrielHCataldo/go-helper?branch=main)
 [![Open Source Helpers](https://www.codetriage.com/gabrielhcataldo/go-helper/badges/users.svg)](https://www.codetriage.com/gabrielhcataldo/go-helper)
@@ -287,6 +287,7 @@ Outputs:
 - [Equal](https://github/GabrielHCataldo/go-helper/blob/main/_example/equal/main.go)
 - [Float](https://github/GabrielHCataldo/go-helper/blob/main/_example/float/main.go)
 - [Format](https://github/GabrielHCataldo/go-helper/blob/main/_example/format/main.go)
+- [Convert](https://github/GabrielHCataldo/go-helper/blob/main/_example/convert/main.go)
 - [Int](https://github/GabrielHCataldo/go-helper/blob/main/_example/int/main.go)
 - [String](https://github/GabrielHCataldo/go-helper/blob/main/_example/string/main.go)
 - [Time](https://github/GabrielHCataldo/go-helper/blob/main/_example/time/main.go)

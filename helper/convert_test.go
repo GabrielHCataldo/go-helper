@@ -12,15 +12,14 @@ func TestConvertToPointer(t *testing.T) {
 }
 
 func TestConvertToObjectId(t *testing.T) {
-	v := ""
-	result := ConvertToObjectId(v)
-	logger.Info("ConvertToObjectId:", result)
+	result, err := ConvertToObjectId("")
+	logger.Info("ConvertToObjectId:", result, "err:", err)
 }
 
-func TestConvertToObjectIdWithErr(t *testing.T) {
+func TestSimpleConvertToObjectId(t *testing.T) {
 	v := ""
-	result, err := ConvertToObjectIdWithErr(v)
-	logger.Info("ConvertToObjectId:", result, "err:", err)
+	result := SimpleConvertToObjectId(v)
+	logger.Info("SimpleConvertToObjectId:", result)
 }
 
 func TestConvertByteUnit(t *testing.T) {
@@ -39,6 +38,11 @@ func TestConvertByteUnit(t *testing.T) {
 	}
 }
 
+func TestSimpleConvertByteUnit(t *testing.T) {
+	result := SimpleConvertByteUnit("")
+	logger.Info("SimpleConvertByteUnit:", result)
+}
+
 func TestConvertMegaByteUnit(t *testing.T) {
 	for _, tt := range initListTestConvertMegaByteUnit() {
 		t.Run(tt.name, func(t *testing.T) {
@@ -55,6 +59,11 @@ func TestConvertMegaByteUnit(t *testing.T) {
 	}
 }
 
+func TestSimpleConvertMegaByteUnit(t *testing.T) {
+	result := SimpleConvertMegaByteUnit("")
+	logger.Info("SimpleConvertMegaByteUnit:", result)
+}
+
 func TestConvertToString(t *testing.T) {
 	for _, tt := range initListTestConvertToString() {
 		t.Run(tt.name, func(t *testing.T) {
@@ -67,6 +76,11 @@ func TestConvertToString(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestSimpleConvertToString(t *testing.T) {
+	result := SimpleConvertToString("")
+	logger.Info("SimpleConvertToString:", result)
 }
 
 func TestConvertToInt(t *testing.T) {
@@ -83,6 +97,11 @@ func TestConvertToInt(t *testing.T) {
 	}
 }
 
+func TestSimpleConvertToInt(t *testing.T) {
+	result := SimpleConvertToInt("")
+	logger.Info("SimpleConvertToInt:", result)
+}
+
 func TestConvertToFloat(t *testing.T) {
 	for _, tt := range initListTestConvertToInt() {
 		t.Run(tt.name, func(t *testing.T) {
@@ -95,6 +114,11 @@ func TestConvertToFloat(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestSimpleConvertToFloat(t *testing.T) {
+	result := SimpleConvertToFloat("")
+	logger.Info("SimpleConvertToFloat:", result)
 }
 
 func TestConvertToBool(t *testing.T) {
@@ -111,6 +135,11 @@ func TestConvertToBool(t *testing.T) {
 	}
 }
 
+func TestSimpleConvertToBool(t *testing.T) {
+	result := SimpleConvertToBool("")
+	logger.Info("SimpleConvertToBool:", result)
+}
+
 func TestConvertToTime(t *testing.T) {
 	for _, tt := range initListTestConvertToTime() {
 		t.Run(tt.name, func(t *testing.T) {
@@ -125,6 +154,11 @@ func TestConvertToTime(t *testing.T) {
 	}
 }
 
+func TestSimpleConvertToTime(t *testing.T) {
+	result := SimpleConvertToTime("")
+	logger.Info("SimpleConvertToTime:", result)
+}
+
 func TestConvertToBytes(t *testing.T) {
 	for _, tt := range initListTestConvertToString() {
 		t.Run(tt.name, func(t *testing.T) {
@@ -137,6 +171,11 @@ func TestConvertToBytes(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestSimpleConvertToBytes(t *testing.T) {
+	result := SimpleConvertToBytes("")
+	logger.Info("SimpleConvertToBytes:", result)
 }
 
 func TestConvertToDest(t *testing.T) {
