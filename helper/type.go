@@ -60,9 +60,14 @@ func IsNotInterface(a any) bool {
 
 // IsJson If value is struct, map, slice or array return true, otherwise return false
 func IsJson(a any) bool {
+	v := reflect.ValueOf(a)
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
+		v = v.Elem()
 		t = t.Elem()
+	}
+	if IsError(a) || IsTime(a) {
+		return false
 	}
 	return t != nil && (t.Kind() == reflect.Struct || t.Kind() == reflect.Map || t.Kind() == reflect.Slice ||
 		t.Kind() == reflect.Array)
@@ -355,4 +360,23 @@ func IsBytes(a any) bool {
 // IsNotBytes If value is not slice byte return true, otherwise return false
 func IsNotBytes(a any) bool {
 	return !IsBytes(a)
+}
+
+// IsError If value is error return true, otherwise return false
+func IsError(a any) bool {
+	vr := reflect.ValueOf(a)
+	if IsPointer(a) {
+		vr = vr.Elem()
+	}
+	return okCastError(a) || okCastError(vr.Interface())
+}
+
+// IsNotError If value is not error return true, otherwise return false
+func IsNotError(a any) bool {
+	return !IsError(a)
+}
+
+func okCastError(a any) bool {
+	_, ok := a.(error)
+	return ok
 }

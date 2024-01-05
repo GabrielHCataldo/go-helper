@@ -113,16 +113,16 @@ func ConvertToString(a any) (string, error) {
 	if v.Type().Kind() == reflect.Pointer {
 		v = v.Elem()
 	}
-	switch v.Kind() {
-	case reflect.Struct, reflect.Map, reflect.Slice, reflect.Array:
+	if IsJson(a) || IsTime(a) {
 		if s, ok := v.Interface().([]byte); ok {
 			return string(s), nil
 		}
 		b, err := json.Marshal(v.Interface())
 		return string(b), err
-	default:
-		return convertToStringByType(v.Interface())
+	} else if IsError(a) {
+		return a.(error).Error(), nil
 	}
+	return convertToStringByType(v.Interface())
 }
 
 // SimpleConvertToString convert any value to beautiful string, if err return empty value
@@ -215,7 +215,7 @@ func SimpleConvertToTime(a any) time.Time {
 func ConvertToBytes(a any) ([]byte, error) {
 	if IsNil(a) {
 		return []byte{}, errors.New("error convert to bool: value is nil")
-	} else if IsJson(a) && IsNotTime(a) && IsNotBytes(a) {
+	} else if IsJson(a) && IsNotBytes(a) {
 		return json.Marshal(a)
 	} else {
 		s, err := ConvertToString(a)
@@ -242,8 +242,8 @@ func ConvertToDest(a, dest any) error {
 	}
 	vInterface := v.Interface()
 	reflectDest := reflect.ValueOf(dest)
-	if IsJson(dest) && IsNotTime(dest) {
-		b, _ := ConvertToBytes(vInterface)
+	if IsJson(dest) {
+		b, _ := ConvertToBytes(a)
 		return json.Unmarshal(b, dest)
 	} else if IsInt(dest) {
 		i, err := ConvertToInt(vInterface)

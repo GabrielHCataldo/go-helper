@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"errors"
 	"github.com/GabrielHCataldo/go-logger/logger"
 	"testing"
 	"time"
@@ -54,6 +55,10 @@ func TestIsNotInterface(t *testing.T) {
 
 func TestIsJson(t *testing.T) {
 	result := IsJson(initTestStruct())
+	logger.Info("IsJson:", result)
+	result = IsJson(time.Now())
+	logger.Info("IsJson:", result)
+	result = IsJson(errors.New("test error value string"))
 	logger.Info("IsJson:", result)
 }
 
@@ -287,4 +292,29 @@ func TestIsNotTime(t *testing.T) {
 	v := time.Now()
 	result := IsNotTime(&v)
 	logger.Info("IsNotTime:", result)
+}
+
+func TestIsBytes(t *testing.T) {
+	var v []byte
+	result := IsBytes(&v)
+	logger.Info("IsBytes:", result)
+}
+
+func TestIsNotBytes(t *testing.T) {
+	var v []byte
+	result := IsNotBytes(&v)
+	logger.Info("IsNotBytes:", result)
+}
+
+func TestIsError(t *testing.T) {
+	var v any
+	v = errors.New("test error value")
+	result := IsError(v)
+	logger.Info("IsError:", result)
+}
+
+func TestIsNotError(t *testing.T) {
+	v := "test error value"
+	result := IsNotError(&v)
+	logger.Info("IsNotError:", result)
 }

@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"errors"
 	"testing"
 	"time"
 )
@@ -674,7 +675,7 @@ func initListTestConvertToTime() []testGenericValue {
 	}
 }
 
-func initListTestConvertStringToDest() []testGenericDestValue {
+func initListTestConvertToDest() []testGenericDestValue {
 	var s string
 	var i int
 	var f float64
@@ -745,6 +746,18 @@ func initListTestConvertStringToDest() []testGenericDestValue {
 			name:    "failed not pointer",
 			value:   "true",
 			dest:    b,
+			wantErr: true,
+		},
+		{
+			name:    "failed json format",
+			value:   "true 1123 test",
+			dest:    &st,
+			wantErr: true,
+		},
+		{
+			name:    "failed error json format",
+			value:   errors.New("error string value"),
+			dest:    &st,
 			wantErr: true,
 		},
 	}

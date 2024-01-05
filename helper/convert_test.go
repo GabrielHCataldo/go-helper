@@ -179,7 +179,7 @@ func TestSimpleConvertToBytes(t *testing.T) {
 }
 
 func TestConvertToDest(t *testing.T) {
-	for _, tt := range initListTestConvertStringToDest() {
+	for _, tt := range initListTestConvertToDest() {
 		t.Run(tt.name, func(t *testing.T) {
 			err := ConvertToDest(tt.value, tt.dest)
 			if (err != nil) != tt.wantErr {
