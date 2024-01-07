@@ -2,6 +2,7 @@ package helper
 
 import (
 	"errors"
+	"os"
 	"testing"
 	"time"
 )
@@ -42,6 +43,12 @@ type testIntMinMax struct {
 type testFile struct {
 	name    string
 	uri     string
+	wantErr bool
+}
+
+type testFileValue struct {
+	name    string
+	value   *os.File
 	wantErr bool
 }
 
@@ -176,6 +183,7 @@ func initListTestConvertMegaByteUnit() []testGenericValue {
 }
 
 func initListTestConvertToString() []testGenericValue {
+	osFile, _ := os.Open("../gopher-helper.png")
 	return []testGenericValue{
 		{
 			name:  "success string",
@@ -252,6 +260,10 @@ func initListTestConvertToString() []testGenericValue {
 		{
 			name:  "success bytes",
 			value: []byte{116, 114, 117, 101},
+		},
+		{
+			name:  "success file",
+			value: osFile,
 		},
 		{
 			name:  "success time",
@@ -758,6 +770,20 @@ func initListTestConvertToDest() []testGenericDestValue {
 			name:    "failed error json format",
 			value:   errors.New("error string value"),
 			dest:    &st,
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestConvertFileToBytes() []testFileValue {
+	f, _ := os.Open("../gopher-helper.png")
+	return []testFileValue{
+		{
+			name:  "success",
+			value: f,
+		},
+		{
+			name:    "failed",
 			wantErr: true,
 		},
 	}

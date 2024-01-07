@@ -1,10 +1,13 @@
 package helper
 
 import (
+	"bufio"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"math"
+	"os"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -113,9 +116,13 @@ func ConvertToString(a any) (string, error) {
 	if v.Type().Kind() == reflect.Pointer {
 		v = v.Elem()
 	}
-	if IsJson(a) || IsTime(a) {
+	if IsJson(a) || IsTime(a) || IsFile(a) {
 		if s, ok := v.Interface().([]byte); ok {
 			return string(s), nil
+		}
+		if f, ok := v.Interface().(os.File); ok {
+			b, err := ConvertFileToBytes(&f)
+			return base64.StdEncoding.EncodeToString(b), err
 		}
 		b, err := json.Marshal(v.Interface())
 		return string(b), err
@@ -214,7 +221,7 @@ func SimpleConvertToTime(a any) time.Time {
 // ConvertToBytes convert any value to bytes
 func ConvertToBytes(a any) ([]byte, error) {
 	if IsNil(a) {
-		return []byte{}, errors.New("error convert to bool: value is nil")
+		return []byte{}, errors.New("error convert to bytes: value is nil")
 	} else if IsJson(a) && IsNotError(a) && IsNotBytes(a) {
 		return json.Marshal(a)
 	} else {
@@ -227,6 +234,23 @@ func ConvertToBytes(a any) ([]byte, error) {
 func SimpleConvertToBytes(a any) []byte {
 	bs, _ := ConvertToBytes(a)
 	return bs
+}
+
+// ConvertFileToBytes convert os.File value to slice byte
+func ConvertFileToBytes(file *os.File) ([]byte, error) {
+	if IsNil(file) {
+		return nil, errors.New("error convert file to bytes: value is nil")
+	}
+	stat, _ := file.Stat()
+	bs := make([]byte, stat.Size())
+	_, err := bufio.NewReader(file).Read(bs)
+	return bs, err
+}
+
+// SimpleConvertFileToBytes convert os.File value to slice byte, without error
+func SimpleConvertFileToBytes(file *os.File) []byte {
+	b, _ := ConvertFileToBytes(file)
+	return b
 }
 
 // ConvertToDest convert value to dest param

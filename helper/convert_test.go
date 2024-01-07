@@ -2,6 +2,7 @@ package helper
 
 import (
 	"github.com/GabrielHCataldo/go-logger/logger"
+	"os"
 	"testing"
 )
 
@@ -176,6 +177,25 @@ func TestConvertToBytes(t *testing.T) {
 func TestSimpleConvertToBytes(t *testing.T) {
 	result := SimpleConvertToBytes("")
 	logger.Info("SimpleConvertToBytes:", result)
+}
+
+func TestConvertFileToBytes(t *testing.T) {
+	for _, tt := range initListTestConvertFileToBytes() {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := ConvertFileToBytes(tt.value)
+			if (err != nil) != tt.wantErr {
+				logger.Errorf("ConvertFileToBytes() err = %v, wantErr = %v", err, tt.wantErr)
+				t.Fail()
+			} else {
+				logger.Info("result:", result, "error:", err)
+			}
+		})
+	}
+}
+
+func TestSimpleConvertFileToBytes(t *testing.T) {
+	result := SimpleConvertFileToBytes(os.NewFile(0, "test"))
+	logger.Info("SimpleConvertFileToBytes:", result)
 }
 
 func TestConvertToDest(t *testing.T) {

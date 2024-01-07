@@ -3,6 +3,7 @@ package helper
 import (
 	"errors"
 	"github.com/GabrielHCataldo/go-logger/logger"
+	"os"
 	"testing"
 	"time"
 )
@@ -317,4 +318,18 @@ func TestIsNotError(t *testing.T) {
 	v := "test error value"
 	result := IsNotError(&v)
 	logger.Info("IsNotError:", result)
+}
+
+func TestIsFile(t *testing.T) {
+	var v any
+	v, _ = os.Open("../gopher-helper.png")
+	result := IsFile(v)
+	logger.Info("IsFile:", result)
+}
+
+func TestIsNotFile(t *testing.T) {
+	var v any
+	v, _ = os.Open("../gopher-helper.png")
+	result := IsNotFile(&v)
+	logger.Info("IsNotFile:", result)
 }

@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"os"
 	"reflect"
 	"time"
 )
@@ -64,7 +65,7 @@ func IsJson(a any) bool {
 	if IsPointer(a) {
 		t = t.Elem()
 	}
-	if (IsError(a) && IsNotStringJson(a.(error).Error())) || IsTime(a) {
+	if (IsError(a) && IsNotStringJson(a.(error).Error())) || IsTime(a) || IsFile(a) {
 		return false
 	}
 	return t != nil && (t.Kind() == reflect.Struct || t.Kind() == reflect.Map || t.Kind() == reflect.Slice ||
@@ -372,6 +373,21 @@ func IsError(a any) bool {
 // IsNotError If value is not error return true, otherwise return false
 func IsNotError(a any) bool {
 	return !IsError(a)
+}
+
+// IsFile If value is os.File return true, otherwise return false
+func IsFile(a any) bool {
+	vr := reflect.ValueOf(a)
+	if IsPointer(a) {
+		vr = vr.Elem()
+	}
+	_, ok := vr.Interface().(os.File)
+	return ok
+}
+
+// IsNotFile If value is os.File return true, otherwise return false
+func IsNotFile(a any) bool {
+	return !IsFile(a)
 }
 
 func okCastError(a any) bool {
