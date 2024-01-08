@@ -2,6 +2,7 @@ package helper
 
 import (
 	"bytes"
+	"io"
 	"os"
 	"reflect"
 	"time"
@@ -478,7 +479,7 @@ func IsReader(a any) bool {
 	if IsPointer(a) {
 		vr = vr.Elem()
 	}
-	_, ok := vr.Interface().(bytes.Reader)
+	_, ok := vr.Interface().(io.Reader)
 	return ok
 }
 

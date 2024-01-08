@@ -139,8 +139,8 @@ func ConvertToString(a any) (string, error) {
 		if bf, ok := v.Interface().(bytes.Buffer); ok {
 			return base64.StdEncoding.EncodeToString(bf.Bytes()), nil
 		}
-		if r, ok := v.Interface().(bytes.Reader); ok {
-			bs, err := io.ReadAll(&r)
+		if r, ok := v.Interface().(io.Reader); ok {
+			bs, err := io.ReadAll(r)
 			return base64.StdEncoding.EncodeToString(bs), err
 		}
 		b, err := json.Marshal(v.Interface())
@@ -303,8 +303,8 @@ func SimpleConvertToFile(a any) *os.File {
 	return f
 }
 
-// ConvertToReader convert any value to bytes.Reader
-func ConvertToReader(a any) (*bytes.Reader, error) {
+// ConvertToReader convert any value to io.Reader
+func ConvertToReader(a any) (io.Reader, error) {
 	if IsNil(a) {
 		return nil, errors.New("error convert to reader: value is nil")
 	}
@@ -313,7 +313,7 @@ func ConvertToReader(a any) (*bytes.Reader, error) {
 }
 
 // SimpleConvertToReader convert any value to bytes.Reader, without error
-func SimpleConvertToReader(a any) *bytes.Reader {
+func SimpleConvertToReader(a any) io.Reader {
 	r, _ := ConvertToReader(a)
 	return r
 }
@@ -376,8 +376,8 @@ func ConvertToDest(a, dest any) error {
 		}
 		return err
 	} else if IsReader(dest) {
-		f, err := ConvertToReader(vInterface)
-		rDest.Elem().Set(reflect.ValueOf(ConvertPointerToValue(f)))
+		r, err := ConvertToReader(vInterface)
+		rDest.Elem().Set(reflect.ValueOf(r))
 		return err
 	} else if IsBuffer(dest) {
 		bf, err := ConvertToBuffer(vInterface)
