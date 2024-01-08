@@ -2,6 +2,7 @@ package helper
 
 import (
 	"github.com/GabrielHCataldo/go-logger/logger"
+	"io"
 	"os"
 	"testing"
 )
@@ -10,6 +11,12 @@ func TestConvertToPointer(t *testing.T) {
 	v := "string text"
 	result := ConvertToPointer(v)
 	logger.Info("ConvertToPointer:", result)
+}
+
+func TestConvertPointerToValue(t *testing.T) {
+	v := "string text"
+	result := ConvertPointerToValue(&v)
+	logger.Info("ConvertPointerToValue:", result)
 }
 
 func TestConvertToObjectId(t *testing.T) {
@@ -196,6 +203,72 @@ func TestConvertFileToBytes(t *testing.T) {
 func TestSimpleConvertFileToBytes(t *testing.T) {
 	result := SimpleConvertFileToBytes(os.NewFile(0, "test"))
 	logger.Info("SimpleConvertFileToBytes:", result)
+}
+
+func TestConvertToFile(t *testing.T) {
+	for _, tt := range initListTestConvertToFile() {
+		t.Run(tt.name, func(t *testing.T) {
+			var resultPrint any
+			result, err := ConvertToFile(tt.value)
+			defer closeFile(result)
+			if (err != nil) != tt.wantErr {
+				logger.Errorf("ConvertToFile() err = %v, wantErr = %v", err, tt.wantErr)
+				t.Fail()
+			} else if result != nil {
+				bs, _ := io.ReadAll(result)
+				resultPrint = string(bs)
+			}
+			logger.Info("result:", resultPrint, "error:", err)
+		})
+	}
+}
+
+func TestSimpleConvertToFile(t *testing.T) {
+	result := SimpleConvertToFile("test file")
+	bs, _ := io.ReadAll(result)
+	logger.Info("SimpleConvertToFile:", string(bs))
+}
+
+func TestConvertToReader(t *testing.T) {
+	for _, tt := range initListTestConvertFileToBytes() {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := ConvertToReader(tt.value)
+			if (err != nil) != tt.wantErr {
+				logger.Errorf("ConvertToReader() err = %v, wantErr = %v", err, tt.wantErr)
+				t.Fail()
+			} else if result != nil {
+				bs, _ := io.ReadAll(result)
+				logger.Info("result:", string(bs), "error:", err)
+			}
+		})
+	}
+}
+
+func TestSimpleConvertToReader(t *testing.T) {
+	result := SimpleConvertToReader("test file")
+	bs, _ := io.ReadAll(result)
+	logger.Info("SimpleConvertToReader:", string(bs))
+}
+
+func TestConvertToBuffer(t *testing.T) {
+	for _, tt := range initListTestConvertFileToBytes() {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := ConvertToBuffer(tt.value)
+			if (err != nil) != tt.wantErr {
+				logger.Errorf("ConvertToBuffer() err = %v, wantErr = %v", err, tt.wantErr)
+				t.Fail()
+			} else if result != nil {
+				bs, _ := io.ReadAll(result)
+				logger.Info("result:", string(bs), "error:", err)
+			}
+		})
+	}
+}
+
+func TestSimpleConvertToBuffer(t *testing.T) {
+	result := SimpleConvertToBuffer("test file")
+	bs, _ := io.ReadAll(result)
+	logger.Info("SimpleConvertToBuffer:", string(bs))
 }
 
 func TestConvertToDest(t *testing.T) {

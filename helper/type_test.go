@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"bytes"
 	"errors"
 	"github.com/GabrielHCataldo/go-logger/logger"
 	"os"
@@ -19,8 +20,11 @@ func TestIsNotPointer(t *testing.T) {
 }
 
 func TestIsFunc(t *testing.T) {
-	v := func() {}
-	result := IsFunc(&v)
+	var v *func()
+	result := IsFunc(v)
+	logger.Info("IsFunc:", result)
+	v = ConvertToPointer(func() {})
+	result = IsFunc(v)
 	logger.Info("IsFunc:", result)
 }
 
@@ -31,8 +35,11 @@ func TestIsNotFunc(t *testing.T) {
 }
 
 func TestIsChan(t *testing.T) {
-	v := make(chan struct{}, 1)
-	result := IsChan(&v)
+	var v *chan struct{}
+	result := IsChan(v)
+	logger.Info("IsChannel:", result)
+	v = ConvertToPointer(make(chan struct{}))
+	result = IsChan(v)
 	logger.Info("IsChannel:", result)
 }
 
@@ -43,8 +50,11 @@ func TestIsNotChan(t *testing.T) {
 }
 
 func TestIsInterface(t *testing.T) {
-	v := make(chan struct{}, 1)
-	result := IsInterface(&v)
+	var v *interface{}
+	result := IsInterface(v)
+	logger.Info("IsInterface:", result)
+	v2 := make(chan interface{}, 1)
+	result = IsInterface(&v2)
 	logger.Info("IsInterface:", result)
 }
 
@@ -55,7 +65,9 @@ func TestIsNotInterface(t *testing.T) {
 }
 
 func TestIsJson(t *testing.T) {
-	result := IsJson(initTestStruct())
+	result := IsJson(initPointerNil())
+	logger.Info("IsJson:", result)
+	result = IsJson(initTestStruct())
 	logger.Info("IsJson:", result)
 	result = IsJson(time.Now())
 	logger.Info("IsJson:", result)
@@ -70,7 +82,9 @@ func TestIsNotJson(t *testing.T) {
 }
 
 func TestIsMap(t *testing.T) {
-	result := IsMap(initTestMap())
+	result := IsMap(initPointerNil())
+	logger.Info("IsMap:", result)
+	result = IsMap(initTestMap())
 	logger.Info("IsMap:", result)
 }
 
@@ -81,7 +95,9 @@ func TestIsNotMap(t *testing.T) {
 }
 
 func TestIsStruct(t *testing.T) {
-	result := IsStruct(initTestStruct())
+	result := IsStruct(initPointerNil())
+	logger.Info("IsStruct:", result)
+	result = IsStruct(initTestStruct())
 	logger.Info("IsStruct:", result)
 }
 
@@ -92,8 +108,9 @@ func TestIsNotStruct(t *testing.T) {
 }
 
 func TestIsSlice(t *testing.T) {
-	v := []any{"test", 123}
-	result := IsSlice(&v)
+	result := IsSlice(initPointerNil())
+	logger.Info("IsSlice:", result)
+	result = IsSlice(ConvertToPointer([]any{"test", 123}))
 	logger.Info("IsSlice:", result)
 }
 
@@ -104,8 +121,9 @@ func TestIsNotSlice(t *testing.T) {
 }
 
 func TestIsString(t *testing.T) {
-	v := "string text"
-	result := IsString(&v)
+	result := IsString(initPointerNil())
+	logger.Info("IsString:", result)
+	result = IsString(ConvertToPointer("string text"))
 	logger.Info("IsString:", result)
 }
 
@@ -116,8 +134,9 @@ func TestIsNotString(t *testing.T) {
 }
 
 func TestIsInt(t *testing.T) {
-	v := 123
-	result := IsInt(&v)
+	result := IsInt(initPointerNil())
+	logger.Info("IsInt:", result)
+	result = IsInt(ConvertToPointer(123))
 	logger.Info("IsInt:", result)
 }
 
@@ -128,9 +147,10 @@ func TestIsNotInt(t *testing.T) {
 }
 
 func TestIsInt8(t *testing.T) {
-	v := 123
-	result := IsInt8(&v)
-	logger.Info("IsInt:", result)
+	result := IsInt8(initPointerNil())
+	logger.Info("IsInt8:", result)
+	result = IsInt8(ConvertToPointer(123))
+	logger.Info("IsInt8:", result)
 }
 
 func TestIsNotInt8(t *testing.T) {
@@ -140,8 +160,9 @@ func TestIsNotInt8(t *testing.T) {
 }
 
 func TestIsInt16(t *testing.T) {
-	v := 123
-	result := IsInt16(&v)
+	result := IsInt16(initPointerNil())
+	logger.Info("IsInt16:", result)
+	result = IsInt16(ConvertToPointer(123))
 	logger.Info("IsInt16:", result)
 }
 
@@ -152,8 +173,9 @@ func TestIsNotInt16(t *testing.T) {
 }
 
 func TestIsInt32(t *testing.T) {
-	v := 123
-	result := IsInt32(&v)
+	result := IsInt32(initPointerNil())
+	logger.Info("IsInt32:", result)
+	result = IsInt32(ConvertToPointer(123))
 	logger.Info("IsInt32:", result)
 }
 
@@ -164,8 +186,9 @@ func TestIsNotInt32(t *testing.T) {
 }
 
 func TestIsInt64(t *testing.T) {
-	v := 123
-	result := IsInt64(&v)
+	result := IsInt64(initPointerNil())
+	logger.Info("IsInt64:", result)
+	result = IsInt64(ConvertToPointer(123))
 	logger.Info("IsInt64:", result)
 }
 
@@ -176,8 +199,9 @@ func TestIsNotInt64(t *testing.T) {
 }
 
 func TestIsUint(t *testing.T) {
-	v := 123
-	result := IsUint(&v)
+	result := IsUint(initPointerNil())
+	logger.Info("IsUint:", result)
+	result = IsUint(ConvertToPointer(123))
 	logger.Info("IsUint:", result)
 }
 
@@ -188,9 +212,10 @@ func TestIsNotUint(t *testing.T) {
 }
 
 func TestIsUint8(t *testing.T) {
-	v := 123
-	result := IsUint8(&v)
-	logger.Info("IsUint:", result)
+	result := IsUint8(initPointerNil())
+	logger.Info("IsUint8:", result)
+	result = IsUint8(ConvertToPointer(123))
+	logger.Info("IsUint8:", result)
 }
 
 func TestIsNotUint8(t *testing.T) {
@@ -200,8 +225,9 @@ func TestIsNotUint8(t *testing.T) {
 }
 
 func TestIsUint16(t *testing.T) {
-	v := 123
-	result := IsUint16(&v)
+	result := IsUint16(initPointerNil())
+	logger.Info("IsUint16:", result)
+	result = IsUint16(ConvertToPointer(123))
 	logger.Info("IsUint16:", result)
 }
 
@@ -212,8 +238,9 @@ func TestIsNotUint16(t *testing.T) {
 }
 
 func TestIsUint32(t *testing.T) {
-	v := 123
-	result := IsUint32(&v)
+	result := IsUint32(initPointerNil())
+	logger.Info("IsUint32:", result)
+	result = IsUint32(ConvertToPointer(123))
 	logger.Info("IsUint32:", result)
 }
 
@@ -224,8 +251,9 @@ func TestIsNotUint32(t *testing.T) {
 }
 
 func TestIsUint64(t *testing.T) {
-	v := 123
-	result := IsUint64(&v)
+	result := IsUint64(initPointerNil())
+	logger.Info("IsUint64:", result)
+	result = IsUint64(ConvertToPointer(123))
 	logger.Info("IsUint64:", result)
 }
 
@@ -236,8 +264,9 @@ func TestIsNotUint64(t *testing.T) {
 }
 
 func TestIsFloat(t *testing.T) {
-	v := 123.23
-	result := IsFloat(&v)
+	result := IsFloat(initPointerNil())
+	logger.Info("IsFloat:", result)
+	result = IsFloat(ConvertToPointer(123.23))
 	logger.Info("IsFloat:", result)
 }
 
@@ -248,8 +277,9 @@ func TestIsNotFloat(t *testing.T) {
 }
 
 func TestIsFloat32(t *testing.T) {
-	v := 123.23
-	result := IsFloat32(&v)
+	result := IsFloat32(initPointerNil())
+	logger.Info("IsFloat32:", result)
+	result = IsFloat32(ConvertToPointer(123.23))
 	logger.Info("IsFloat32:", result)
 }
 
@@ -260,8 +290,9 @@ func TestIsNotFloat32(t *testing.T) {
 }
 
 func TestIsFloat64(t *testing.T) {
-	v := 123.23
-	result := IsFloat64(&v)
+	result := IsFloat64(initPointerNil())
+	logger.Info("IsFloat64:", result)
+	result = IsFloat32(ConvertToPointer(123.23))
 	logger.Info("IsFloat64:", result)
 }
 
@@ -272,8 +303,9 @@ func TestIsNotFloat64(t *testing.T) {
 }
 
 func TestIsBool(t *testing.T) {
-	v := true
-	result := IsBool(&v)
+	result := IsBool(initPointerNil())
+	logger.Info("IsBool:", result)
+	result = IsBool(true)
 	logger.Info("IsBool:", result)
 }
 
@@ -284,8 +316,9 @@ func TestIsNotBool(t *testing.T) {
 }
 
 func TestIsTime(t *testing.T) {
-	v := time.Now()
-	result := IsTime(&v)
+	result := IsTime(initPointerNil())
+	logger.Info("IsTime:", result)
+	result = IsTime(ConvertToPointer(time.Now()))
 	logger.Info("IsTime:", result)
 }
 
@@ -296,8 +329,9 @@ func TestIsNotTime(t *testing.T) {
 }
 
 func TestIsBytes(t *testing.T) {
-	var v []byte
-	result := IsBytes(&v)
+	result := IsBytes(initPointerNil())
+	logger.Info("IsBytes:", result)
+	result = IsBytes(ConvertToPointer([]byte{}))
 	logger.Info("IsBytes:", result)
 }
 
@@ -308,9 +342,9 @@ func TestIsNotBytes(t *testing.T) {
 }
 
 func TestIsError(t *testing.T) {
-	var v any
-	v = errors.New("test error value")
-	result := IsError(v)
+	result := IsError(initPointerNil())
+	logger.Info("IsError:", result)
+	result = IsError(ConvertToPointer(errors.New("test error value")))
 	logger.Info("IsError:", result)
 }
 
@@ -323,7 +357,9 @@ func TestIsNotError(t *testing.T) {
 func TestIsFile(t *testing.T) {
 	var v any
 	v, _ = os.Open("../gopher-helper.png")
-	result := IsFile(v)
+	result := IsFile(initPointerNil())
+	logger.Info("IsFile:", result)
+	result = IsFile(v)
 	logger.Info("IsFile:", result)
 }
 
@@ -332,4 +368,40 @@ func TestIsNotFile(t *testing.T) {
 	v, _ = os.Open("../gopher-helper.png")
 	result := IsNotFile(&v)
 	logger.Info("IsNotFile:", result)
+}
+
+func TestIsReader(t *testing.T) {
+	bs, _ := os.ReadFile("../gopher-helper.png")
+	var v any
+	v = bytes.NewReader(bs)
+	result := IsReader(initPointerNil())
+	logger.Info("IsReader:", result)
+	result = IsReader(v)
+	logger.Info("IsReader:", result)
+}
+
+func TestIsNotReader(t *testing.T) {
+	bs, _ := os.ReadFile("../gopher-helper.png")
+	var v any
+	v = bytes.NewBuffer(bs)
+	result := IsNotReader(v)
+	logger.Info("IsNotReader:", result)
+}
+
+func TestIsBuffer(t *testing.T) {
+	bs, _ := os.ReadFile("../gopher-helper.png")
+	var v any
+	v = bytes.NewBuffer(bs)
+	result := IsBuffer(initPointerNil())
+	logger.Info("IsBuffer:", result)
+	result = IsBuffer(v)
+	logger.Info("IsBuffer:", result)
+}
+
+func TestIsNotBuffer(t *testing.T) {
+	bs, _ := os.ReadFile("../gopher-helper.png")
+	var v any
+	v = bytes.NewBuffer(bs)
+	result := IsNotBuffer(v)
+	logger.Info("IsNotBuffer:", result)
 }

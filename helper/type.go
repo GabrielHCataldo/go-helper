@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"bytes"
 	"os"
 	"reflect"
 	"time"
@@ -19,6 +20,9 @@ func IsNotPointer(a any) bool {
 
 // IsFunc If value is func return true, otherwise return false
 func IsFunc(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -33,6 +37,9 @@ func IsNotFunc(a any) bool {
 
 // IsChan If value is chan return true, otherwise return false
 func IsChan(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -47,6 +54,9 @@ func IsNotChan(a any) bool {
 
 // IsInterface If value is interface return true, otherwise return false
 func IsInterface(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -61,11 +71,14 @@ func IsNotInterface(a any) bool {
 
 // IsJson If value is struct, map, slice or array return true, otherwise return false
 func IsJson(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
 	}
-	if (IsError(a) && IsNotStringJson(a.(error).Error())) || IsTime(a) || IsFile(a) {
+	if (IsError(a) && IsNotStringJson(a.(error).Error())) || IsTime(a) || IsFile(a) || IsReader(a) || IsBuffer(a) {
 		return false
 	}
 	return t != nil && (t.Kind() == reflect.Struct || t.Kind() == reflect.Map || t.Kind() == reflect.Slice ||
@@ -79,6 +92,9 @@ func IsNotJson(a any) bool {
 
 // IsMap If value is map return true, otherwise return false
 func IsMap(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -93,6 +109,9 @@ func IsNotMap(a any) bool {
 
 // IsStruct If value is struct return true, otherwise return false
 func IsStruct(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -107,6 +126,9 @@ func IsNotStruct(a any) bool {
 
 // IsSlice If value is slice or array return true, otherwise return false
 func IsSlice(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -121,6 +143,9 @@ func IsNotSlice(a any) bool {
 
 // IsString If value is string return true, otherwise return false
 func IsString(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -135,6 +160,9 @@ func IsNotString(a any) bool {
 
 // IsInt If value is int, int8, int16, int32 or int64 return true, otherwise return false
 func IsInt(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -150,6 +178,9 @@ func IsNotInt(a any) bool {
 
 // IsInt8 If value is int8 return true, otherwise return false
 func IsInt8(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -164,6 +195,9 @@ func IsNotInt8(a any) bool {
 
 // IsInt16 If value is int16 return true, otherwise return false
 func IsInt16(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -178,6 +212,9 @@ func IsNotInt16(a any) bool {
 
 // IsInt32 If value is int32 return true, otherwise return false
 func IsInt32(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -192,6 +229,9 @@ func IsNotInt32(a any) bool {
 
 // IsInt64 If value is int64 return true, otherwise return false
 func IsInt64(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -206,6 +246,9 @@ func IsNotInt64(a any) bool {
 
 // IsUint If value is uint, uint8, uint16, uint32 or uint64 return true, otherwise return false
 func IsUint(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -221,6 +264,9 @@ func IsNotUint(a any) bool {
 
 // IsUint8 If value is uint8 return true, otherwise return false
 func IsUint8(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -235,6 +281,9 @@ func IsNotUint8(a any) bool {
 
 // IsUint16 If value is uint16 return true, otherwise return false
 func IsUint16(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -249,6 +298,9 @@ func IsNotUint16(a any) bool {
 
 // IsUint32 If value is uint32 return true, otherwise return false
 func IsUint32(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -263,6 +315,9 @@ func IsNotUint32(a any) bool {
 
 // IsUint64 If value is uint64 return true, otherwise return false
 func IsUint64(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -277,6 +332,9 @@ func IsNotUint64(a any) bool {
 
 // IsFloat If value is float32 or float64 return true, otherwise return false
 func IsFloat(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -291,6 +349,9 @@ func IsNotFloat(a any) bool {
 
 // IsFloat32 If value is float32 return true, otherwise return false
 func IsFloat32(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -305,6 +366,9 @@ func IsNotFloat32(a any) bool {
 
 // IsFloat64 If value is float64 return true, otherwise return false
 func IsFloat64(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -319,6 +383,9 @@ func IsNotFloat64(a any) bool {
 
 // IsBool If value is bool return true, otherwise return false
 func IsBool(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
@@ -333,6 +400,9 @@ func IsNotBool(a any) bool {
 
 // IsTime If value is time return true, otherwise return false
 func IsTime(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	vr := reflect.ValueOf(a)
 	if IsPointer(a) {
 		vr = vr.Elem()
@@ -348,6 +418,9 @@ func IsNotTime(a any) bool {
 
 // IsBytes If value is slice byte return true, otherwise return false
 func IsBytes(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	vr := reflect.ValueOf(a)
 	if IsPointer(a) {
 		vr = vr.Elem()
@@ -363,6 +436,9 @@ func IsNotBytes(a any) bool {
 
 // IsError If value is error return true, otherwise return false
 func IsError(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	vr := reflect.ValueOf(a)
 	if IsPointer(a) {
 		vr = vr.Elem()
@@ -377,6 +453,9 @@ func IsNotError(a any) bool {
 
 // IsFile If value is os.File return true, otherwise return false
 func IsFile(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	vr := reflect.ValueOf(a)
 	if IsPointer(a) {
 		vr = vr.Elem()
@@ -388,6 +467,42 @@ func IsFile(a any) bool {
 // IsNotFile If value is os.File return true, otherwise return false
 func IsNotFile(a any) bool {
 	return !IsFile(a)
+}
+
+// IsReader If value is bytes.Reader return true, otherwise return false
+func IsReader(a any) bool {
+	if IsNil(a) {
+		return false
+	}
+	vr := reflect.ValueOf(a)
+	if IsPointer(a) {
+		vr = vr.Elem()
+	}
+	_, ok := vr.Interface().(bytes.Reader)
+	return ok
+}
+
+// IsNotReader If value is bytes.Reader return true, otherwise return false
+func IsNotReader(a any) bool {
+	return !IsReader(a)
+}
+
+// IsBuffer If value is bytes.Buffer return true, otherwise return false
+func IsBuffer(a any) bool {
+	if IsNil(a) {
+		return false
+	}
+	vr := reflect.ValueOf(a)
+	if IsPointer(a) {
+		vr = vr.Elem()
+	}
+	_, ok := vr.Interface().(bytes.Buffer)
+	return ok
+}
+
+// IsNotBuffer If value is bytes.Buffer return true, otherwise return false
+func IsNotBuffer(a any) bool {
+	return !IsBuffer(a)
 }
 
 func okCastError(a any) bool {

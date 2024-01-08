@@ -2,10 +2,13 @@ package helper
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"github.com/GabrielHCataldo/go-logger/logger"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"io"
 	"math"
 	"os"
 	"reflect"
@@ -17,6 +20,15 @@ import (
 // ConvertToPointer convert any value to pointer
 func ConvertToPointer[T any](t T) *T {
 	return &t
+}
+
+// ConvertPointerToValue convert pointer value to value
+func ConvertPointerToValue[T any](t *T) T {
+	var result T
+	if IsNotNil(t) {
+		result = *t
+	}
+	return result
 }
 
 // ConvertToObjectId convert any value to primitive.ObjectID
@@ -116,13 +128,20 @@ func ConvertToString(a any) (string, error) {
 	if v.Type().Kind() == reflect.Pointer {
 		v = v.Elem()
 	}
-	if IsJson(a) || IsTime(a) || IsFile(a) {
+	if IsJson(a) || IsTime(a) || IsFile(a) || IsReader(a) || IsBuffer(a) {
 		if s, ok := v.Interface().([]byte); ok {
 			return string(s), nil
 		}
 		if f, ok := v.Interface().(os.File); ok {
 			b, err := ConvertFileToBytes(&f)
 			return base64.StdEncoding.EncodeToString(b), err
+		}
+		if bf, ok := v.Interface().(bytes.Buffer); ok {
+			return base64.StdEncoding.EncodeToString(bf.Bytes()), nil
+		}
+		if r, ok := v.Interface().(bytes.Reader); ok {
+			bs, err := io.ReadAll(&r)
+			return base64.StdEncoding.EncodeToString(bs), err
 		}
 		b, err := json.Marshal(v.Interface())
 		return string(b), err
@@ -253,6 +272,67 @@ func SimpleConvertFileToBytes(file *os.File) []byte {
 	return b
 }
 
+// ConvertToFile convert any value to os.File .txt base64
+func ConvertToFile(a any) (*os.File, error) {
+	if IsNil(a) {
+		return nil, errors.New("error convert to file: value is nil")
+	}
+	s, err := ConvertToString(a)
+	if IsNotNil(err) {
+		return nil, err
+	}
+	s64 := base64.StdEncoding.EncodeToString([]byte(s))
+	f, err := os.CreateTemp("", "tmp-helper-")
+	var fr *os.File
+	if IsNil(err) {
+		defer closeFile(f)
+		_, err = f.WriteString(s64)
+		if IsNil(err) {
+			err = f.Sync()
+			if IsNil(err) {
+				fr, err = os.Open(f.Name())
+			}
+		}
+	}
+	return fr, err
+}
+
+// SimpleConvertToFile convert any value to os.File .txt base64, without error
+func SimpleConvertToFile(a any) *os.File {
+	f, _ := ConvertToFile(a)
+	return f
+}
+
+// ConvertToReader convert any value to bytes.Reader
+func ConvertToReader(a any) (*bytes.Reader, error) {
+	if IsNil(a) {
+		return nil, errors.New("error convert to reader: value is nil")
+	}
+	bs, err := ConvertToBytes(a)
+	return bytes.NewReader(bs), err
+}
+
+// SimpleConvertToReader convert any value to bytes.Reader, without error
+func SimpleConvertToReader(a any) *bytes.Reader {
+	r, _ := ConvertToReader(a)
+	return r
+}
+
+// ConvertToBuffer convert any value to bytes.Buffer
+func ConvertToBuffer(a any) (*bytes.Buffer, error) {
+	if IsNil(a) {
+		return nil, errors.New("error convert to buffer: value is nil")
+	}
+	bs, err := ConvertToBytes(a)
+	return bytes.NewBuffer(bs), err
+}
+
+// SimpleConvertToBuffer convert any value to bytes.Buffer, without error
+func SimpleConvertToBuffer(a any) *bytes.Buffer {
+	bf, _ := ConvertToBuffer(a)
+	return bf
+}
+
 // ConvertToDest convert value to dest param
 func ConvertToDest(a, dest any) error {
 	if IsNil(a) {
@@ -288,6 +368,20 @@ func ConvertToDest(a, dest any) error {
 	} else if IsTime(dest) {
 		tm, err := ConvertToTime(vInterface)
 		rDest.Elem().Set(reflect.ValueOf(tm))
+		return err
+	} else if IsFile(dest) {
+		f, err := ConvertToFile(vInterface)
+		if IsNil(err) {
+			rDest.Elem().Set(reflect.ValueOf(ConvertPointerToValue(f)))
+		}
+		return err
+	} else if IsReader(dest) {
+		f, err := ConvertToReader(vInterface)
+		rDest.Elem().Set(reflect.ValueOf(ConvertPointerToValue(f)))
+		return err
+	} else if IsBuffer(dest) {
+		bf, err := ConvertToBuffer(vInterface)
+		rDest.Elem().Set(reflect.ValueOf(ConvertPointerToValue(bf)))
 		return err
 	} else {
 		return errors.New("error convert to dest: unknown value dest")
@@ -503,5 +597,12 @@ func convertToTimeByType(a any) (time.Time, error) {
 		return tm, err
 	default:
 		return time.Time{}, errors.New("error convert to parse time from type: " + reflect.TypeOf(a).Kind().String())
+	}
+}
+
+func closeFile(f *os.File) {
+	err := f.Close()
+	if IsNotNil(err) {
+		logger.ErrorSkipCaller(3, "error close file to convert:", err)
 	}
 }

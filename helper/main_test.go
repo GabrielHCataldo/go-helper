@@ -1,7 +1,9 @@
 package helper
 
 import (
+	"bytes"
 	"errors"
+	"io"
 	"os"
 	"testing"
 	"time"
@@ -184,6 +186,10 @@ func initListTestConvertMegaByteUnit() []testGenericValue {
 
 func initListTestConvertToString() []testGenericValue {
 	osFile, _ := os.Open("../gopher-helper.png")
+	osFile2, _ := os.Open("../gopher-helper.png")
+	bs, _ := io.ReadAll(osFile2)
+	reader := bytes.NewReader(bs)
+	buffer := bytes.NewBuffer(bs)
 	return []testGenericValue{
 		{
 			name:  "success string",
@@ -264,6 +270,14 @@ func initListTestConvertToString() []testGenericValue {
 		{
 			name:  "success file",
 			value: osFile,
+		},
+		{
+			name:  "success reader",
+			value: reader,
+		},
+		{
+			name:  "success buffer",
+			value: buffer,
 		},
 		{
 			name:  "success time",
@@ -696,6 +710,9 @@ func initListTestConvertToDest() []testGenericDestValue {
 	var m map[string]any
 	var sl []any
 	var tm time.Time
+	var fl os.File
+	var rd bytes.Reader
+	var bff bytes.Buffer
 
 	var valueStr = "test value string"
 	return []testGenericDestValue{
@@ -738,6 +755,21 @@ func initListTestConvertToDest() []testGenericDestValue {
 			name:  "success time",
 			value: "2024-01-04T19:37:29.087202-03:00",
 			dest:  &tm,
+		},
+		{
+			name:  "success file",
+			value: "file",
+			dest:  &fl,
+		},
+		{
+			name:  "success reader",
+			value: "reader",
+			dest:  &rd,
+		},
+		{
+			name:  "success buffet",
+			value: "buffet",
+			dest:  &bff,
 		},
 		{
 			name:    "failed",
@@ -784,6 +816,29 @@ func initListTestConvertFileToBytes() []testFileValue {
 		},
 		{
 			name:    "failed",
+			wantErr: true,
+		},
+		{
+			name:    "failed convert",
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestConvertToFile() []testGenericValue {
+	f, _ := os.Open("../gopher-helper.png")
+	return []testGenericValue{
+		{
+			name:  "success",
+			value: f,
+		},
+		{
+			name:    "failed",
+			wantErr: true,
+		},
+		{
+			name:    "failed convert",
+			value:   initChan(),
 			wantErr: true,
 		},
 	}
