@@ -1422,6 +1422,10 @@ func initListTestGreater() []testGenericValues {
 			value: []any{14.2, 14.2},
 		},
 		{
+			name:  "false",
+			value: []any{14.2, 15.2},
+		},
+		{
 			name:  "empty",
 			value: []any{},
 		},
@@ -1455,6 +1459,10 @@ func initListTestSmaller() []testGenericValues {
 		{
 			name:  "equal",
 			value: []any{14.2, 14.2},
+		},
+		{
+			name:  "false",
+			value: []any{15.2, 14.2},
 		},
 		{
 			name:  "empty",
