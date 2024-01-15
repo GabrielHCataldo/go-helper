@@ -188,8 +188,8 @@ func TestIsNotBirthDate(t *testing.T) {
 
 func TestIsIOSDeviceId(t *testing.T) {
 	v := ""
-	result := IsIosDeviceId(v)
-	logger.Info("IsIosDeviceId:", result)
+	result := IsIOSDeviceId(v)
+	logger.Info("IsIOSDeviceId:", result)
 }
 
 func TestIsNotIOSDeviceId(t *testing.T) {

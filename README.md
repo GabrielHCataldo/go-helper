@@ -3,7 +3,7 @@ Go Helper
 <!--suppress ALL -->
 <img align="right" src="gopher-helper.png" alt="">
 
-[![Project status](https://img.shields.io/badge/version-v1.0.9-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.0.9)
+[![Project status](https://img.shields.io/badge/version-v1.1.0-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.1.0)
 [![Go Report Card](https://goreportcard.com/badge/github.com/GabrielHCataldo/go-helper)](https://goreportcard.com/report/github.com/GabrielHCataldo/go-helper)
 [![Coverage Status](https://coveralls.io/repos/GabrielHCataldo/go-helper/badge.svg?branch=main&service=github)](https://coveralls.io/github/GabrielHCataldo/go-helper?branch=main)
 [![Open Source Helpers](https://www.codetriage.com/gabrielhcataldo/go-helper/badges/users.svg)](https://www.codetriage.com/gabrielhcataldo/go-helper)
@@ -194,7 +194,7 @@ Outputs
 See other types of values as examples by accessing
 the [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go).
 
-### Equal
+### IsEqual
 Checking equals is very simple, and works for any type and number 
 of parameters entered, if it is **Pointer**, go-helper will obtain the
 real value for comparison, see one of the examples:
@@ -213,12 +213,12 @@ func main() {
     s3 := "value"
     s4 := "value"
     
-    equals := helper.Equal(s1, s2, s3, s4)
+    equals := helper.IsEqual(s1, s2, s3, s4)
     logger.Info("equals?", equals)
     
     s1 = "value1"
     
-    notEquals := helper.NotEqual(s1, s2, s3, s4)
+    notEquals := helper.IsNotEqual(s1, s2, s3, s4)
     logger.Info("not equals?", notEquals)
 }
 ```
@@ -284,7 +284,7 @@ Outputs:
 ### For more examples
 
 - [Empty](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go)
-- [Equal](https://github/GabrielHCataldo/go-helper/blob/main/_example/equal/main.go)
+- [IsEqual](https://github/GabrielHCataldo/go-helper/blob/main/_example/equal/main.go)
 - [Float](https://github/GabrielHCataldo/go-helper/blob/main/_example/float/main.go)
 - [Format](https://github/GabrielHCataldo/go-helper/blob/main/_example/format/main.go)
 - [Convert](https://github/GabrielHCataldo/go-helper/blob/main/_example/convert/main.go)

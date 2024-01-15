@@ -11,11 +11,11 @@ func main() {
 	s3 := "value"
 	s4 := "value"
 
-	equals := helper.Equal(s1, s2, s3, s4)
+	equals := helper.IsEqual(s1, s2, s3, s4)
 	logger.Info("equals?", equals)
 
 	s1 = "value1"
 
-	notEquals := helper.NotEqual(s1, s2, s3, s4)
+	notEquals := helper.IsNotEqual(s1, s2, s3, s4)
 	logger.Info("not equals?", notEquals)
 }

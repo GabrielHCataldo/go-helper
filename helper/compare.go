@@ -1,7 +1,29 @@
 package helper
 
-// Equal compare values if are equals return true, otherwise return false
-func Equal(a ...any) bool {
+// IsTrue compare any values if all true return true, otherwise return false
+func IsTrue(a ...any) bool {
+	for _, av := range a {
+		b, _ := ConvertToBool(av)
+		if !b {
+			return false
+		}
+	}
+	return true
+}
+
+// IsNotTrue compare any values if all false return true, otherwise return false
+func IsNotTrue(a ...any) bool {
+	for _, av := range a {
+		b, _ := ConvertToBool(av)
+		if b {
+			return false
+		}
+	}
+	return true
+}
+
+// IsEqual compare values if are equals return true, otherwise return false
+func IsEqual(a ...any) bool {
 	a2 := a
 	for _, v := range a {
 		for _, v2 := range a2 {
@@ -15,9 +37,9 @@ func Equal(a ...any) bool {
 	return true
 }
 
-// NotEqual compare values if aren't equals return true, otherwise return false
-func NotEqual(a ...any) bool {
-	return !Equal(a...)
+// IsNotEqual compare values if aren't equals return true, otherwise return false
+func IsNotEqual(a ...any) bool {
+	return !IsEqual(a...)
 }
 
 // IsGreater compares whether A is greater than all values passed in B, If the value is not numeric, we will convert

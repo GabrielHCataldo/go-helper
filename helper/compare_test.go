@@ -5,20 +5,38 @@ import (
 	"testing"
 )
 
-func TestEqual(t *testing.T) {
+func TestIsTrue(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {
-			empty := Equal(tt.value...)
-			logger.Info("Equal:", empty)
+			empty := IsTrue(tt.value...)
+			logger.Info("IsTrue:", empty)
 		})
 	}
 }
 
-func TestNotEqual(t *testing.T) {
+func TestIsNotTrue(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {
-			empty := NotEqual(tt.value...)
-			logger.Info("NotEqual:", empty)
+			empty := IsNotTrue(tt.value...)
+			logger.Info("IsNotTrue:", empty)
+		})
+	}
+}
+
+func TestIsEqual(t *testing.T) {
+	for _, tt := range initListTestEquals() {
+		t.Run(tt.name, func(t *testing.T) {
+			empty := IsEqual(tt.value...)
+			logger.Info("IsEqual:", empty)
+		})
+	}
+}
+
+func TestIsNotEqual(t *testing.T) {
+	for _, tt := range initListTestEquals() {
+		t.Run(tt.name, func(t *testing.T) {
+			empty := IsNotEqual(tt.value...)
+			logger.Info("IsNotEqual:", empty)
 		})
 	}
 }

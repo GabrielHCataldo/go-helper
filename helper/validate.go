@@ -236,8 +236,8 @@ func IsNotBirthDate(a any) bool {
 	return !IsBirthDate(a)
 }
 
-// IsIosDeviceId If value string is ios device id hex return true, otherwise return false
-func IsIosDeviceId(a any) bool {
+// IsIOSDeviceId If value string is ios device id hex return true, otherwise return false
+func IsIOSDeviceId(a any) bool {
 	s, _ := ConvertToString(a)
 	regex := regexp.MustCompile(`[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}`)
 	return regex.MatchString(s)
@@ -245,7 +245,7 @@ func IsIosDeviceId(a any) bool {
 
 // IsNotIOSDeviceId If value string is not ios device id hex return true, otherwise return false
 func IsNotIOSDeviceId(a any) bool {
-	return !IsIosDeviceId(a)
+	return !IsIOSDeviceId(a)
 }
 
 // IsAndroidDeviceId If value string is android device id hex return true, otherwise return false

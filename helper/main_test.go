@@ -1390,6 +1390,22 @@ func initListTestEquals() []testGenericValues {
 			name:  "not equals",
 			value: []any{"test", "test", 12},
 		},
+		{
+			name:  "bool",
+			value: []any{true, false},
+		},
+		{
+			name:  "bool",
+			value: []any{false, true},
+		},
+		{
+			name:  "bool",
+			value: []any{true},
+		},
+		{
+			name:  "bool",
+			value: []any{false},
+		},
 	}
 }
 
