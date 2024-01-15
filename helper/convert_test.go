@@ -271,6 +271,25 @@ func TestSimpleConvertToBuffer(t *testing.T) {
 	logger.Info("SimpleConvertToBuffer:", string(bs))
 }
 
+func TestConvertToBase64(t *testing.T) {
+	for _, tt := range initListTestConvertToString() {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := ConvertToBase64(tt.value)
+			if (err != nil) != tt.wantErr {
+				logger.Errorf("ConvertToBase64() err = %v, wantErr = %v", err, tt.wantErr)
+				t.Fail()
+				return
+			}
+			logger.Info("result:", result, "error:", err)
+		})
+	}
+}
+
+func TestSimpleConvertToBase64(t *testing.T) {
+	result := SimpleConvertToBase64("test file")
+	logger.Info("SimpleConvertToBase64:", result)
+}
+
 func TestConvertToDest(t *testing.T) {
 	for _, tt := range initListTestConvertToDest() {
 		t.Run(tt.name, func(t *testing.T) {

@@ -14,6 +14,7 @@ import (
 	"reflect"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -139,8 +140,12 @@ func ConvertToString(a any) (string, error) {
 		if bf, ok := v.Interface().(bytes.Buffer); ok {
 			return base64.StdEncoding.EncodeToString(bf.Bytes()), nil
 		}
-		if r, ok := v.Interface().(io.Reader); ok {
-			bs, err := io.ReadAll(r)
+		if r, ok := v.Interface().(bytes.Reader); ok {
+			bs, err := io.ReadAll(&r)
+			return base64.StdEncoding.EncodeToString(bs), err
+		}
+		if r, ok := v.Interface().(strings.Reader); ok {
+			bs, err := io.ReadAll(&r)
 			return base64.StdEncoding.EncodeToString(bs), err
 		}
 		b, err := json.Marshal(v.Interface())
@@ -304,7 +309,7 @@ func SimpleConvertToFile(a any) *os.File {
 }
 
 // ConvertToReader convert any value to io.Reader
-func ConvertToReader(a any) (io.Reader, error) {
+func ConvertToReader(a any) (*bytes.Reader, error) {
 	if IsNil(a) {
 		return nil, errors.New("error convert to reader: value is nil")
 	}
@@ -313,7 +318,7 @@ func ConvertToReader(a any) (io.Reader, error) {
 }
 
 // SimpleConvertToReader convert any value to bytes.Reader, without error
-func SimpleConvertToReader(a any) io.Reader {
+func SimpleConvertToReader(a any) *bytes.Reader {
 	r, _ := ConvertToReader(a)
 	return r
 }
@@ -331,6 +336,21 @@ func ConvertToBuffer(a any) (*bytes.Buffer, error) {
 func SimpleConvertToBuffer(a any) *bytes.Buffer {
 	bf, _ := ConvertToBuffer(a)
 	return bf
+}
+
+// ConvertToBase64 convert any value to string base64
+func ConvertToBase64(a any) (string, error) {
+	if IsNil(a) {
+		return "", errors.New("error convert to base64: value is nil")
+	}
+	bs, err := ConvertToBytes(a)
+	return base64.StdEncoding.EncodeToString(bs), err
+}
+
+// SimpleConvertToBase64 convert any value to string base64, without error
+func SimpleConvertToBase64(a any) string {
+	s, _ := ConvertToBase64(a)
+	return s
 }
 
 // ConvertToDest convert value to dest param
@@ -377,7 +397,7 @@ func ConvertToDest(a, dest any) error {
 		return err
 	} else if IsReader(dest) {
 		r, err := ConvertToReader(vInterface)
-		rDest.Elem().Set(reflect.ValueOf(r))
+		rDest.Elem().Set(reflect.ValueOf(ConvertPointerToValue(r)))
 		return err
 	} else if IsBuffer(dest) {
 		bf, err := ConvertToBuffer(vInterface)

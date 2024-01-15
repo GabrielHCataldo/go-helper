@@ -2,9 +2,9 @@ package helper
 
 import (
 	"bytes"
-	"io"
 	"os"
 	"reflect"
+	"strings"
 	"time"
 )
 
@@ -470,7 +470,7 @@ func IsNotFile(a any) bool {
 	return !IsFile(a)
 }
 
-// IsReader If value is bytes.Reader return true, otherwise return false
+// IsReader If value is io.Reader return true, otherwise return false
 func IsReader(a any) bool {
 	if IsNil(a) {
 		return false
@@ -479,11 +479,12 @@ func IsReader(a any) bool {
 	if IsPointer(a) {
 		vr = vr.Elem()
 	}
-	_, ok := vr.Interface().(io.Reader)
-	return ok
+	_, ok := vr.Interface().(bytes.Reader)
+	_, ok2 := vr.Interface().(strings.Reader)
+	return ok || ok2
 }
 
-// IsNotReader If value is bytes.Reader return true, otherwise return false
+// IsNotReader If value is io.Reader return true, otherwise return false
 func IsNotReader(a any) bool {
 	return !IsReader(a)
 }

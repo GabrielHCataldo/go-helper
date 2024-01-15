@@ -40,7 +40,7 @@ func validatePhoneUs(fl validator.FieldLevel) bool {
 }
 
 func validateFullName(fl validator.FieldLevel) bool {
-	return ValidateFullName(fl.Field().String())
+	return IsFullName(fl.Field().String())
 }
 
 func validateBcrypt(fl validator.FieldLevel) bool {

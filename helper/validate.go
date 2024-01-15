@@ -19,11 +19,21 @@ func IsUrl(a any) bool {
 	return err == nil
 }
 
+// IsNotUrl If value is not url return true, otherwise return false ex: "google.com" = false
+func IsNotUrl(a any) bool {
+	return !IsUrl(a)
+}
+
 // IsPhoneNumber If value is phone number by region return true, otherwise return false
 func IsPhoneNumber(a any, defaultRegion string) bool {
 	s, _ := ConvertToString(a)
 	num, _ := phonenumbers.Parse(s, defaultRegion)
 	return num != nil && phonenumbers.IsValidNumber(num)
+}
+
+// IsNotPhoneNumber If value is not phone number by region return true, otherwise return false
+func IsNotPhoneNumber(a any, defaultRegion string) bool {
+	return !IsPhoneNumber(a, defaultRegion)
 }
 
 // IsEmail If value is email return true, otherwise return false
@@ -34,16 +44,41 @@ func IsEmail(a any) bool {
 	return err == nil
 }
 
+// IsNotEmail If value is not email return true, otherwise return false
+func IsNotEmail(a any) bool {
+	return !IsEmail(a)
+}
+
 // IsCpf If value is cpf return true, otherwise return false
 func IsCpf(a any) bool {
 	s, _ := ConvertToString(a)
 	return cpfcnpj.ValidateCPF(s)
 }
 
+// IsNotCpf If value is not cpf return true, otherwise return false
+func IsNotCpf(a any) bool {
+	return !IsCpf(a)
+}
+
 // IsCnpj If value is cnpj return true, otherwise return false
 func IsCnpj(a any) bool {
 	s, _ := ConvertToString(a)
 	return cpfcnpj.ValidateCNPJ(s)
+}
+
+// IsNotCnpj If value is not cnpj return true, otherwise return false
+func IsNotCnpj(a any) bool {
+	return !IsCnpj(a)
+}
+
+// IsCpfCnpj If value is cpf or cnpj return true, otherwise return false
+func IsCpfCnpj(a any) bool {
+	return IsCpf(a) || IsCnpj(a)
+}
+
+// IsNotCpfCnpj If value is not cpf or cnpj return true, otherwise return false
+func IsNotCpfCnpj(a any) bool {
+	return !IsCpfCnpj(a)
 }
 
 // IsPostalCode If value is postal code return true, otherwise return false
@@ -63,6 +98,11 @@ func IsPostalCode(a any) bool {
 		}
 	}
 	return matched
+}
+
+// IsNotPostalCode If value is not postal code return true, otherwise return false
+func IsNotPostalCode(a any) bool {
+	return !IsPostalCode(a)
 }
 
 // IsPostalCodePerCountry If value is postal code per country return true, otherwise return false
@@ -85,11 +125,21 @@ func IsPostalCodePerCountry(a any, countryIso string) bool {
 	return matched
 }
 
+// IsNotPostalCodePerCountry If value is not postal code per country return true, otherwise return false
+func IsNotPostalCodePerCountry(a any, countryIso string) bool {
+	return !IsPostalCodePerCountry(a, countryIso)
+}
+
 // IsObjectId If value is hex objectId return true, otherwise return false
 func IsObjectId(a any) bool {
 	s, _ := ConvertToString(a)
 	_, err := primitive.ObjectIDFromHex(s)
 	return err == nil
+}
+
+// IsNotObjectId If value is not hex objectId return true, otherwise return false
+func IsNotObjectId(a any) bool {
+	return !IsObjectId(a)
 }
 
 // IsBase64 If value is string base64 return true, otherwise return false
@@ -99,11 +149,21 @@ func IsBase64(a any) bool {
 	return regex.MatchString(s)
 }
 
+// IsNotBase64 If value is not string base64 return true, otherwise return false
+func IsNotBase64(a any) bool {
+	return !IsBase64(a)
+}
+
 // IsBCrypt If value is string bcrypt return true, otherwise return false
 func IsBCrypt(a any) bool {
 	s, _ := ConvertToString(a)
 	cost, err := bcrypt.Cost([]byte(s))
 	return err == nil && cost == bcrypt.DefaultCost
+}
+
+// IsNotBCrypt If value is not string bcrypt return true, otherwise return false
+func IsNotBCrypt(a any) bool {
+	return !IsBCrypt(a)
 }
 
 // IsBearer If value is string bearer return true, otherwise return false
@@ -114,8 +174,13 @@ func IsBearer(a any) bool {
 	return len(splitAuthorization) != 2 && splitAuthorization[0] == bearer
 }
 
-// IsPrivateIP check value is private ip
-func IsPrivateIP(a any) bool {
+// IsNotBearer If value is not string bearer return true, otherwise return false
+func IsNotBearer(a any) bool {
+	return !IsBearer(a)
+}
+
+// IsPrivateIp check value is private ip
+func IsPrivateIp(a any) bool {
 	s, _ := ConvertToString(a)
 	var privateIPBlocks []*net.IPNet
 	for _, cidr := range []string{
@@ -144,35 +209,65 @@ func IsPrivateIP(a any) bool {
 	return result
 }
 
-// ValidateFullName If value contains first name and last name return true, otherwise return false
-func ValidateFullName(a any) bool {
+// IsNotPrivateIp check value is private ip
+func IsNotPrivateIp(a any) bool {
+	return !IsPrivateIp(a)
+}
+
+// IsFullName If value contains first name and last name return true, otherwise return false
+func IsFullName(a any) bool {
 	s, _ := ConvertToString(a)
 	regex := regexp.MustCompile(`^([a-zA-Z]{2,}\s[a-zA-Z]+'?-?[a-zA-Z]+\s?([a-zA-Z]+)?)`)
 	return regex.MatchString(s)
 }
 
-// ValidateBirthDate If value time is before today return true, otherwise return false
-func ValidateBirthDate(a any) bool {
+// IsNotFullName If value not contains first name and last name return true, otherwise return false
+func IsNotFullName(a any) bool {
+	return !IsFullName(a)
+}
+
+// IsBirthDate If value time is before today return true, otherwise return false
+func IsBirthDate(a any) bool {
 	return IsBeforeDateToday(a)
 }
 
-// ValidateIosDeviceId If value string is ios device id hex return true, otherwise return false
-func ValidateIosDeviceId(a any) bool {
+// IsNotBirthDate If value time is before today return true, otherwise return false
+func IsNotBirthDate(a any) bool {
+	return !IsBirthDate(a)
+}
+
+// IsIosDeviceId If value string is ios device id hex return true, otherwise return false
+func IsIosDeviceId(a any) bool {
 	s, _ := ConvertToString(a)
 	regex := regexp.MustCompile(`[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}`)
 	return regex.MatchString(s)
 }
 
-// ValidateAndroidDeviceId If value string is android device id hex return true, otherwise return false
-func ValidateAndroidDeviceId(a any) bool {
+// IsNotIOSDeviceId If value string is not ios device id hex return true, otherwise return false
+func IsNotIOSDeviceId(a any) bool {
+	return !IsIosDeviceId(a)
+}
+
+// IsAndroidDeviceId If value string is android device id hex return true, otherwise return false
+func IsAndroidDeviceId(a any) bool {
 	s, _ := ConvertToString(a)
 	regex := regexp.MustCompile(`[0-9a-fA-F]`)
 	return regex.MatchString(s)
 }
 
-// ValidateMobilePlatform If value string is "android", "ios" or "iphone os" (independently we always count lowercase) return true, otherwise return false
-func ValidateMobilePlatform(a any) bool {
+// IsNotAndroidDeviceId If value string is not android device id hex return true, otherwise return false
+func IsNotAndroidDeviceId(a any) bool {
+	return !IsAndroidDeviceId(a)
+}
+
+// IsMobilePlatform If value string is "android", "ios" or "iphone os" (independently we always count lowercase) return true, otherwise return false
+func IsMobilePlatform(a any) bool {
 	s, _ := ConvertToString(a)
 	platform := strings.ToLower(s)
 	return platform == "android" || platform == "ios" || platform == "iphone os"
+}
+
+// IsNotMobilePlatform If value string is not "android", "ios" or "iphone os" (independently we always count lowercase) return true, otherwise return false
+func IsNotMobilePlatform(a any) bool {
+	return !IsMobilePlatform(a)
 }

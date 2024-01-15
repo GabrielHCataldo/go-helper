@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"os"
+	"strings"
 	"testing"
 	"time"
 )
@@ -190,6 +191,8 @@ func initListTestConvertToString() []testGenericValue {
 	bs, _ := io.ReadAll(osFile2)
 	reader := bytes.NewReader(bs)
 	buffer := bytes.NewBuffer(bs)
+	strReader := strings.NewReader("test reader")
+
 	return []testGenericValue{
 		{
 			name:  "success string",
@@ -274,6 +277,10 @@ func initListTestConvertToString() []testGenericValue {
 		{
 			name:  "success reader",
 			value: reader,
+		},
+		{
+			name:  "success io reader",
+			value: strReader,
 		},
 		{
 			name:  "success buffer",
@@ -1382,6 +1389,76 @@ func initListTestEquals() []testGenericValues {
 		{
 			name:  "not equals",
 			value: []any{"test", "test", 12},
+		},
+	}
+}
+
+func initListTestGreater() []testGenericValues {
+	mapTest := initTestMap()
+	structTest := initTestStruct()
+	return []testGenericValues{
+		{
+			name:  "string",
+			value: []any{"tests", "test"},
+		},
+		{
+			name:  "struct",
+			value: []any{structTest, structTest},
+		},
+		{
+			name:  "map",
+			value: []any{mapTest, mapTest},
+		},
+		{
+			name:  "int",
+			value: []any{13, 12, 12},
+		},
+		{
+			name:  "float",
+			value: []any{14.2, 13.2},
+		},
+		{
+			name:  "equal",
+			value: []any{14.2, 14.2},
+		},
+		{
+			name:  "empty",
+			value: []any{},
+		},
+	}
+}
+
+func initListTestSmaller() []testGenericValues {
+	mapTest := initTestMap()
+	structTest := initTestStruct()
+	return []testGenericValues{
+		{
+			name:  "string",
+			value: []any{"test", "tests"},
+		},
+		{
+			name:  "struct",
+			value: []any{structTest, structTest},
+		},
+		{
+			name:  "map",
+			value: []any{mapTest, mapTest},
+		},
+		{
+			name:  "int",
+			value: []any{12, 13, 13},
+		},
+		{
+			name:  "float",
+			value: []any{13.2, 14.2},
+		},
+		{
+			name:  "equal",
+			value: []any{14.2, 14.2},
+		},
+		{
+			name:  "empty",
+			value: []any{},
 		},
 	}
 }
