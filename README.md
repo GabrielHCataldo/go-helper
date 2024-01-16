@@ -194,7 +194,7 @@ Outputs
 See other types of values as examples by accessing
 the [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go).
 
-### IsEqual
+### Equal
 Checking equals is very simple, and works for any type and number 
 of parameters entered, if it is **Pointer**, go-helper will obtain the
 real value for comparison, see one of the examples:
@@ -284,7 +284,7 @@ Outputs:
 ### For more examples
 
 - [Empty](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go)
-- [IsEqual](https://github/GabrielHCataldo/go-helper/blob/main/_example/equal/main.go)
+- [Equal](https://github/GabrielHCataldo/go-helper/blob/main/_example/equal/main.go)
 - [Float](https://github/GabrielHCataldo/go-helper/blob/main/_example/float/main.go)
 - [Format](https://github/GabrielHCataldo/go-helper/blob/main/_example/format/main.go)
 - [Convert](https://github/GabrielHCataldo/go-helper/blob/main/_example/convert/main.go)
