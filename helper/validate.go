@@ -145,7 +145,7 @@ func IsNotObjectId(a any) bool {
 // IsBase64 If value is string base64 return true, otherwise return false
 func IsBase64(a any) bool {
 	s, _ := ConvertToString(a)
-	regex := regexp.MustCompile(`^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$`)
+	regex := regexp.MustCompile(`^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$`)
 	return regex.MatchString(s)
 }
 

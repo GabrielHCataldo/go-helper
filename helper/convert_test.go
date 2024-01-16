@@ -175,7 +175,7 @@ func TestConvertToBytes(t *testing.T) {
 				logger.Errorf("ConvertToBytes() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else {
-				logger.Info("result:", result, "error:", err)
+				logger.Info("result:", string(result), "error:", err)
 			}
 		})
 	}

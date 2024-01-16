@@ -135,22 +135,22 @@ func ConvertToString(a any) (string, error) {
 		}
 		if f, ok := v.Interface().(os.File); ok {
 			b, err := ConvertFileToBytes(&f)
-			return base64.StdEncoding.EncodeToString(b), err
+			return string(b), err
 		}
 		if bf, ok := v.Interface().(bytes.Buffer); ok {
-			return base64.StdEncoding.EncodeToString(bf.Bytes()), nil
+			return string(bf.Bytes()), nil
 		}
 		if r, ok := v.Interface().(bytes.Reader); ok {
 			bs, err := io.ReadAll(&r)
-			return base64.StdEncoding.EncodeToString(bs), err
+			return string(bs), err
 		}
 		if r, ok := v.Interface().(strings.Reader); ok {
 			bs, err := io.ReadAll(&r)
-			return base64.StdEncoding.EncodeToString(bs), err
+			return string(bs), err
 		}
 		if r, ok := a.(io.Reader); ok {
 			bs, err := io.ReadAll(r)
-			return base64.StdEncoding.EncodeToString(bs), err
+			return string(bs), err
 		}
 		b, err := json.Marshal(v.Interface())
 		return string(b), err
