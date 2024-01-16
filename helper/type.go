@@ -1,7 +1,9 @@
 package helper
 
 import (
+	"bufio"
 	"bytes"
+	"io"
 	"os"
 	"reflect"
 	"strings"
@@ -481,7 +483,9 @@ func IsReader(a any) bool {
 	}
 	_, ok := vr.Interface().(bytes.Reader)
 	_, ok2 := vr.Interface().(strings.Reader)
-	return ok || ok2
+	_, ok3 := vr.Interface().(bufio.Reader)
+	_, ok4 := vr.Interface().(io.Reader)
+	return ok || ok2 || ok3 || ok4
 }
 
 // IsNotReader If value is io.Reader return true, otherwise return false

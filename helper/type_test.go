@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"github.com/GabrielHCataldo/go-logger/logger"
+	"io"
 	"os"
 	"testing"
 	"time"
@@ -372,11 +373,16 @@ func TestIsNotFile(t *testing.T) {
 
 func TestIsReader(t *testing.T) {
 	bs, _ := os.ReadFile("../gopher-helper.png")
+	r := bytes.NewReader(bs)
 	var v any
-	v = bytes.NewReader(bs)
+	v = r
 	result := IsReader(initPointerNil())
 	logger.Info("IsReader:", result)
 	result = IsReader(v)
+	logger.Info("IsReader:", result)
+	result = IsReader(io.Reader(r))
+	logger.Info("IsReader:", result)
+	result = IsReader(io.NopCloser(r))
 	logger.Info("IsReader:", result)
 }
 

@@ -148,6 +148,10 @@ func ConvertToString(a any) (string, error) {
 			bs, err := io.ReadAll(&r)
 			return base64.StdEncoding.EncodeToString(bs), err
 		}
+		if r, ok := a.(io.Reader); ok {
+			bs, err := io.ReadAll(r)
+			return base64.StdEncoding.EncodeToString(bs), err
+		}
 		b, err := json.Marshal(v.Interface())
 		return string(b), err
 	} else if IsError(a) {

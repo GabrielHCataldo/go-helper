@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"bufio"
 	"bytes"
 	"errors"
 	"io"
@@ -192,6 +193,9 @@ func initListTestConvertToString() []testGenericValue {
 	reader := bytes.NewReader(bs)
 	buffer := bytes.NewBuffer(bs)
 	strReader := strings.NewReader("test reader")
+	readCloser := io.NopCloser(bytes.NewReader(bs))
+	bufioReader := bufio.NewReader(bytes.NewReader(bs))
+	ioReader := io.Reader(bytes.NewReader(bs))
 
 	return []testGenericValue{
 		{
@@ -279,8 +283,20 @@ func initListTestConvertToString() []testGenericValue {
 			value: reader,
 		},
 		{
-			name:  "success io reader",
+			name:  "success string reader",
 			value: strReader,
+		},
+		{
+			name:  "success reader nop closer",
+			value: readCloser,
+		},
+		{
+			name:  "success bufio reader",
+			value: bufioReader,
+		},
+		{
+			name:  "success io reader",
+			value: ioReader,
 		},
 		{
 			name:  "success buffer",
