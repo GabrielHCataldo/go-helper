@@ -111,7 +111,7 @@ func TestSimpleConvertToInt(t *testing.T) {
 }
 
 func TestConvertToFloat(t *testing.T) {
-	for _, tt := range initListTestConvertToInt() {
+	for _, tt := range initListTestConvertToFloat() {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ConvertToFloat(tt.value)
 			if (err != nil) != tt.wantErr {

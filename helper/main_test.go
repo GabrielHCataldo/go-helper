@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
+	"github.com/GabrielHCataldo/go-helper/internal/enum"
 	"io"
 	"os"
 	"strings"
@@ -307,6 +308,10 @@ func initListTestConvertToString() []testGenericValue {
 			value: time.Now(),
 		},
 		{
+			name:  "success enum",
+			value: enum.ExampleEnumStr1,
+		},
+		{
 			name:    "failed",
 			value:   initChan(),
 			wantErr: true,
@@ -417,6 +422,133 @@ func initListTestConvertToInt() []testGenericValue {
 			value: "234.23",
 		},
 		{
+			name:  "success enum",
+			value: enum.ExampleEnumInt1,
+		},
+		{
+			name:    "failed string bool",
+			value:   "true",
+			wantErr: true,
+		},
+		{
+			name:    "failed",
+			value:   initChan(),
+			wantErr: true,
+		},
+		{
+			name:    "failed invalid",
+			wantErr: true,
+		},
+	}
+}
+
+func initListTestConvertToFloat() []testGenericValue {
+	return []testGenericValue{
+		{
+			name:    "failed string",
+			value:   "test",
+			wantErr: true,
+		},
+		{
+			name:    "failed struct",
+			value:   *initTestStruct(),
+			wantErr: true,
+		},
+		{
+			name:    "failed pointer struct",
+			value:   initTestStruct(),
+			wantErr: true,
+		},
+		{
+			name:    "failed slice",
+			value:   []int{12, 23, 45, 456, 467578},
+			wantErr: true,
+		},
+		{
+			name:    "failed map",
+			value:   *initTestMap(),
+			wantErr: true,
+		},
+		{
+			name:  "success int",
+			value: 21,
+		},
+		{
+			name:  "success int8",
+			value: int8(21),
+		},
+		{
+			name:  "success int16",
+			value: int16(21232),
+		},
+		{
+			name:  "success int32",
+			value: int32(2112312312),
+		},
+		{
+			name:  "success int64",
+			value: int64(9123809),
+		},
+		{
+			name:  "success uint",
+			value: uint(21),
+		},
+		{
+			name:  "success uint8",
+			value: uint8(21),
+		},
+		{
+			name:  "success uint16",
+			value: uint16(21232),
+		},
+		{
+			name:  "success uint32",
+			value: uint32(2112312312),
+		},
+		{
+			name:  "success uint64",
+			value: uint64(9123809),
+		},
+		{
+			name:  "success float32",
+			value: float32(12.23),
+		},
+		{
+			name:  "success float64",
+			value: 12.23,
+		},
+		{
+			name:    "failed bool",
+			value:   true,
+			wantErr: true,
+		},
+		{
+			name:    "failed bytes",
+			value:   []byte{},
+			wantErr: true,
+		},
+		{
+			name:    "failed time",
+			value:   time.Now(),
+			wantErr: true,
+		},
+		{
+			name:  "success string int",
+			value: "234",
+		},
+		{
+			name:  "success string float",
+			value: "234.23",
+		},
+		{
+			name:  "success enum",
+			value: enum.ExampleEnumFloat1,
+		},
+		{
+			name:  "success enum int",
+			value: enum.ExampleEnumInt1,
+		},
+		{
 			name:    "failed string bool",
 			value:   "true",
 			wantErr: true,
@@ -523,6 +655,10 @@ func initListTestConvertToBool() []testGenericValue {
 		{
 			name:  "success bool",
 			value: true,
+		},
+		{
+			name:  "success enum",
+			value: enum.ExampleEnumBool1,
 		},
 		{
 			name:    "failed bytes",
@@ -711,6 +847,10 @@ func initListTestConvertToTime() []testGenericValue {
 		{
 			name:  "time timeOnly",
 			value: t.Format(time.TimeOnly),
+		},
+		{
+			name:  "time custom type",
+			value: enum.ExampleTime(time.Now()),
 		},
 		{
 			name:    "bool",

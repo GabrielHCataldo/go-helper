@@ -411,7 +411,7 @@ func IsTime(a any) bool {
 		vr = vr.Elem()
 	}
 	_, ok := vr.Interface().(time.Time)
-	return ok
+	return ok || vr.CanConvert(reflect.TypeOf(time.Time{}))
 }
 
 // IsNotTime If value is not time return true, otherwise return false
@@ -429,7 +429,7 @@ func IsBytes(a any) bool {
 		vr = vr.Elem()
 	}
 	_, ok := vr.Interface().([]byte)
-	return ok
+	return ok || vr.CanConvert(reflect.TypeOf([]byte{}))
 }
 
 // IsNotBytes If value is not slice byte return true, otherwise return false
@@ -464,7 +464,7 @@ func IsFile(a any) bool {
 		vr = vr.Elem()
 	}
 	_, ok := vr.Interface().(os.File)
-	return ok
+	return ok || vr.CanConvert(reflect.TypeOf(os.File{}))
 }
 
 // IsNotFile If value is os.File return true, otherwise return false
@@ -503,7 +503,7 @@ func IsBuffer(a any) bool {
 		vr = vr.Elem()
 	}
 	_, ok := vr.Interface().(bytes.Buffer)
-	return ok
+	return ok || vr.CanConvert(reflect.TypeOf(bytes.Buffer{}))
 }
 
 // IsNotBuffer If value is bytes.Buffer return true, otherwise return false

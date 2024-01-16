@@ -126,7 +126,7 @@ func ConvertToString(a any) (string, error) {
 		return "", errors.New("error convert to string: value is nil")
 	}
 	v := reflect.ValueOf(a)
-	if v.Type().Kind() == reflect.Pointer {
+	if IsPointer(a) {
 		v = v.Elem()
 	}
 	if IsJson(a) || IsTime(a) || IsFile(a) || IsReader(a) || IsBuffer(a) {
@@ -234,7 +234,11 @@ func ConvertToTime(a any) (time.Time, error) {
 		if t, ok := v.Interface().(time.Time); ok {
 			return t, nil
 		}
-		return time.Time{}, errors.New("error type to parse time: " + reflect.TypeOf(a).Kind().String())
+		canConvert := v.CanConvert(reflect.TypeOf(time.Time{}))
+		if canConvert {
+			return v.Convert(reflect.TypeOf(time.Time{})).Interface().(time.Time), nil
+		}
+		return time.Time{}, errors.New("error type to parse time: " + v.Kind().String())
 	default:
 		return convertToTimeByType(v.Interface())
 	}
@@ -452,9 +456,10 @@ func convertToStringByType(a any) (string, error) {
 	case string:
 		return t, nil
 	default:
-		s, ok := a.(string)
-		if ok {
-			return s, nil
+		v := reflect.ValueOf(a)
+		canConvert := v.CanConvert(reflect.TypeOf(""))
+		if canConvert {
+			return v.Convert(reflect.TypeOf("")).Interface().(string), nil
 		}
 		return "", errors.New("error convert to string from type: " + reflect.TypeOf(a).Kind().String())
 	}
@@ -490,9 +495,10 @@ func convertToIntByType(a any) (int, error) {
 		f, err := strconv.ParseFloat(t, 64)
 		return int(f), err
 	default:
-		i, ok := a.(int)
-		if ok {
-			return i, nil
+		v := reflect.ValueOf(a)
+		canConvert := v.CanConvert(reflect.TypeOf(0))
+		if canConvert {
+			return v.Convert(reflect.TypeOf(0)).Interface().(int), nil
 		}
 		return 0, errors.New("error convert to int from type: " + reflect.TypeOf(a).Kind().String())
 	}
@@ -527,9 +533,10 @@ func convertToFloatByType(a any) (float64, error) {
 	case string:
 		return strconv.ParseFloat(t, 64)
 	default:
-		f, ok := a.(float64)
-		if ok {
-			return f, nil
+		v := reflect.ValueOf(a)
+		canConvert := v.CanConvert(reflect.TypeOf(0.0))
+		if canConvert {
+			return v.Convert(reflect.TypeOf(0.0)).Interface().(float64), nil
 		}
 		return 0, errors.New("error convert to float from type: " + reflect.TypeOf(a).Kind().String())
 	}
@@ -542,9 +549,10 @@ func convertToBoolByType(a any) (bool, error) {
 	case string:
 		return strconv.ParseBool(t)
 	default:
-		b, ok := a.(bool)
-		if ok {
-			return b, nil
+		v := reflect.ValueOf(a)
+		canConvert := v.CanConvert(reflect.TypeOf(true))
+		if canConvert {
+			return v.Convert(reflect.TypeOf(true)).Interface().(bool), nil
 		}
 		return false, errors.New("error convert to bool from type: " + reflect.TypeOf(a).Kind().String())
 	}
@@ -636,10 +644,6 @@ func convertToTimeByType(a any) (time.Time, error) {
 		tm, err = time.Parse(time.TimeOnly, t)
 		return tm, err
 	default:
-		tm, ok := a.(time.Time)
-		if ok {
-			return tm, nil
-		}
 		return time.Time{}, errors.New("error convert to parse time from type: " + reflect.TypeOf(a).Kind().String())
 	}
 }
