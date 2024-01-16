@@ -452,6 +452,10 @@ func convertToStringByType(a any) (string, error) {
 	case string:
 		return t, nil
 	default:
+		s, ok := a.(string)
+		if ok {
+			return s, nil
+		}
 		return "", errors.New("error convert to string from type: " + reflect.TypeOf(a).Kind().String())
 	}
 }
@@ -486,6 +490,10 @@ func convertToIntByType(a any) (int, error) {
 		f, err := strconv.ParseFloat(t, 64)
 		return int(f), err
 	default:
+		i, ok := a.(int)
+		if ok {
+			return i, nil
+		}
 		return 0, errors.New("error convert to int from type: " + reflect.TypeOf(a).Kind().String())
 	}
 }
@@ -519,6 +527,10 @@ func convertToFloatByType(a any) (float64, error) {
 	case string:
 		return strconv.ParseFloat(t, 64)
 	default:
+		f, ok := a.(float64)
+		if ok {
+			return f, nil
+		}
 		return 0, errors.New("error convert to float from type: " + reflect.TypeOf(a).Kind().String())
 	}
 }
@@ -530,6 +542,10 @@ func convertToBoolByType(a any) (bool, error) {
 	case string:
 		return strconv.ParseBool(t)
 	default:
+		b, ok := a.(bool)
+		if ok {
+			return b, nil
+		}
 		return false, errors.New("error convert to bool from type: " + reflect.TypeOf(a).Kind().String())
 	}
 }
@@ -620,6 +636,10 @@ func convertToTimeByType(a any) (time.Time, error) {
 		tm, err = time.Parse(time.TimeOnly, t)
 		return tm, err
 	default:
+		tm, ok := a.(time.Time)
+		if ok {
+			return tm, nil
+		}
 		return time.Time{}, errors.New("error convert to parse time from type: " + reflect.TypeOf(a).Kind().String())
 	}
 }
