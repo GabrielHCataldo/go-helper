@@ -2,9 +2,11 @@ package helper
 
 import (
 	"github.com/GabrielHCataldo/go-logger/logger"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io"
 	"os"
 	"testing"
+	"time"
 )
 
 func TestConvertToPointer(t *testing.T) {
@@ -20,7 +22,9 @@ func TestConvertPointerToValue(t *testing.T) {
 }
 
 func TestConvertToObjectId(t *testing.T) {
-	result, err := ConvertToObjectId("")
+	result, err := ConvertToObjectId(nil)
+	logger.Info("ConvertToObjectId:", result, "err:", err)
+	result, err = ConvertToObjectId(ConvertToPointer(primitive.NewObjectID().Hex()))
 	logger.Info("ConvertToObjectId:", result, "err:", err)
 }
 
@@ -28,6 +32,21 @@ func TestSimpleConvertToObjectId(t *testing.T) {
 	v := ""
 	result := SimpleConvertToObjectId(v)
 	logger.Info("SimpleConvertToObjectId:", result)
+}
+
+func TestConvertToPrimitiveDateTime(t *testing.T) {
+	result, err := ConvertToPrimitiveDateTime(nil)
+	logger.Info("ConvertToPrimitiveDateTime:", result, "err:", err)
+	result, err = ConvertToPrimitiveDateTime(ConvertToPointer(primitive.NewDateTimeFromTime(time.Now())))
+	logger.Info("ConvertToPrimitiveDateTime:", result, "err:", err)
+	result, err = ConvertToPrimitiveDateTime(ConvertToPointer(10))
+	logger.Info("ConvertToPrimitiveDateTime:", result, "err:", err)
+}
+
+func TestSimpleConvertToPrimitiveDateTime(t *testing.T) {
+	v := ""
+	result := SimpleConvertToPrimitiveDateTime(v)
+	logger.Info("SimpleConvertToPrimitiveDateTime:", result)
 }
 
 func TestConvertByteUnit(t *testing.T) {

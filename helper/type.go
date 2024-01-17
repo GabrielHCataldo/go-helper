@@ -3,6 +3,7 @@ package helper
 import (
 	"bufio"
 	"bytes"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io"
 	"os"
 	"reflect"
@@ -81,7 +82,8 @@ func IsJson(a any) bool {
 	if IsPointer(a) {
 		t = t.Elem()
 	}
-	if (IsError(a) && IsNotStringJson(a.(error).Error())) || IsTime(a) || IsFile(a) || IsReader(a) || IsBuffer(a) {
+	if (IsError(a) && IsNotStringJson(a.(error).Error())) || IsTime(a) || IsFile(a) || IsReader(a) || IsBuffer(a) ||
+		IsObjectId(a) {
 		return false
 	}
 	return t != nil && (t.Kind() == reflect.Struct || t.Kind() == reflect.Map || t.Kind() == reflect.Slice ||
@@ -136,6 +138,9 @@ func IsSlice(a any) bool {
 	if IsPointer(a) {
 		t = t.Elem()
 	}
+	if IsObjectId(a) {
+		return false
+	}
 	return t != nil && (t.Kind() == reflect.Slice || t.Kind() == reflect.Array)
 }
 
@@ -163,7 +168,7 @@ func IsNotString(a any) bool {
 
 // IsInt If value is int, int8, int16, int32 or int64 return true, otherwise return false
 func IsInt(a any) bool {
-	if IsNil(a) {
+	if IsNil(a) || IsPrimitiveDateTime(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
@@ -410,8 +415,7 @@ func IsTime(a any) bool {
 	if IsPointer(a) {
 		vr = vr.Elem()
 	}
-	_, ok := vr.Interface().(time.Time)
-	return ok || vr.CanConvert(reflect.TypeOf(time.Time{}))
+	return vr.CanConvert(reflect.TypeOf(time.Time{}))
 }
 
 // IsNotTime If value is not time return true, otherwise return false
@@ -509,6 +513,41 @@ func IsBuffer(a any) bool {
 // IsNotBuffer If value is bytes.Buffer return true, otherwise return false
 func IsNotBuffer(a any) bool {
 	return !IsBuffer(a)
+}
+
+// IsObjectId If value is primitive.ObjectID return true, otherwise return false
+func IsObjectId(a any) bool {
+	if IsNil(a) {
+		return false
+	}
+	r := reflect.ValueOf(a)
+	if IsPointer(a) {
+		r = r.Elem()
+	}
+	return r.CanConvert(reflect.TypeOf(primitive.ObjectID{}))
+}
+
+// IsNotObjectId If value is not primitive.ObjectID return true, otherwise return false
+func IsNotObjectId(a any) bool {
+	return !IsObjectId(a)
+}
+
+// IsPrimitiveDateTime If value is primitive.DateTime return true, otherwise return false
+func IsPrimitiveDateTime(a any) bool {
+	if IsNil(a) {
+		return false
+	}
+	r := reflect.ValueOf(a)
+	if IsPointer(a) {
+		r = r.Elem()
+	}
+	return IsEqualIgnoreCase(r.Type().String(), "primitive.DateTime") &&
+		r.CanConvert(reflect.TypeOf(primitive.NewDateTimeFromTime(time.Time{})))
+}
+
+// IsNotPrimitiveDateTime If value is not primitive.DateTime return true, otherwise return false
+func IsNotPrimitiveDateTime(a any) bool {
+	return !IsPrimitiveDateTime(a)
 }
 
 func okCastError(a any) bool {

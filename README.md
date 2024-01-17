@@ -3,7 +3,7 @@ Go Helper
 <!--suppress ALL -->
 <img align="right" src="gopher-helper.png" alt="">
 
-[![Project status](https://img.shields.io/badge/version-v1.1.6-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.1.6)
+[![Project status](https://img.shields.io/badge/version-v1.1.7-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.1.7)
 [![Go Report Card](https://goreportcard.com/badge/github.com/GabrielHCataldo/go-helper)](https://goreportcard.com/report/github.com/GabrielHCataldo/go-helper)
 [![Coverage Status](https://coveralls.io/repos/GabrielHCataldo/go-helper/badge.svg?branch=main&service=github)](https://coveralls.io/github/GabrielHCataldo/go-helper?branch=main)
 [![Open Source Helpers](https://www.codetriage.com/gabrielhcataldo/go-helper/badges/users.svg)](https://www.codetriage.com/gabrielhcataldo/go-helper)
@@ -49,8 +49,8 @@ Usability and documentation
 For more details on the examples, visit [All examples link](https://github/GabrielHCataldo/go-helper/blob/main/_example)
 
 ### Empty validate
-
-For empty checks we can insert any value of any type, see the examples:
+To check if the values are empty, just do as in the example below,
+remembering that we also accept values of any type, see:
 
 ```go
 package main
@@ -69,68 +69,28 @@ type exampleStruct struct {
 
 func main() {
     nStruct := exampleStruct{}
-    isEmpty := helper.IsEmpty(nStruct)
-    logger.Info("struct is empty?", isEmpty)
-    nStruct.Name = "test name"
-    isNotEmpty := helper.IsNotEmpty(&nStruct)
-    logger.Info("pointer struct is not empty?", isNotEmpty)
+    nString := "  "
+    isEmpty := helper.IsEmpty(nStruct, nString)
+    logger.Info("is empty?", isEmpty)
+    nString = "test name"
+    nStruct.Name = nString
+    isNotEmpty := helper.IsNotEmpty(&nStruct, nString)
+    logger.Info("is not empty?", isNotEmpty)
 }
 ```
 
 Outputs:
 
-    [INFO 2024/01/03 20:03:06] main.go:18: struct is empty? true
-    [INFO 2024/01/03 20:03:06] main.go:21: struct is not empty? true
-
-You can validate multiple values simultaneously, whether they are empty or not, see:
-
-```go
-package main
-
-import (
-    "github.com/GabrielHCataldo/go-helper/helper"
-    "github.com/GabrielHCataldo/go-logger/logger"
-)
-
-func main() {
-    var anyPointer *any
-    var nMap map[string]any
-    var nSlice []any
-    var nString string
-    var nInt int
-    var nFloat float64
-    var nBool bool
-   
-    allEmpty := helper.AllEmpty(anyPointer, nMap, nSlice, nString, nInt, nFloat, nBool)
-    logger.Info("all are empty?", allEmpty)
-   
-    anyPointer = helper.ConvertToPointer(any("value string"))
-    nMap = map[string]any{
-      "test": "value",
-    }
-    nString = "value"
-    nInt = 1
-    nFloat = 1.0
-    nBool = true
-    nSlice = append(nSlice, any("value"))
-   
-    allNotEmpty := helper.AllNotEmpty(anyPointer, nMap, nString, nInt, nFloat, nBool)
-    logger.Info("all are not empty?", allNotEmpty)
-}
-```
-
-Outputs:
-
-    [INFO 2024/01/04 05:09:56] main.go:17: all are empty? true
-    [INFO 2024/01/04 05:09:56] main.go:27: all are not empty? true
+    [INFO 2024/01/03 20:03:06] main.go:18: is empty? true
+    [INFO 2024/01/03 20:03:06] main.go:21: is not empty? true
 
 See other types of values as examples by accessing
 the [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go).
 
 ### Nil validate
-Validating the "nil" value is simple, but be careful, as
-only the types **Pointer**, **Map**, **Chan**, **Interface**, **Slice** and **Array**
-can have a nil value in go, see an example below:
+Validating “nil” values is simple, but be careful as
+only the types **Pointer**, **Map**, **Chan**, **Interface** and **Slice**
+can have a null value in go, see an example below:
 
 ```go
 package main
@@ -142,60 +102,26 @@ import (
 
 func main() {
     var anyPointer *any
-    isNil := helper.IsNil(anyPointer)
-    logger.Info("pointer is nil?", isNil)
+    var anotherValue []any
+    isNil := helper.IsNil(anyPointer, anotherValue)
+    logger.Info("is nil?", isNil)
     anyPointer = helper.ConvertToPointer(any("value string"))
-    isNotNil := helper.IsNotNil(anyPointer)
-    logger.Info("pointer is not nil?", isNotNil)
+    anotherValue = []any{12, "test"}
+    isNotNil := helper.IsNotNil(anyPointer, anotherValue)
+    logger.Info("is not nil?", isNotNil)
 }
 ```
 
 Outputs:
 
-    [INFO 2024/01/04 05:01:57] main.go:12: pointer is nil? true
-    [INFO 2024/01/04 05:01:57] main.go:15: pointer is not nil? true
-
-You can also be validating multiple values simultaneously, see the example below:
-
-```go
-package main
-
-import (
-    "github.com/GabrielHCataldo/go-helper/helper"
-    "github.com/GabrielHCataldo/go-logger/logger"
-)
-
-func main() {
-    var anyPointer *any
-    var nMap map[string]any
-    var nSlice []any
-    var nChan chan struct{}
-    var nInterface interface{}
-    
-    allNil := helper.AllNil(anyPointer, nMap, nSlice, nChan, nInterface)
-    logger.Info("all are nil?", allNil)
-    
-    anyPointer = helper.ConvertToPointer(any("value string"))
-    nMap = map[string]any{}
-    nSlice = append(nSlice, any("value"))
-    nChan = make(chan struct{}, 1)
-    nInterface = "value"
-    
-    allNotNil := helper.AllNotNil(anyPointer, nMap, nSlice, nChan, nInterface)
-    logger.Info("all are not nil?", allNotNil)
-}
-```
-
-Outputs
-
-    [INFO 2024/01/04 05:19:48] main.go:17: all are nil? true
-    [INFO 2024/01/04 05:19:48] main.go:26: all are not nil? true
+    [INFO 2024/01/04 05:01:57] main.go:12: is nil? true
+    [INFO 2024/01/04 05:01:57] main.go:15: is not nil? true
 
 See other types of values as examples by accessing
 the [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go).
 
-### Equal
-Checking equals is very simple, and works for any type and number 
+### Equal validate
+Checking equal is very simple, and works for any type and number 
 of parameters entered, if it is **Pointer**, go-helper will obtain the
 real value for comparison, see one of the examples:
 
@@ -220,6 +146,19 @@ func main() {
     
     notEquals := helper.IsNotEqual(s1, s2, s3, s4)
     logger.Info("not equals?", notEquals)
+
+    s1 = "VaLuE"
+    s2 = "VaLuE"
+    s3 = "VaLuE"
+    s4 = "VaLuE"
+
+    equals = helper.IsEqualIgnoreCase(s1, s2, s3, s4)
+    logger.Info("equals ignore case?", equals)
+
+	s1 = "value1"
+
+    notEquals := helper.IsNotEqualIgnoreCase(s1, s2, s3, s4)
+    logger.Info("not equals ignore case?", notEquals)
 }
 ```
 
@@ -227,8 +166,10 @@ Outputs:
 
     [INFO 2024/01/04 05:32:42] main.go:15: equals? true
     [INFO 2024/01/04 05:32:42] main.go:20: not equals? true
+    [INFO 2024/01/04 05:32:42] main.go:25: equals ignore case? true
+    [INFO 2024/01/04 05:32:42] main.go:30: not equals ignore case? true
 
-### Type
+### Type validate
 With go-helper it is very simple to know the type of your variable, see the example:
 
 ```go
@@ -280,6 +221,63 @@ Outputs:
     [INFO 2024/01/04 05:47:38] main.go:23: is int? true
     [INFO 2024/01/04 05:47:38] main.go:28: is bool? true
     [INFO 2024/01/04 05:47:38] main.go:33: is time? true
+
+### Convert
+With go-helper you don't need to worry about laborious and repetitive conversions to implement, see a powerful 
+example of conversion from any type A to any type B:
+
+```go
+package main
+
+import (
+    "github.com/GabrielHCataldo/go-helper/helper"
+    "github.com/GabrielHCataldo/go-logger/logger"
+    "time"
+)
+
+type exampleStruct struct {
+    Name      string
+    BirthDate time.Time
+    Map       map[string]any
+}
+
+func main() {
+    var destStruct exampleStruct
+    // convert to struct to string base64, it's funny and sample
+    s64 := helper.SimpleConvertToBase64(initExampleStruct())
+    // convert string base64 to struct
+    err := helper.ConvertToDest(s64, &destStruct)
+    if helper.IsNotNil(err) {
+        logger.Error("error convert base64 to struct:", err)
+        return
+    }
+    logger.Info("converted base64 to struct:", destStruct)
+    var destMap map[string]any
+    // convert struct to simple map
+    err = helper.ConvertToDest(destStruct, &destMap)
+    if helper.IsNotNil(err) {
+        logger.Error("error convert struct to map:", err)
+        return
+    }
+    logger.Info("converted struct to map:", destMap)
+}
+
+func initExampleStruct() exampleStruct {
+    return exampleStruct{
+        Name:      "Foo Bar",
+        BirthDate: time.Now(),
+        Map:       map[string]any{"example": 1, "test": 2},
+    }
+}
+```
+
+Output:
+
+    [INFO 2024/01/17 09:09:00] main.go:26: converted base64 to struct: {"Name":"Foo Bar","BirthDate":"2024-01-17T09:08:49-03:00","Map":{"example":1,"test":2}}
+    [INFO 2024/01/17 09:09:00] main.go:34: converted struct to map: {"Name":"Foo Bar","BirthDate":"2024-01-17T09:08:49.038335-03:00","Map":{"example":1,"test":2}}
+
+See other types of values as examples by accessing
+the [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/convert/main.go).
 
 ### For more examples
 

@@ -2,6 +2,7 @@ package helper
 
 import (
 	"github.com/GabrielHCataldo/go-logger/logger"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"testing"
 	"time"
 )
@@ -103,8 +104,7 @@ func TestIsNotPostalCodePerCountry(t *testing.T) {
 }
 
 func TestIsObjectId(t *testing.T) {
-	v := ""
-	result := IsObjectId(v)
+	result := IsObjectId(primitive.NilObjectID)
 	logger.Info("IsObjectId:", result)
 }
 
@@ -112,6 +112,16 @@ func TestIsNotObjectId(t *testing.T) {
 	v := ""
 	result := IsNotObjectId(v)
 	logger.Info("IsNotObjectId:", result)
+}
+
+func TestIsPrimitiveDateTime(t *testing.T) {
+	result := IsPrimitiveDateTime(primitive.DateTime(0))
+	logger.Info("IsPrimitiveDateTime:", result)
+}
+
+func TestIsNotPrimitiveDateTime(t *testing.T) {
+	result := IsNotPrimitiveDateTime("")
+	logger.Info("IsNotPrimitiveDateTime:", result)
 }
 
 func TestIsBase64(t *testing.T) {

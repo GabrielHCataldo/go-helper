@@ -4,7 +4,6 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/klassmann/cpfcnpj"
 	"github.com/nyaruka/phonenumbers"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 	"net"
 	"net/url"
@@ -128,18 +127,6 @@ func IsPostalCodePerCountry(a any, countryIso string) bool {
 // IsNotPostalCodePerCountry If value is not postal code per country return true, otherwise return false
 func IsNotPostalCodePerCountry(a any, countryIso string) bool {
 	return !IsPostalCodePerCountry(a, countryIso)
-}
-
-// IsObjectId If value is hex objectId return true, otherwise return false
-func IsObjectId(a any) bool {
-	s, _ := ConvertToString(a)
-	_, err := primitive.ObjectIDFromHex(s)
-	return err == nil
-}
-
-// IsNotObjectId If value is not hex objectId return true, otherwise return false
-func IsNotObjectId(a any) bool {
-	return !IsObjectId(a)
 }
 
 // IsBase64 If value is string base64 return true, otherwise return false

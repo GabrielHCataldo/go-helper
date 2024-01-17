@@ -41,6 +41,24 @@ func TestIsNotEqual(t *testing.T) {
 	}
 }
 
+func TestIsEqualIgnoreCase(t *testing.T) {
+	for _, tt := range initListTestEquals() {
+		t.Run(tt.name, func(t *testing.T) {
+			empty := IsEqualIgnoreCase(tt.value...)
+			logger.Info("IsEqualIgnoreCase:", empty)
+		})
+	}
+}
+
+func TestIsNotEqualIgnoreCase(t *testing.T) {
+	for _, tt := range initListTestEquals() {
+		t.Run(tt.name, func(t *testing.T) {
+			empty := IsNotEqualIgnoreCase(tt.value...)
+			logger.Info("IsNotEqualIgnoreCase:", empty)
+		})
+	}
+}
+
 func TestIsGreater(t *testing.T) {
 	for _, tt := range initListTestGreater() {
 		t.Run(tt.name, func(t *testing.T) {

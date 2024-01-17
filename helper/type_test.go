@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"github.com/GabrielHCataldo/go-logger/logger"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io"
 	"os"
 	"testing"
@@ -320,6 +321,13 @@ func TestIsTime(t *testing.T) {
 	result := IsTime(initPointerNil())
 	logger.Info("IsTime:", result)
 	result = IsTime(ConvertToPointer(time.Now()))
+	logger.Info("IsTime:", result)
+	result = IsTime(primitive.NewDateTimeFromTime(time.Now()))
+	logger.Info("IsTime:", result)
+	result = IsTime(primitive.Timestamp{
+		T: uint32(time.Now().Unix()),
+		I: 0,
+	})
 	logger.Info("IsTime:", result)
 }
 

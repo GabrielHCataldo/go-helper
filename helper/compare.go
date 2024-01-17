@@ -1,5 +1,7 @@
 package helper
 
+import "strings"
+
 // IsTrue compare any values if all true return true, otherwise return false
 func IsTrue(a ...any) bool {
 	for _, av := range a {
@@ -40,6 +42,26 @@ func IsEqual(a ...any) bool {
 // IsNotEqual compare values if aren't equals return true, otherwise return false
 func IsNotEqual(a ...any) bool {
 	return !IsEqual(a...)
+}
+
+// IsEqualIgnoreCase compare values if are equals ignoring case return true, otherwise return false
+func IsEqualIgnoreCase(a ...any) bool {
+	a2 := a
+	for _, v := range a {
+		for _, v2 := range a2 {
+			s := strings.ToLower(SimpleConvertToString(v))
+			s2 := strings.ToLower(SimpleConvertToString(v2))
+			if s != s2 {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+// IsNotEqualIgnoreCase compare values if aren't equals ignoring case return true, otherwise return false
+func IsNotEqualIgnoreCase(a ...any) bool {
+	return !IsEqualIgnoreCase(a...)
 }
 
 // IsGreater compares whether A is greater than all values passed in B, If the value is not numeric, we will convert

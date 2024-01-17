@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"errors"
 	"github.com/GabrielHCataldo/go-helper/internal/enum"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io"
 	"os"
 	"strings"
@@ -876,6 +877,8 @@ func initListTestConvertToDest() []testGenericDestValue {
 	var fl os.File
 	var rd bytes.Reader
 	var bff bytes.Buffer
+	var objID primitive.ObjectID
+	var dt primitive.DateTime
 
 	var valueStr = "test value string"
 	return []testGenericDestValue{
@@ -933,6 +936,16 @@ func initListTestConvertToDest() []testGenericDestValue {
 			name:  "success buffet",
 			value: "buffet",
 			dest:  &bff,
+		},
+		{
+			name:  "success objectId",
+			value: primitive.NewObjectID().Hex(),
+			dest:  &objID,
+		},
+		{
+			name:  "success dateTime",
+			value: primitive.NewDateTimeFromTime(time.Now()).Time(),
+			dest:  &dt,
 		},
 		{
 			name:    "failed",
@@ -1111,6 +1124,14 @@ func initListTestIsEmpty() []testGenericValue {
 			name:  "byte",
 			value: []byte{},
 		},
+		{
+			name:  "objectId",
+			value: primitive.NilObjectID,
+		},
+		{
+			name:  "primitive datetime",
+			value: primitive.NewDateTimeFromTime(time.Time{}),
+		},
 	}
 }
 
@@ -1164,269 +1185,13 @@ func initListTestIsNotEmpty() []testGenericValue {
 			name:  "byte",
 			value: []byte{101, 133, 178, 255, 197, 19, 21, 77, 11, 38, 26, 152},
 		},
-	}
-}
-
-func initListTestIsPointerNil() []testGenericValue {
-	return []testGenericValue{
 		{
-			name:  "success",
-			value: initPointerNil(),
+			name:  "objectId",
+			value: primitive.NewObjectID(),
 		},
 		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsPointerNonNil() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success",
-			value: initTestStruct(),
-		},
-		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsJsonEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success struct",
-			value: testStruct{},
-		},
-		{
-			name:  "success map",
-			value: map[string]any{},
-		},
-		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsJsonNotEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success struct",
-			value: *initTestStruct(),
-		},
-		{
-			name:  "success map",
-			value: *initTestMap(),
-		},
-		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsMapEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success",
-			value: map[string]any{},
-		},
-		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsMapNotEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success",
-			value: *initTestMap(),
-		},
-		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsStructEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success",
-			value: testStruct{},
-		},
-		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsStructNotEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success",
-			value: *initTestStruct(),
-		},
-		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsSliceEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success",
-			value: []any{},
-		},
-		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsSliceNotEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success",
-			value: []any{"test", 23, 123},
-		},
-		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsStringEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success",
-			value: *initEmptyPointerString(),
-		},
-		{
-			name:  "success pointer empty",
-			value: initEmptyPointerString(),
-		},
-		{
-			name:    "failed",
-			value:   23,
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsStringNotEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success",
-			value: "not empty",
-		},
-		{
-			name:    "failed",
-			value:   23,
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsIntEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success",
-			value: 0,
-		},
-		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsIntNotEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success",
-			value: 23,
-		},
-		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsFloatEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success",
-			value: 0.0,
-		},
-		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsFloatNotEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success",
-			value: 23.23,
-		},
-		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsBoolEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success",
-			value: false,
-		},
-		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
-		},
-	}
-}
-
-func initListTestIsBoolNotEmpty() []testGenericValue {
-	return []testGenericValue{
-		{
-			name:  "success",
-			value: true,
-		},
-		{
-			name:    "failed",
-			value:   "",
-			wantErr: true,
+			name:  "primitive datetime",
+			value: primitive.NewDateTimeFromTime(time.Now()),
 		},
 	}
 }
@@ -1529,6 +1294,10 @@ func initListTestEquals() []testGenericValues {
 		{
 			name:  "string",
 			value: []any{"test", "test"},
+		},
+		{
+			name:  "string diff cases",
+			value: []any{"testaT", "testAt"},
 		},
 		{
 			name:  "struct",
@@ -1815,10 +1584,6 @@ func initChanPointer() *chan string {
 func initEmptyAny() any {
 	var a any
 	return a
-}
-func initEmptyPointerString() *string {
-	var a string
-	return &a
 }
 
 func panicRecovery(t *testing.T, wantErr bool) {

@@ -34,14 +34,53 @@ func ConvertPointerToValue[T any](t *T) T {
 
 // ConvertToObjectId convert any value to primitive.ObjectID
 func ConvertToObjectId(a any) (primitive.ObjectID, error) {
-	s, _ := ConvertToString(a)
-	return primitive.ObjectIDFromHex(s)
+	if IsNil(a) {
+		return primitive.NilObjectID, errors.New("error convert to objectId: value is nil")
+	}
+	v := reflect.ValueOf(a)
+	if v.Type().Kind() == reflect.Pointer {
+		v = v.Elem()
+	}
+	var objectId primitive.ObjectID
+	canConvert := v.CanConvert(reflect.TypeOf(primitive.ObjectID{}))
+	if canConvert {
+		objectId = v.Convert(reflect.TypeOf(primitive.ObjectID{})).Interface().(primitive.ObjectID)
+	} else {
+		s := SimpleConvertToString(a)
+		objectId, _ = primitive.ObjectIDFromHex(s)
+	}
+	return objectId, nil
 }
 
 // SimpleConvertToObjectId convert any value to primitive.ObjectID, if err return empty value, check using primitive.NilObjectID
 func SimpleConvertToObjectId(a any) primitive.ObjectID {
 	r, _ := ConvertToObjectId(a)
 	return r
+}
+
+// ConvertToPrimitiveDateTime convert any value to primitive.DateTime
+func ConvertToPrimitiveDateTime(a any) (primitive.DateTime, error) {
+	if IsNil(a) {
+		return primitive.NewDateTimeFromTime(time.Time{}), errors.New("error convert to primitive dateTime: value is nil")
+	}
+	v := reflect.ValueOf(a)
+	if v.Type().Kind() == reflect.Pointer {
+		v = v.Elem()
+	}
+	var dateTime primitive.DateTime
+	canConvert := v.CanConvert(reflect.TypeOf(primitive.DateTime(0)))
+	if canConvert {
+		dateTime = v.Convert(reflect.TypeOf(primitive.DateTime(0))).Interface().(primitive.DateTime)
+	} else if IsTime(a) {
+		dateTime = primitive.NewDateTimeFromTime(v.Interface().(time.Time))
+	}
+	return dateTime, nil
+}
+
+// SimpleConvertToPrimitiveDateTime convert any value to primitive.DateTime, if err return empty value
+func SimpleConvertToPrimitiveDateTime(a any) primitive.DateTime {
+	d, _ := ConvertToPrimitiveDateTime(a)
+	return d
 }
 
 // ConvertByteUnit convert byte unit text to int ex: 1KB = 1024
@@ -257,8 +296,15 @@ func ConvertToBytes(a any) ([]byte, error) {
 	} else if IsJson(a) && IsNotError(a) && IsNotBytes(a) {
 		return json.Marshal(a)
 	} else {
+		var bs []byte
 		s, err := ConvertToString(a)
-		return []byte(s), err
+		if IsNil(err) && IsBase64(s) {
+			bs, err = base64.StdEncoding.DecodeString(s)
+		}
+		if IsEmpty(bs) {
+			bs = []byte(s)
+		}
+		return bs, err
 	}
 }
 
@@ -411,18 +457,17 @@ func ConvertToDest(a, dest any) error {
 		bf, err := ConvertToBuffer(vInterface)
 		rDest.Elem().Set(reflect.ValueOf(ConvertPointerToValue(bf)))
 		return err
+	} else if IsObjectId(dest) {
+		bf, err := ConvertToObjectId(vInterface)
+		rDest.Elem().Set(reflect.ValueOf(bf))
+		return err
+	} else if IsPrimitiveDateTime(dest) {
+		bf, err := ConvertToPrimitiveDateTime(vInterface)
+		rDest.Elem().Set(reflect.ValueOf(bf))
+		return err
 	} else {
 		return errors.New("error convert to dest: unknown value dest")
 	}
-}
-
-// getRealValue get real value by any, if pointer or interface return value non pointer or interface
-func getRealValue(a any) any {
-	elem := reflect.ValueOf(a)
-	if IsPointer(a) || IsInterface(a) {
-		elem = elem.Elem()
-	}
-	return elem.Interface()
 }
 
 func convertToStringByType(a any) (string, error) {
