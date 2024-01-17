@@ -9,7 +9,7 @@ import (
 func IsNil(a any) bool {
 	elem := reflect.ValueOf(a)
 	switch elem.Kind() {
-	case reflect.Pointer, reflect.Chan, reflect.Map, reflect.Interface, reflect.Slice, reflect.Array:
+	case reflect.Pointer, reflect.Chan, reflect.Map, reflect.Interface, reflect.Slice:
 		return elem.IsNil() || !elem.IsValid()
 	default:
 		return !elem.IsValid()
