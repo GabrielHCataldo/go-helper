@@ -20,7 +20,7 @@ func GetCallerInfo(skipCaller int) (fileName string, line string, funcName strin
 	dir, fileBase := filepath.Split(file)
 	dirBase := filepath.Base(dir)
 	name := formatFuncName(funcInfo.Name())
-	return dirBase + "." + fileBase, strconv.Itoa(lineInt), name
+	return dirBase + "/" + fileBase, strconv.Itoa(MinInt(lineInt-1, 1)), name
 }
 
 func formatFuncName(name string) string {
