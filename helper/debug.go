@@ -12,6 +12,10 @@ func GetCallerInfo(skipCaller int) (fileName string, line string, funcName strin
 	pc := make([]uintptr, 1)
 	runtime.Callers(skipCaller+1, pc)
 	funcInfo := runtime.FuncForPC(pc[0])
+	if IsNil(funcInfo) {
+		runtime.Callers(2, pc)
+		funcInfo = runtime.FuncForPC(pc[0])
+	}
 	file, lineInt := funcInfo.FileLine(pc[0])
 	dir, fileBase := filepath.Split(file)
 	dirBase := filepath.Base(dir)
