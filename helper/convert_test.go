@@ -1,9 +1,9 @@
 package helper
 
 import (
-	"github.com/GabrielHCataldo/go-logger/logger"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io"
+	"log"
 	"os"
 	"testing"
 	"time"
@@ -12,41 +12,41 @@ import (
 func TestConvertToPointer(t *testing.T) {
 	v := "string text"
 	result := ConvertToPointer(v)
-	logger.Info("ConvertToPointer:", result)
+	log.Println("ConvertToPointer:", result)
 }
 
 func TestConvertPointerToValue(t *testing.T) {
 	v := "string text"
 	result := ConvertPointerToValue(&v)
-	logger.Info("ConvertPointerToValue:", result)
+	log.Println("ConvertPointerToValue:", result)
 }
 
 func TestConvertToObjectId(t *testing.T) {
 	result, err := ConvertToObjectId(nil)
-	logger.Info("ConvertToObjectId:", result, "err:", err)
+	log.Println("ConvertToObjectId:", result, "err:", err)
 	result, err = ConvertToObjectId(ConvertToPointer(primitive.NewObjectID().Hex()))
-	logger.Info("ConvertToObjectId:", result, "err:", err)
+	log.Println("ConvertToObjectId:", result, "err:", err)
 }
 
 func TestSimpleConvertToObjectId(t *testing.T) {
 	v := ""
 	result := SimpleConvertToObjectId(v)
-	logger.Info("SimpleConvertToObjectId:", result)
+	log.Println("SimpleConvertToObjectId:", result)
 }
 
 func TestConvertToPrimitiveDateTime(t *testing.T) {
 	result, err := ConvertToPrimitiveDateTime(nil)
-	logger.Info("ConvertToPrimitiveDateTime:", result, "err:", err)
+	log.Println("ConvertToPrimitiveDateTime:", result, "err:", err)
 	result, err = ConvertToPrimitiveDateTime(ConvertToPointer(primitive.NewDateTimeFromTime(time.Now())))
-	logger.Info("ConvertToPrimitiveDateTime:", result, "err:", err)
+	log.Println("ConvertToPrimitiveDateTime:", result, "err:", err)
 	result, err = ConvertToPrimitiveDateTime(ConvertToPointer(10))
-	logger.Info("ConvertToPrimitiveDateTime:", result, "err:", err)
+	log.Println("ConvertToPrimitiveDateTime:", result, "err:", err)
 }
 
 func TestSimpleConvertToPrimitiveDateTime(t *testing.T) {
 	v := ""
 	result := SimpleConvertToPrimitiveDateTime(v)
-	logger.Info("SimpleConvertToPrimitiveDateTime:", result)
+	log.Println("SimpleConvertToPrimitiveDateTime:", result)
 }
 
 func TestConvertByteUnit(t *testing.T) {
@@ -54,12 +54,12 @@ func TestConvertByteUnit(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ConvertByteUnit(tt.value)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertByteUnit() error = %v, wantErr %v", err, tt.wantErr)
+				log.Printf("ConvertByteUnit() error = %v, wantErr %v", err, tt.wantErr)
 				t.Fail()
 			} else if err != nil {
-				logger.Info("err expected:", err)
+				log.Println("err expected:", err)
 			} else {
-				logger.Info("result:", result)
+				log.Println("result:", result)
 			}
 		})
 	}
@@ -67,7 +67,7 @@ func TestConvertByteUnit(t *testing.T) {
 
 func TestSimpleConvertByteUnit(t *testing.T) {
 	result := SimpleConvertByteUnit("")
-	logger.Info("SimpleConvertByteUnit:", result)
+	log.Println("SimpleConvertByteUnit:", result)
 }
 
 func TestConvertMegaByteUnit(t *testing.T) {
@@ -75,12 +75,12 @@ func TestConvertMegaByteUnit(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ConvertMegaByteUnit(tt.value)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertMegaByteUnit() error = %v, wantErr = %v", err, tt.wantErr)
+				log.Printf("ConvertMegaByteUnit() error = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else if err != nil {
-				logger.Info("err expected:", err)
+				log.Println("err expected:", err)
 			} else {
-				logger.Info("result:", result)
+				log.Println("result:", result)
 			}
 		})
 	}
@@ -88,7 +88,7 @@ func TestConvertMegaByteUnit(t *testing.T) {
 
 func TestSimpleConvertMegaByteUnit(t *testing.T) {
 	result := SimpleConvertMegaByteUnit("")
-	logger.Info("SimpleConvertMegaByteUnit:", result)
+	log.Println("SimpleConvertMegaByteUnit:", result)
 }
 
 func TestConvertToString(t *testing.T) {
@@ -96,10 +96,10 @@ func TestConvertToString(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ConvertToString(tt.value)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertToString() err = %v, wantErr = %v", err, tt.wantErr)
+				log.Printf("ConvertToString() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else {
-				logger.Info("result:", result, "err:", err)
+				log.Println("result:", result, "err:", err)
 			}
 		})
 	}
@@ -107,7 +107,7 @@ func TestConvertToString(t *testing.T) {
 
 func TestSimpleConvertToString(t *testing.T) {
 	result := SimpleConvertToString("")
-	logger.Info("SimpleConvertToString:", result)
+	log.Println("SimpleConvertToString:", result)
 }
 
 func TestConvertToInt(t *testing.T) {
@@ -115,10 +115,10 @@ func TestConvertToInt(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ConvertToInt(tt.value)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertToInt() err = %v, wantErr = %v", err, tt.wantErr)
+				log.Printf("ConvertToInt() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else {
-				logger.Info("result:", result, "err:", err)
+				log.Println("result:", result, "err:", err)
 			}
 		})
 	}
@@ -126,7 +126,7 @@ func TestConvertToInt(t *testing.T) {
 
 func TestSimpleConvertToInt(t *testing.T) {
 	result := SimpleConvertToInt("")
-	logger.Info("SimpleConvertToInt:", result)
+	log.Println("SimpleConvertToInt:", result)
 }
 
 func TestConvertToFloat(t *testing.T) {
@@ -134,10 +134,10 @@ func TestConvertToFloat(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ConvertToFloat(tt.value)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertToFloat() err = %v, wantErr = %v", err, tt.wantErr)
+				log.Printf("ConvertToFloat() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else {
-				logger.Info("result:", result, "err:", err)
+				log.Println("result:", result, "err:", err)
 			}
 		})
 	}
@@ -145,7 +145,7 @@ func TestConvertToFloat(t *testing.T) {
 
 func TestSimpleConvertToFloat(t *testing.T) {
 	result := SimpleConvertToFloat("")
-	logger.Info("SimpleConvertToFloat:", result)
+	log.Println("SimpleConvertToFloat:", result)
 }
 
 func TestConvertToBool(t *testing.T) {
@@ -153,10 +153,10 @@ func TestConvertToBool(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ConvertToBool(tt.value)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertToBool() err = %v, wantErr = %v", err, tt.wantErr)
+				log.Printf("ConvertToBool() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else {
-				logger.Info("result:", result, "err:", err)
+				log.Println("result:", result, "err:", err)
 			}
 		})
 	}
@@ -164,7 +164,7 @@ func TestConvertToBool(t *testing.T) {
 
 func TestSimpleConvertToBool(t *testing.T) {
 	result := SimpleConvertToBool("")
-	logger.Info("SimpleConvertToBool:", result)
+	log.Println("SimpleConvertToBool:", result)
 }
 
 func TestConvertToTime(t *testing.T) {
@@ -172,10 +172,10 @@ func TestConvertToTime(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ConvertToTime(tt.value)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertToString() err = %v, wantErr = %v", err, tt.wantErr)
+				log.Printf("ConvertToString() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else {
-				logger.Info("result:", result)
+				log.Println("result:", result)
 			}
 		})
 	}
@@ -183,7 +183,7 @@ func TestConvertToTime(t *testing.T) {
 
 func TestSimpleConvertToTime(t *testing.T) {
 	result := SimpleConvertToTime("")
-	logger.Info("SimpleConvertToTime:", result)
+	log.Println("SimpleConvertToTime:", result)
 }
 
 func TestConvertToBytes(t *testing.T) {
@@ -191,10 +191,10 @@ func TestConvertToBytes(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ConvertToBytes(tt.value)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertToBytes() err = %v, wantErr = %v", err, tt.wantErr)
+				log.Printf("ConvertToBytes() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else {
-				logger.Info("result:", string(result), "error:", err)
+				log.Println("result:", string(result), "error:", err)
 			}
 		})
 	}
@@ -202,7 +202,7 @@ func TestConvertToBytes(t *testing.T) {
 
 func TestSimpleConvertToBytes(t *testing.T) {
 	result := SimpleConvertToBytes("")
-	logger.Info("SimpleConvertToBytes:", result)
+	log.Println("SimpleConvertToBytes:", result)
 }
 
 func TestConvertFileToBytes(t *testing.T) {
@@ -210,10 +210,10 @@ func TestConvertFileToBytes(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ConvertFileToBytes(tt.value)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertFileToBytes() err = %v, wantErr = %v", err, tt.wantErr)
+				log.Printf("ConvertFileToBytes() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else {
-				logger.Info("result:", result, "error:", err)
+				log.Println("result:", result, "error:", err)
 			}
 		})
 	}
@@ -221,7 +221,7 @@ func TestConvertFileToBytes(t *testing.T) {
 
 func TestSimpleConvertFileToBytes(t *testing.T) {
 	result := SimpleConvertFileToBytes(os.NewFile(0, "test"))
-	logger.Info("SimpleConvertFileToBytes:", result)
+	log.Println("SimpleConvertFileToBytes:", result)
 }
 
 func TestConvertToFile(t *testing.T) {
@@ -231,13 +231,13 @@ func TestConvertToFile(t *testing.T) {
 			result, err := ConvertToFile(tt.value)
 			defer closeFile(result)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertToFile() err = %v, wantErr = %v", err, tt.wantErr)
+				log.Printf("ConvertToFile() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else if result != nil {
 				bs, _ := io.ReadAll(result)
 				resultPrint = string(bs)
 			}
-			logger.Info("result:", resultPrint, "error:", err)
+			log.Println("result:", resultPrint, "error:", err)
 		})
 	}
 }
@@ -245,7 +245,7 @@ func TestConvertToFile(t *testing.T) {
 func TestSimpleConvertToFile(t *testing.T) {
 	result := SimpleConvertToFile("test file")
 	bs, _ := io.ReadAll(result)
-	logger.Info("SimpleConvertToFile:", string(bs))
+	log.Println("SimpleConvertToFile:", string(bs))
 }
 
 func TestConvertToReader(t *testing.T) {
@@ -253,11 +253,11 @@ func TestConvertToReader(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ConvertToReader(tt.value)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertToReader() err = %v, wantErr = %v", err, tt.wantErr)
+				log.Printf("ConvertToReader() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else if result != nil {
 				bs, _ := io.ReadAll(result)
-				logger.Info("result:", string(bs), "error:", err)
+				log.Println("result:", string(bs), "error:", err)
 			}
 		})
 	}
@@ -266,7 +266,7 @@ func TestConvertToReader(t *testing.T) {
 func TestSimpleConvertToReader(t *testing.T) {
 	result := SimpleConvertToReader("test file")
 	bs, _ := io.ReadAll(result)
-	logger.Info("SimpleConvertToReader:", string(bs))
+	log.Println("SimpleConvertToReader:", string(bs))
 }
 
 func TestConvertToBuffer(t *testing.T) {
@@ -274,11 +274,11 @@ func TestConvertToBuffer(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ConvertToBuffer(tt.value)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertToBuffer() err = %v, wantErr = %v", err, tt.wantErr)
+				log.Printf("ConvertToBuffer() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else if result != nil {
 				bs, _ := io.ReadAll(result)
-				logger.Info("result:", string(bs), "error:", err)
+				log.Println("result:", string(bs), "error:", err)
 			}
 		})
 	}
@@ -287,7 +287,7 @@ func TestConvertToBuffer(t *testing.T) {
 func TestSimpleConvertToBuffer(t *testing.T) {
 	result := SimpleConvertToBuffer("test file")
 	bs, _ := io.ReadAll(result)
-	logger.Info("SimpleConvertToBuffer:", string(bs))
+	log.Println("SimpleConvertToBuffer:", string(bs))
 }
 
 func TestConvertToBase64(t *testing.T) {
@@ -295,18 +295,18 @@ func TestConvertToBase64(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ConvertToBase64(tt.value)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertToBase64() err = %v, wantErr = %v", err, tt.wantErr)
+				log.Printf("ConvertToBase64() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 				return
 			}
-			logger.Info("result:", result, "error:", err)
+			log.Println("result:", result, "error:", err)
 		})
 	}
 }
 
 func TestSimpleConvertToBase64(t *testing.T) {
 	result := SimpleConvertToBase64("test file")
-	logger.Info("SimpleConvertToBase64:", result)
+	log.Println("SimpleConvertToBase64:", result)
 }
 
 func TestConvertToDest(t *testing.T) {
@@ -314,10 +314,10 @@ func TestConvertToDest(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			err := ConvertToDest(tt.value, tt.dest)
 			if (err != nil) != tt.wantErr {
-				logger.Errorf("ConvertToDest() err = %v, wantErr = %v", err, tt.wantErr)
+				log.Printf("ConvertToDest() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else {
-				logger.Info("result:", tt.dest, "error:", err)
+				log.Println("result:", tt.dest, "error:", err)
 			}
 		})
 	}

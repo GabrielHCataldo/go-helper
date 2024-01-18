@@ -1,7 +1,7 @@
 package helper
 
 import (
-	"github.com/GabrielHCataldo/go-logger/logger"
+	"log"
 	"testing"
 	"time"
 )
@@ -65,5 +65,5 @@ func initValidatorStruct() validatorStruct {
 
 func TestValidator(t *testing.T) {
 	err := Validate().Struct(initValidatorStruct())
-	logger.Info("Validate Struct Result:", err)
+	log.Println("Validate Struct Result:", err)
 }

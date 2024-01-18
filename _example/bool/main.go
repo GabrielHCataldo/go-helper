@@ -2,10 +2,10 @@ package main
 
 import (
 	"github.com/GabrielHCataldo/go-helper/helper"
-	"github.com/GabrielHCataldo/go-logger/logger"
+	"log"
 )
 
 func main() {
 	randomResult := helper.RandomBool()
-	logger.Info("result randomBool:", randomResult)
+	log.Println("result randomBool:", randomResult)
 }

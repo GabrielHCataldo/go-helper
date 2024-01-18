@@ -1,11 +1,11 @@
 package helper
 
 import (
-	"github.com/GabrielHCataldo/go-logger/logger"
+	"log"
 	"testing"
 )
 
 func TestRandomBool(t *testing.T) {
 	b := RandomBool()
-	logger.Info("result:", b)
+	log.Println("result:", b)
 }

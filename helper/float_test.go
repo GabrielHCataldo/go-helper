@@ -1,24 +1,24 @@
 package helper
 
 import (
-	"github.com/GabrielHCataldo/go-logger/logger"
+	"log"
 	"testing"
 )
 
 func TestRound(t *testing.T) {
 	v := 1.6
 	result := Round(v, 2)
-	logger.Info("Round:", result)
+	log.Println("Round:", result)
 }
 
 func TestRoundUp(t *testing.T) {
 	v := 1.5
 	result := RoundUp(v, 2)
-	logger.Info("RoundUp:", result)
+	log.Println("RoundUp:", result)
 }
 
 func TestRoundDown(t *testing.T) {
 	v := 1.5
 	result := RoundDown(v, 2)
-	logger.Info("RoundDown:", result)
+	log.Println("RoundDown:", result)
 }

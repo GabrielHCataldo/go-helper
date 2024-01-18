@@ -3,7 +3,7 @@ Go Helper
 <!--suppress ALL -->
 <img align="right" src="gopher-helper.png" alt="">
 
-[![Project status](https://img.shields.io/badge/version-v1.1.9-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.1.9)
+[![Project status](https://img.shields.io/badge/version-v1.2.0-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.2.0)
 [![Go Report Card](https://goreportcard.com/badge/github.com/GabrielHCataldo/go-helper)](https://goreportcard.com/report/github.com/GabrielHCataldo/go-helper)
 [![Coverage Status](https://coveralls.io/repos/GabrielHCataldo/go-helper/badge.svg?branch=main&service=github)](https://coveralls.io/github/GabrielHCataldo/go-helper?branch=main)
 [![Open Source Helpers](https://www.codetriage.com/gabrielhcataldo/go-helper/badges/users.svg)](https://www.codetriage.com/gabrielhcataldo/go-helper)
@@ -57,7 +57,7 @@ package main
 
 import (
     "github.com/GabrielHCataldo/go-helper/helper"
-    "github.com/GabrielHCataldo/go-logger/logger"
+    "log"
     "time"
 )
 
@@ -71,18 +71,18 @@ func main() {
     nStruct := exampleStruct{}
     nString := "  "
     isEmpty := helper.IsEmpty(nStruct, nString)
-    logger.Info("is empty?", isEmpty)
+    log.Println("is empty?", isEmpty)
     nString = "test name"
     nStruct.Name = nString
     isNotEmpty := helper.IsNotEmpty(&nStruct, nString)
-    logger.Info("is not empty?", isNotEmpty)
+    log.Println("is not empty?", isNotEmpty)
 }
 ```
 
 Outputs:
 
-    [INFO 2024/01/03 20:03:06] main.go:18: is empty? true
-    [INFO 2024/01/03 20:03:06] main.go:21: is not empty? true
+    is empty? true
+    is not empty? true
 
 See other types of values as examples by accessing
 the [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go).
@@ -97,25 +97,25 @@ package main
 
 import (
     "github.com/GabrielHCataldo/go-helper/helper"
-    "github.com/GabrielHCataldo/go-logger/logger"
+    "log"
 )
 
 func main() {
     var anyPointer *any
     var anotherValue []any
     isNil := helper.IsNil(anyPointer, anotherValue)
-    logger.Info("is nil?", isNil)
+    log.Println("is nil?", isNil)
     anyPointer = helper.ConvertToPointer(any("value string"))
     anotherValue = []any{12, "test"}
     isNotNil := helper.IsNotNil(anyPointer, anotherValue)
-    logger.Info("is not nil?", isNotNil)
+    log.Println("is not nil?", isNotNil)
 }
 ```
 
 Outputs:
 
-    [INFO 2024/01/04 05:01:57] main.go:12: is nil? true
-    [INFO 2024/01/04 05:01:57] main.go:15: is not nil? true
+    is nil? true
+    is not nil? true
 
 See other types of values as examples by accessing
 the [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go).
@@ -130,7 +130,7 @@ package main
 
 import (
     "github.com/GabrielHCataldo/go-helper/helper"
-    "github.com/GabrielHCataldo/go-logger/logger"
+    "log"
 )
 
 func main() {
@@ -140,12 +140,12 @@ func main() {
     s4 := "value"
     
     equals := helper.IsEqual(s1, s2, s3, s4)
-    logger.Info("equals?", equals)
+    log.Println("equals?", equals)
     
     s1 = "value1"
     
     notEquals := helper.IsNotEqual(s1, s2, s3, s4)
-    logger.Info("not equals?", notEquals)
+    log.Println("not equals?", notEquals)
 
     s1 = "VaLuE"
     s2 = "VaLuE"
@@ -153,21 +153,21 @@ func main() {
     s4 = "VaLuE"
 
     equals = helper.IsEqualIgnoreCase(s1, s2, s3, s4)
-    logger.Info("equals ignore case?", equals)
+    log.Println("equals ignore case?", equals)
 
 	s1 = "value1"
 
     notEquals := helper.IsNotEqualIgnoreCase(s1, s2, s3, s4)
-    logger.Info("not equals ignore case?", notEquals)
+    log.Println("not equals ignore case?", notEquals)
 }
 ```
 
 Outputs:
 
-    [INFO 2024/01/04 05:32:42] main.go:15: equals? true
-    [INFO 2024/01/04 05:32:42] main.go:20: not equals? true
-    [INFO 2024/01/04 05:32:42] main.go:25: equals ignore case? true
-    [INFO 2024/01/04 05:32:42] main.go:30: not equals ignore case? true
+    equals? true
+    not equals? true
+    equals ignore case? true
+    not equals ignore case? true
 
 ### Type validate
 With go-helper it is very simple to know the type of your variable, see the example:
@@ -177,7 +177,7 @@ package main
 
 import (
     "github.com/GabrielHCataldo/go-helper/helper"
-    "github.com/GabrielHCataldo/go-logger/logger"
+    "log"
     "time"
 )
 
@@ -186,41 +186,41 @@ func main() {
     
     // for negative use IsNotMap
     isMap := helper.IsMap(a)
-    logger.Info("is map?", isMap)
+    log.Println("is map?", isMap)
     
     a = "value1"
 
     // for negative use IsNotString
     isString := helper.IsString(a)
-    logger.Info("is string?", isString)
+    log.Println("is string?", isString)
     
     a = 12
 	
     // for negative use IsNotInt
     isInt := helper.IsInt(a)
-    logger.Info("is int?", isInt)
+    log.Println("is int?", isInt)
     
     a = true
 
     // for negative use IsNotBool
     isBool := helper.IsBool(a)
-    logger.Info("is bool?", isBool)
+    log.Println("is bool?", isBool)
     
     a = time.Now()
 
     // for negative use IsNotTime
     isTime := helper.IsTime(a)
-    logger.Info("is time?", isTime)
+    log.Println("is time?", isTime)
 }
 ```
 
 Outputs:
 
-    [INFO 2024/01/04 05:47:38] main.go:13: is map? true
-    [INFO 2024/01/04 05:47:38] main.go:18: is string? true
-    [INFO 2024/01/04 05:47:38] main.go:23: is int? true
-    [INFO 2024/01/04 05:47:38] main.go:28: is bool? true
-    [INFO 2024/01/04 05:47:38] main.go:33: is time? true
+    is map? true
+    is string? true
+    is int? true
+    is bool? true
+    is time? true
 
 ### Convert
 With go-helper you don't need to worry about laborious and repetitive conversions to implement, see a powerful 
@@ -231,7 +231,7 @@ package main
 
 import (
     "github.com/GabrielHCataldo/go-helper/helper"
-    "github.com/GabrielHCataldo/go-logger/logger"
+    "log"
     "time"
 )
 
@@ -248,18 +248,18 @@ func main() {
     // convert string base64 to struct
     err := helper.ConvertToDest(s64, &destStruct)
     if helper.IsNotNil(err) {
-        logger.Error("error convert base64 to struct:", err)
+        log.Println("error convert base64 to struct:", err)
         return
     }
-    logger.Info("converted base64 to struct:", destStruct)
+    log.Println("converted base64 to struct:", destStruct)
     var destMap map[string]any
     // convert struct to simple map
     err = helper.ConvertToDest(destStruct, &destMap)
     if helper.IsNotNil(err) {
-        logger.Error("error convert struct to map:", err)
+        log.Println("error convert struct to map:", err)
         return
     }
-    logger.Info("converted struct to map:", destMap)
+    log.Println("converted struct to map:", destMap)
 }
 
 func initExampleStruct() exampleStruct {

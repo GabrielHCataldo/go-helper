@@ -6,9 +6,9 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	"github.com/GabrielHCataldo/go-logger/logger"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io"
+	"log"
 	"math"
 	"os"
 	"reflect"
@@ -696,6 +696,6 @@ func convertToTimeByType(a any) (time.Time, error) {
 func closeFile(f *os.File) {
 	err := f.Close()
 	if IsNotNil(err) {
-		logger.ErrorSkipCaller(3, "error close file to convert:", err)
+		log.Println("error close file to convert:", err)
 	}
 }

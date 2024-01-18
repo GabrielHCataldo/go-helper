@@ -1,7 +1,7 @@
 package helper
 
 import (
-	"github.com/GabrielHCataldo/go-logger/logger"
+	"log"
 	"testing"
 )
 
@@ -10,7 +10,7 @@ func TestIsBeforeNow(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			defer panicRecovery(t, tt.wantErr && tt.name != "failed value type b")
 			result := IsBeforeNow(tt.value[0])
-			logger.Info("IsBeforeNow:", result)
+			log.Println("IsBeforeNow:", result)
 		})
 	}
 }
@@ -20,7 +20,7 @@ func TestIsBeforeDateToday(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			defer panicRecovery(t, tt.wantErr && tt.name != "failed value type b")
 			result := IsBeforeDateToday(tt.value[0])
-			logger.Info("IsBeforeDateToday:", result)
+			log.Println("IsBeforeDateToday:", result)
 		})
 	}
 }
@@ -30,7 +30,7 @@ func TestIsBeforeDate(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			defer panicRecovery(t, tt.wantErr)
 			result := IsBeforeDate(tt.value[0], tt.value[1])
-			logger.Info("IsBeforeDate:", result)
+			log.Println("IsBeforeDate:", result)
 		})
 	}
 }
@@ -40,7 +40,7 @@ func TestIsBefore(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			defer panicRecovery(t, tt.wantErr)
 			result := IsBefore(tt.value[0], tt.value[1])
-			logger.Info("IsBefore:", result)
+			log.Println("IsBefore:", result)
 		})
 	}
 }
@@ -50,7 +50,7 @@ func TestIsAfterNow(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			defer panicRecovery(t, tt.wantErr && tt.name != "failed value type b")
 			result := IsAfterNow(tt.value[0])
-			logger.Info("IsAfterNow:", result)
+			log.Println("IsAfterNow:", result)
 		})
 	}
 }
@@ -60,7 +60,7 @@ func TestIsAfterDateToday(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			defer panicRecovery(t, tt.wantErr && tt.name != "failed value type b")
 			result := IsAfterDateToday(tt.value[0])
-			logger.Info("IsAfterDateToday:", result)
+			log.Println("IsAfterDateToday:", result)
 		})
 	}
 }
@@ -70,7 +70,7 @@ func TestIsAfterDate(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			defer panicRecovery(t, tt.wantErr)
 			result := IsAfterDate(tt.value[0], tt.value[1])
-			logger.Info("IsAfterDate:", result)
+			log.Println("IsAfterDate:", result)
 		})
 	}
 }
@@ -80,7 +80,7 @@ func TestIsAfter(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			defer panicRecovery(t, tt.wantErr)
 			result := IsAfter(tt.value[0], tt.value[1])
-			logger.Info("IsAfter:", result)
+			log.Println("IsAfter:", result)
 		})
 	}
 }
@@ -90,7 +90,7 @@ func TestIsToday(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			defer panicRecovery(t, tt.wantErr && tt.name != "failed value type b")
 			result := IsToday(tt.value[0])
-			logger.Info("IsToday:", result)
+			log.Println("IsToday:", result)
 		})
 	}
 }
@@ -100,7 +100,7 @@ func TestIsNow(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			defer panicRecovery(t, tt.wantErr && tt.name != "failed value type b")
 			result := IsNow(tt.value[0])
-			logger.Info("IsNow:", result)
+			log.Println("IsNow:", result)
 		})
 	}
 }
@@ -110,7 +110,7 @@ func TestIsFullNow(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			defer panicRecovery(t, tt.wantErr && tt.name != "failed value type b")
 			result := IsFullNow(tt.value[0])
-			logger.Info("IsFullNow:", result)
+			log.Println("IsFullNow:", result)
 		})
 	}
 }

@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/GabrielHCataldo/go-helper/helper"
-	"github.com/GabrielHCataldo/go-logger/logger"
+	"log"
 	"time"
 )
 
@@ -23,18 +23,18 @@ func playground() {
 	// convert string base64 to struct
 	err := helper.ConvertToDest(s64, &destStruct)
 	if helper.IsNotNil(err) {
-		logger.Error("error convert base64 to struct:", err)
+		log.Println("error convert base64 to struct:", err)
 		return
 	}
-	logger.Info("converted base64 to struct:", destStruct)
+	log.Println("converted base64 to struct:", destStruct)
 	var destMap map[string]any
 	// convert struct to simple map
 	err = helper.ConvertToDest(destStruct, &destMap)
 	if helper.IsNotNil(err) {
-		logger.Error("error convert struct to map:", err)
+		log.Println("error convert struct to map:", err)
 		return
 	}
-	logger.Info("converted struct to map:", destMap)
+	log.Println("converted struct to map:", destMap)
 }
 
 func initExampleStruct() exampleStruct {

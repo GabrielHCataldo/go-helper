@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/GabrielHCataldo/go-helper/helper"
-	"github.com/GabrielHCataldo/go-logger/logger"
+	"log"
 )
 
 func main() {
@@ -12,10 +12,10 @@ func main() {
 	s4 := "value"
 
 	equals := helper.IsEqual(s1, s2, s3, s4)
-	logger.Info("equals?", equals)
+	log.Println("equals?", equals)
 
 	s1 = "value1"
 
 	notEquals := helper.IsNotEqual(s1, s2, s3, s4)
-	logger.Info("not equals?", notEquals)
+	log.Println("not equals?", notEquals)
 }

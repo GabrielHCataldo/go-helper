@@ -70,7 +70,7 @@ func FormatEFloat64(v float64) string {
 //
 // result := FormatMoney(12.23, 2, "R$" , ".", "," )
 //
-// logger.Info("money result:", result)
+// log.Println("money result:", result)
 //
 // Output:
 //
