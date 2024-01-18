@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
-	"github.com/GabrielHCataldo/go-helper/internal/enum"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io"
 	"os"
@@ -310,7 +309,7 @@ func initListTestConvertToString() []testGenericValue {
 		},
 		{
 			name:  "success enum",
-			value: enum.ExampleEnumStr1,
+			value: exampleEnumStr1,
 		},
 		{
 			name:    "failed",
@@ -424,7 +423,7 @@ func initListTestConvertToInt() []testGenericValue {
 		},
 		{
 			name:  "success enum",
-			value: enum.ExampleEnumInt1,
+			value: exampleEnumInt1,
 		},
 		{
 			name:    "failed string bool",
@@ -543,11 +542,11 @@ func initListTestConvertToFloat() []testGenericValue {
 		},
 		{
 			name:  "success enum",
-			value: enum.ExampleEnumFloat1,
+			value: exampleEnumFloat1,
 		},
 		{
 			name:  "success enum int",
-			value: enum.ExampleEnumInt1,
+			value: exampleEnumInt1,
 		},
 		{
 			name:    "failed string bool",
@@ -659,7 +658,7 @@ func initListTestConvertToBool() []testGenericValue {
 		},
 		{
 			name:  "success enum",
-			value: enum.ExampleEnumBool1,
+			value: exampleEnumBool1,
 		},
 		{
 			name:    "failed bytes",
@@ -851,7 +850,7 @@ func initListTestConvertToTime() []testGenericValue {
 		},
 		{
 			name:  "time custom type",
-			value: enum.ExampleTime(time.Now()),
+			value: exampleTime(time.Now()),
 		},
 		{
 			name:    "bool",
