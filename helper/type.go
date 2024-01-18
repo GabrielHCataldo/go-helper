@@ -82,12 +82,7 @@ func IsJson(a any) bool {
 	if IsPointer(a) {
 		t = t.Elem()
 	}
-	if (IsError(a) && IsNotStringJson(a.(error).Error())) || IsTime(a) || IsFile(a) || IsReader(a) || IsBuffer(a) ||
-		IsObjectId(a) {
-		return false
-	}
-	return t != nil && (t.Kind() == reflect.Struct || t.Kind() == reflect.Map || t.Kind() == reflect.Slice ||
-		t.Kind() == reflect.Array)
+	return IsStruct(a) || IsMap(a) || IsSlice(a)
 }
 
 // IsNotJson If value is not struct, map, slice or array return true, otherwise return false
@@ -120,6 +115,10 @@ func IsStruct(a any) bool {
 	t := reflect.TypeOf(a)
 	if IsPointer(a) {
 		t = t.Elem()
+	}
+	if (IsError(a) && IsNotStringJson(a.(error).Error())) || IsTime(a) || IsFile(a) || IsReader(a) || IsBuffer(a) ||
+		IsObjectId(a) {
+		return false
 	}
 	return t != nil && t.Kind() == reflect.Struct
 }

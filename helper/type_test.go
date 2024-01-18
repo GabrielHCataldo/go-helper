@@ -101,6 +101,8 @@ func TestIsStruct(t *testing.T) {
 	logger.Info("IsStruct:", result)
 	result = IsStruct(initTestStruct())
 	logger.Info("IsStruct:", result)
+	result = IsStruct(time.Now())
+	logger.Info("IsStruct:", result)
 }
 
 func TestIsNotStruct(t *testing.T) {
