@@ -42,9 +42,9 @@ func IsNotEqualIgnoreCase(a ...any) bool {
 	return !IsEqualIgnoreCase(a...)
 }
 
-// IsGreater compares whether A is greater than all values passed in B, If the value is not numeric, we will convert
+// IsGreaterThan compares whether A is greater than all values passed in B, If the value is not numeric, we will convert
 // them to string and compare the size
-func IsGreater(a any, b ...any) bool {
+func IsGreaterThan(a any, b ...any) bool {
 	for _, bv := range b {
 		fa, err := ConvertToFloat(a)
 		if IsNotNil(err) {
@@ -63,9 +63,9 @@ func IsGreater(a any, b ...any) bool {
 	return true
 }
 
-// IsGreaterEqual compares whether A is greater than or equal to all values passed in B, If the value is not numeric, we will convert
+// IsGreaterThanOrEqual compares whether A is greater than or equal to all values passed in B, If the value is not numeric, we will convert
 // them to string and compare the size
-func IsGreaterEqual(a any, b ...any) bool {
+func IsGreaterThanOrEqual(a any, b ...any) bool {
 	for _, bv := range b {
 		fa, err := ConvertToFloat(a)
 		if IsNotNil(err) {
@@ -84,9 +84,9 @@ func IsGreaterEqual(a any, b ...any) bool {
 	return true
 }
 
-// IsSmaller compares whether A is smaller than all values passed in B, If the value is not numeric, we will convert
+// IsLessThan compares whether A is less than all values passed in B, If the value is not numeric, we will convert
 // them to string and compare the size
-func IsSmaller(a any, b ...any) bool {
+func IsLessThan(a any, b ...any) bool {
 	for _, bv := range b {
 		fa, err := ConvertToFloat(a)
 		if IsNotNil(err) {
@@ -105,9 +105,9 @@ func IsSmaller(a any, b ...any) bool {
 	return true
 }
 
-// IsSmallerEqual compares whether A is smaller than or equal to all values passed in B, If the value is not numeric, we will convert
+// IsLessThanOrEqual compares whether A is less than or equal to all values passed in B, If the value is not numeric, we will convert
 // them to string and compare the size
-func IsSmallerEqual(a any, b ...any) bool {
+func IsLessThanOrEqual(a any, b ...any) bool {
 	for _, bv := range b {
 		fa, err := ConvertToFloat(a)
 		if IsNotNil(err) {

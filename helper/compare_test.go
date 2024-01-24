@@ -50,8 +50,8 @@ func TestIsGreater(t *testing.T) {
 				a = tt.value[0]
 				values = tt.value[1:]
 			}
-			empty := IsGreater(a, values...)
-			log.Println("IsGreater:", empty)
+			empty := IsGreaterThan(a, values...)
+			log.Println("IsGreaterThan:", empty)
 		})
 	}
 }
@@ -65,7 +65,7 @@ func TestIsGreaterEqual(t *testing.T) {
 				a = tt.value[0]
 				values = tt.value[1:]
 			}
-			empty := IsGreaterEqual(a, values...)
+			empty := IsGreaterThanOrEqual(a, values...)
 			log.Println("IsGreaterEqual:", empty)
 		})
 	}
@@ -80,8 +80,8 @@ func TestIsSmaller(t *testing.T) {
 				a = tt.value[0]
 				values = tt.value[1:]
 			}
-			empty := IsSmaller(a, values...)
-			log.Println("IsSmaller:", empty)
+			empty := IsLessThan(a, values...)
+			log.Println("IsLessThan:", empty)
 		})
 	}
 }
@@ -95,7 +95,7 @@ func TestIsSmallerEqual(t *testing.T) {
 				a = tt.value[0]
 				values = tt.value[1:]
 			}
-			empty := IsSmallerEqual(a, values...)
+			empty := IsLessThanOrEqual(a, values...)
 			log.Println("IsSmallerEqual:", empty)
 		})
 	}
