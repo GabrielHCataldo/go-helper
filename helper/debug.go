@@ -8,19 +8,16 @@ import (
 	"strings"
 )
 
-func GetCallerInfo(skipCaller int) (fileName string, line string, funcName string) {
-	pc := make([]uintptr, 1)
-	runtime.Callers(skipCaller+1, pc)
-	funcInfo := runtime.FuncForPC(pc[0])
-	if IsNil(funcInfo) {
-		runtime.Callers(2, pc)
-		funcInfo = runtime.FuncForPC(pc[0])
+func GetCallerInfo(skip int) (fileName string, line string, funcName string) {
+	pc, file, lineNo, ok := runtime.Caller(skip)
+	if !ok {
+		pc, file, lineNo, _ = runtime.Caller(1)
 	}
-	file, lineInt := funcInfo.FileLine(pc[0])
+	funcInfo := runtime.FuncForPC(pc).Name()
 	dir, fileBase := filepath.Split(file)
 	dirBase := filepath.Base(dir)
-	name := formatFuncName(funcInfo.Name())
-	return dirBase + "/" + fileBase, strconv.Itoa(MinInt(lineInt, 1)), name
+	name := formatFuncName(funcInfo)
+	return dirBase + "/" + fileBase, strconv.Itoa(MinInt(lineNo, 1)), name
 }
 
 func formatFuncName(name string) string {
