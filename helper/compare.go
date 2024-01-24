@@ -2,28 +2,6 @@ package helper
 
 import "strings"
 
-// IsTrue compare any values if all true return true, otherwise return false
-func IsTrue(a ...any) bool {
-	for _, av := range a {
-		b, _ := ConvertToBool(av)
-		if !b {
-			return false
-		}
-	}
-	return true
-}
-
-// IsNotTrue compare any values if all false return true, otherwise return false
-func IsNotTrue(a ...any) bool {
-	for _, av := range a {
-		b, _ := ConvertToBool(av)
-		if b {
-			return false
-		}
-	}
-	return true
-}
-
 // IsEqual compare values if are equals return true, otherwise return false
 func IsEqual(a ...any) bool {
 	a2 := a

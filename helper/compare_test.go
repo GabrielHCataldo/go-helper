@@ -5,24 +5,6 @@ import (
 	"testing"
 )
 
-func TestIsTrue(t *testing.T) {
-	for _, tt := range initListTestEquals() {
-		t.Run(tt.name, func(t *testing.T) {
-			empty := IsTrue(tt.value...)
-			log.Println("IsTrue:", empty)
-		})
-	}
-}
-
-func TestIsNotTrue(t *testing.T) {
-	for _, tt := range initListTestEquals() {
-		t.Run(tt.name, func(t *testing.T) {
-			empty := IsNotTrue(tt.value...)
-			log.Println("IsNotTrue:", empty)
-		})
-	}
-}
-
 func TestIsEqual(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {

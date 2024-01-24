@@ -168,7 +168,7 @@ func ConvertToString(a any) (string, error) {
 	if IsPointer(a) {
 		v = v.Elem()
 	}
-	if IsJson(a) || IsTime(a) || IsFile(a) || IsReader(a) || IsBuffer(a) {
+	if IsJson(a) || IsTime(a) || IsFile(a) || IsReader(a) || IsBuffer(a) || IsError(a) {
 		if s, ok := v.Interface().([]byte); ok {
 			return string(s), nil
 		}
@@ -191,10 +191,11 @@ func ConvertToString(a any) (string, error) {
 			bs, err := io.ReadAll(r)
 			return string(bs), err
 		}
+		if e, ok := a.(error); ok {
+			return e.Error(), nil
+		}
 		b, err := json.Marshal(v.Interface())
 		return string(b), err
-	} else if IsError(a) {
-		return a.(error).Error(), nil
 	}
 	return convertToStringByType(v.Interface())
 }

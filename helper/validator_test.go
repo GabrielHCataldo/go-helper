@@ -65,5 +65,5 @@ func initValidatorStruct() validatorStruct {
 
 func TestValidator(t *testing.T) {
 	err := Validate().Struct(initValidatorStruct())
-	log.Println("Validate Struct Result:", err)
+	log.Println("Validate Struct Result:", SimpleConvertToString(err))
 }
