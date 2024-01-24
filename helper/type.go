@@ -540,7 +540,7 @@ func IsPrimitiveDateTime(a any) bool {
 	if IsPointer(a) {
 		r = r.Elem()
 	}
-	return IsEqualIgnoreCase(r.Type().String(), "primitive.DateTime") &&
+	return EqualsIgnoreCase(r.Type().String(), "primitive.DateTime") &&
 		r.CanConvert(reflect.TypeOf(primitive.NewDateTimeFromTime(time.Time{})))
 }
 

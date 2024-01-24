@@ -3,7 +3,7 @@ Go Helper
 <!--suppress ALL -->
 <img align="right" src="gopher-helper.png" alt="">
 
-[![Project status](https://img.shields.io/badge/version-v1.2.8-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.2.8)
+[![Project status](https://img.shields.io/badge/version-v1.2.9-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.2.9)
 [![Go Report Card](https://goreportcard.com/badge/github.com/GabrielHCataldo/go-helper)](https://goreportcard.com/report/github.com/GabrielHCataldo/go-helper)
 [![Coverage Status](https://coveralls.io/repos/GabrielHCataldo/go-helper/badge.svg?branch=main&service=github)](https://coveralls.io/github/GabrielHCataldo/go-helper?branch=main)
 [![Open Source Helpers](https://www.codetriage.com/gabrielhcataldo/go-helper/badges/users.svg)](https://www.codetriage.com/gabrielhcataldo/go-helper)
@@ -120,7 +120,7 @@ Outputs:
 See other types of values as examples by accessing
 the [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go).
 
-### Equal validate
+### Equals validate
 Checking equal is very simple, and works for any type and number 
 of parameters entered, if it is **Pointer**, go-helper will obtain the
 real value for comparison, see one of the examples:
@@ -139,12 +139,12 @@ func main() {
     s3 := "value"
     s4 := "value"
     
-    equals := helper.IsEqual(s1, s2, s3, s4)
+    equals := helper.Equals(s1, s2, s3, s4)
     log.Println("equals?", equals)
     
     s1 = "value1"
     
-    notEquals := helper.IsNotEqual(s1, s2, s3, s4)
+    notEquals := helper.IsNotEqualTo(s1, s2, s3, s4)
     log.Println("not equals?", notEquals)
 
     s1 = "VaLuE"
@@ -152,12 +152,12 @@ func main() {
     s3 = "VaLuE"
     s4 = "VaLuE"
 
-    equals = helper.IsEqualIgnoreCase(s1, s2, s3, s4)
+    equals = helper.EqualsIgnoreCase(s1, s2, s3, s4)
     log.Println("equals ignore case?", equals)
 
 	s1 = "value1"
 
-    notEquals := helper.IsNotEqualIgnoreCase(s1, s2, s3, s4)
+    notEquals = helper.IsNotEqualToIgnoreCase(s1, s2, s3, s4)
     log.Println("not equals ignore case?", notEquals)
 }
 ```

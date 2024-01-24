@@ -8,7 +8,7 @@ import (
 func TestIsEqual(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {
-			empty := IsEqual(tt.value...)
+			empty := Equals(tt.value...)
 			log.Println("IsEqual:", empty)
 		})
 	}
@@ -17,8 +17,8 @@ func TestIsEqual(t *testing.T) {
 func TestIsNotEqual(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {
-			empty := IsNotEqual(tt.value...)
-			log.Println("IsNotEqual:", empty)
+			empty := IsNotEqualTo(tt.value...)
+			log.Println("IsNotEquals:", empty)
 		})
 	}
 }
@@ -26,7 +26,7 @@ func TestIsNotEqual(t *testing.T) {
 func TestIsEqualIgnoreCase(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {
-			empty := IsEqualIgnoreCase(tt.value...)
+			empty := EqualsIgnoreCase(tt.value...)
 			log.Println("IsEqualIgnoreCase:", empty)
 		})
 	}
@@ -35,7 +35,7 @@ func TestIsEqualIgnoreCase(t *testing.T) {
 func TestIsNotEqualIgnoreCase(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {
-			empty := IsNotEqualIgnoreCase(tt.value...)
+			empty := IsNotEqualToIgnoreCase(tt.value...)
 			log.Println("IsNotEqualIgnoreCase:", empty)
 		})
 	}

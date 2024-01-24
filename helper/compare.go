@@ -2,8 +2,8 @@ package helper
 
 import "strings"
 
-// IsEqual compare values if are equals return true, otherwise return false
-func IsEqual(a ...any) bool {
+// Equals compare values if are equals return true, otherwise return false
+func Equals(a ...any) bool {
 	a2 := a
 	for _, v := range a {
 		for _, v2 := range a2 {
@@ -17,13 +17,13 @@ func IsEqual(a ...any) bool {
 	return true
 }
 
-// IsNotEqual compare values if aren't equals return true, otherwise return false
-func IsNotEqual(a ...any) bool {
-	return !IsEqual(a...)
+// IsNotEqualTo compare values if aren't equals return true, otherwise return false
+func IsNotEqualTo(a ...any) bool {
+	return !Equals(a...)
 }
 
-// IsEqualIgnoreCase compare values if are equals ignoring case return true, otherwise return false
-func IsEqualIgnoreCase(a ...any) bool {
+// EqualsIgnoreCase compare values if are equals ignoring case return true, otherwise return false
+func EqualsIgnoreCase(a ...any) bool {
 	a2 := a
 	for _, v := range a {
 		for _, v2 := range a2 {
@@ -37,9 +37,9 @@ func IsEqualIgnoreCase(a ...any) bool {
 	return true
 }
 
-// IsNotEqualIgnoreCase compare values if aren't equals ignoring case return true, otherwise return false
-func IsNotEqualIgnoreCase(a ...any) bool {
-	return !IsEqualIgnoreCase(a...)
+// IsNotEqualToIgnoreCase compare values if aren't equals ignoring case return true, otherwise return false
+func IsNotEqualToIgnoreCase(a ...any) bool {
+	return !EqualsIgnoreCase(a...)
 }
 
 // IsGreaterThan compares whether A is greater than all values passed in B, If the value is not numeric, we will convert
