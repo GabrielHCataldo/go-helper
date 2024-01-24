@@ -5,44 +5,44 @@ import (
 	"testing"
 )
 
-func TestIsEqual(t *testing.T) {
+func TestEquals(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {
 			empty := Equals(tt.value...)
-			log.Println("IsEqual:", empty)
+			log.Println("Equals:", empty)
 		})
 	}
 }
 
-func TestIsNotEqual(t *testing.T) {
+func TestIsNotEqualTo(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {
 			empty := IsNotEqualTo(tt.value...)
-			log.Println("IsNotEquals:", empty)
+			log.Println("IsNotEqualTo:", empty)
 		})
 	}
 }
 
-func TestIsEqualIgnoreCase(t *testing.T) {
+func TestEqualsIgnoreCase(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {
 			empty := EqualsIgnoreCase(tt.value...)
-			log.Println("IsEqualIgnoreCase:", empty)
+			log.Println("EqualsIgnoreCase:", empty)
 		})
 	}
 }
 
-func TestIsNotEqualIgnoreCase(t *testing.T) {
+func TestIsNotEqualToIgnoreCase(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {
 			empty := IsNotEqualToIgnoreCase(tt.value...)
-			log.Println("IsNotEqualIgnoreCase:", empty)
+			log.Println("IsNotEqualToIgnoreCase:", empty)
 		})
 	}
 }
 
-func TestIsGreater(t *testing.T) {
-	for _, tt := range initListTestGreater() {
+func TestIsGreaterThan(t *testing.T) {
+	for _, tt := range initListTestGreaterThan() {
 		t.Run(tt.name, func(t *testing.T) {
 			var a any = 2
 			values := tt.value
@@ -56,8 +56,8 @@ func TestIsGreater(t *testing.T) {
 	}
 }
 
-func TestIsGreaterEqual(t *testing.T) {
-	for _, tt := range initListTestGreater() {
+func TestIsGreaterThanOrEqual(t *testing.T) {
+	for _, tt := range initListTestGreaterThan() {
 		t.Run(tt.name, func(t *testing.T) {
 			var a any = 2
 			values := tt.value
@@ -66,13 +66,13 @@ func TestIsGreaterEqual(t *testing.T) {
 				values = tt.value[1:]
 			}
 			empty := IsGreaterThanOrEqual(a, values...)
-			log.Println("IsGreaterEqual:", empty)
+			log.Println("IsGreaterThanOrEqual:", empty)
 		})
 	}
 }
 
-func TestIsSmaller(t *testing.T) {
-	for _, tt := range initListTestSmaller() {
+func TestIsLessThan(t *testing.T) {
+	for _, tt := range initListTestLessThan() {
 		t.Run(tt.name, func(t *testing.T) {
 			var a any = 2
 			values := tt.value
@@ -86,8 +86,8 @@ func TestIsSmaller(t *testing.T) {
 	}
 }
 
-func TestIsSmallerEqual(t *testing.T) {
-	for _, tt := range initListTestSmaller() {
+func TestIsLessThanOrEqual(t *testing.T) {
+	for _, tt := range initListTestLessThan() {
 		t.Run(tt.name, func(t *testing.T) {
 			var a any = 2
 			values := tt.value
@@ -96,7 +96,7 @@ func TestIsSmallerEqual(t *testing.T) {
 				values = tt.value[1:]
 			}
 			empty := IsLessThanOrEqual(a, values...)
-			log.Println("IsSmallerEqual:", empty)
+			log.Println("IsLessThanOrEqual:", empty)
 		})
 	}
 }

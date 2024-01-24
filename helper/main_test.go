@@ -1333,7 +1333,7 @@ func initListTestEquals() []testGenericValues {
 	}
 }
 
-func initListTestGreater() []testGenericValues {
+func initListTestGreaterThan() []testGenericValues {
 	mapTest := initTestMap()
 	structTest := initTestStruct()
 	return []testGenericValues{
@@ -1372,7 +1372,7 @@ func initListTestGreater() []testGenericValues {
 	}
 }
 
-func initListTestSmaller() []testGenericValues {
+func initListTestLessThan() []testGenericValues {
 	mapTest := initTestMap()
 	structTest := initTestStruct()
 	return []testGenericValues{
