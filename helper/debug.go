@@ -10,7 +10,7 @@ import (
 
 func GetCallerInfo(skipCaller int) (fileName string, line string, funcName string) {
 	pc := make([]uintptr, 1)
-	runtime.Callers(skipCaller+1, pc)
+	runtime.Callers(skipCaller, pc)
 	funcInfo := runtime.FuncForPC(pc[0])
 	if IsNil(funcInfo) {
 		runtime.Callers(2, pc)
