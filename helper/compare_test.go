@@ -8,7 +8,7 @@ import (
 func TestEquals(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {
-			empty := Equals(tt.value...)
+			empty := Equals(tt.value[0], tt.value[1])
 			log.Println("Equals:", empty)
 		})
 	}
@@ -17,7 +17,7 @@ func TestEquals(t *testing.T) {
 func TestIsNotEqualTo(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {
-			empty := IsNotEqualTo(tt.value...)
+			empty := IsNotEqualTo(tt.value[0], tt.value[1])
 			log.Println("IsNotEqualTo:", empty)
 		})
 	}
@@ -26,7 +26,7 @@ func TestIsNotEqualTo(t *testing.T) {
 func TestEqualsIgnoreCase(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {
-			empty := EqualsIgnoreCase(tt.value...)
+			empty := EqualsIgnoreCase(tt.value[0], tt.value[1])
 			log.Println("EqualsIgnoreCase:", empty)
 		})
 	}
@@ -35,7 +35,7 @@ func TestEqualsIgnoreCase(t *testing.T) {
 func TestIsNotEqualToIgnoreCase(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {
-			empty := IsNotEqualToIgnoreCase(tt.value...)
+			empty := IsNotEqualToIgnoreCase(tt.value[0], tt.value[1])
 			log.Println("IsNotEqualToIgnoreCase:", empty)
 		})
 	}
@@ -44,13 +44,7 @@ func TestIsNotEqualToIgnoreCase(t *testing.T) {
 func TestIsGreaterThan(t *testing.T) {
 	for _, tt := range initListTestGreaterThan() {
 		t.Run(tt.name, func(t *testing.T) {
-			var a any = 2
-			values := tt.value
-			if IsNotEmpty(tt.value) {
-				a = tt.value[0]
-				values = tt.value[1:]
-			}
-			empty := IsGreaterThan(a, values...)
+			empty := IsGreaterThan(tt.value[0], tt.value[1])
 			log.Println("IsGreaterThan:", empty)
 		})
 	}
@@ -59,13 +53,7 @@ func TestIsGreaterThan(t *testing.T) {
 func TestIsGreaterThanOrEqual(t *testing.T) {
 	for _, tt := range initListTestGreaterThan() {
 		t.Run(tt.name, func(t *testing.T) {
-			var a any = 2
-			values := tt.value
-			if IsNotEmpty(tt.value) {
-				a = tt.value[0]
-				values = tt.value[1:]
-			}
-			empty := IsGreaterThanOrEqual(a, values...)
+			empty := IsGreaterThanOrEqual(tt.value[0], tt.value[1])
 			log.Println("IsGreaterThanOrEqual:", empty)
 		})
 	}
@@ -74,13 +62,7 @@ func TestIsGreaterThanOrEqual(t *testing.T) {
 func TestIsLessThan(t *testing.T) {
 	for _, tt := range initListTestLessThan() {
 		t.Run(tt.name, func(t *testing.T) {
-			var a any = 2
-			values := tt.value
-			if IsNotEmpty(tt.value) {
-				a = tt.value[0]
-				values = tt.value[1:]
-			}
-			empty := IsLessThan(a, values...)
+			empty := IsLessThan(tt.value[0], tt.value[1])
 			log.Println("IsLessThan:", empty)
 		})
 	}
@@ -89,13 +71,7 @@ func TestIsLessThan(t *testing.T) {
 func TestIsLessThanOrEqual(t *testing.T) {
 	for _, tt := range initListTestLessThan() {
 		t.Run(tt.name, func(t *testing.T) {
-			var a any = 2
-			values := tt.value
-			if IsNotEmpty(tt.value) {
-				a = tt.value[0]
-				values = tt.value[1:]
-			}
-			empty := IsLessThanOrEqual(a, values...)
+			empty := IsLessThanOrEqual(tt.value[0], tt.value[1])
 			log.Println("IsLessThanOrEqual:", empty)
 		})
 	}

@@ -6,8 +6,9 @@ import (
 )
 
 // IsNil check all values are nil
-func IsNil(a ...any) bool {
-	for _, v := range a {
+func IsNil(a any, b ...any) bool {
+	b = append(b, a)
+	for _, v := range b {
 		if !isReflectNil(v) {
 			return false
 		}
@@ -16,8 +17,8 @@ func IsNil(a ...any) bool {
 }
 
 // IsNotNil check all values are not nil
-func IsNotNil(a ...any) bool {
-	return !IsNil(a...)
+func IsNotNil(a any, b ...any) bool {
+	return !IsNil(a, b...)
 }
 
 // IfNilReturns if A is nil return value B, otherwise return A value
@@ -41,8 +42,9 @@ func ReturnNonNilValue[T any](a ...T) T {
 }
 
 // IsEmpty check all value are empty
-func IsEmpty(a ...any) bool {
-	for _, v := range a {
+func IsEmpty(a any, b ...any) bool {
+	b = append(b, a)
+	for _, v := range b {
 		if !isReflectZero(v) {
 			return false
 		}
@@ -51,8 +53,8 @@ func IsEmpty(a ...any) bool {
 }
 
 // IsNotEmpty check all values are not empty
-func IsNotEmpty(a ...any) bool {
-	return !IsEmpty(a...)
+func IsNotEmpty(a any, b ...any) bool {
+	return !IsEmpty(a, b...)
 }
 
 // IfEmptyReturns if A is empty return B value, otherwise return A value

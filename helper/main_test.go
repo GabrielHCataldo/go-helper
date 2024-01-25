@@ -1312,23 +1312,15 @@ func initListTestEquals() []testGenericValues {
 		},
 		{
 			name:  "not equals",
-			value: []any{"test", "test", 12},
+			value: []any{"test", 12},
 		},
 		{
 			name:  "bool",
-			value: []any{true, false},
+			value: []any{false, false},
 		},
 		{
 			name:  "bool",
-			value: []any{false, true},
-		},
-		{
-			name:  "bool",
-			value: []any{true},
-		},
-		{
-			name:  "bool",
-			value: []any{false},
+			value: []any{true, true},
 		},
 	}
 }
@@ -1351,7 +1343,7 @@ func initListTestGreaterThan() []testGenericValues {
 		},
 		{
 			name:  "int",
-			value: []any{13, 12, 12},
+			value: []any{13, 12},
 		},
 		{
 			name:  "float",
@@ -1364,10 +1356,6 @@ func initListTestGreaterThan() []testGenericValues {
 		{
 			name:  "false",
 			value: []any{14.2, 15.2},
-		},
-		{
-			name:  "empty",
-			value: []any{},
 		},
 	}
 }
@@ -1390,7 +1378,7 @@ func initListTestLessThan() []testGenericValues {
 		},
 		{
 			name:  "int",
-			value: []any{12, 13, 13},
+			value: []any{12, 13},
 		},
 		{
 			name:  "float",
@@ -1403,10 +1391,6 @@ func initListTestLessThan() []testGenericValues {
 		{
 			name:  "false",
 			value: []any{15.2, 14.2},
-		},
-		{
-			name:  "empty",
-			value: []any{},
 		},
 	}
 }
