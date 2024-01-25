@@ -20,6 +20,26 @@ func IsNotNil(a ...any) bool {
 	return !IsNil(a...)
 }
 
+// IfNilReturns if A is nil return value B, otherwise return A value
+func IfNilReturns[T any](a *T, b T) T {
+	if IsNil(a) {
+		return b
+	}
+	return *a
+}
+
+// ReturnNonNilValue returns the information value that is not nil
+func ReturnNonNilValue[T any](a ...T) T {
+	var result T
+	for _, v := range a {
+		if IsNotNil(v) {
+			result = v
+			break
+		}
+	}
+	return result
+}
+
 // IsEmpty check all value are empty
 func IsEmpty(a ...any) bool {
 	for _, v := range a {
@@ -33,6 +53,26 @@ func IsEmpty(a ...any) bool {
 // IsNotEmpty check all values are not empty
 func IsNotEmpty(a ...any) bool {
 	return !IsEmpty(a...)
+}
+
+// IfEmptyReturns if A is empty return B value, otherwise return A value
+func IfEmptyReturns[T any](a T, b T) T {
+	if IsEmpty(a) {
+		return b
+	}
+	return a
+}
+
+// ReturnNonEmptyValue returns the information value that is not empty
+func ReturnNonEmptyValue[T any](a ...T) T {
+	var result T
+	for _, v := range a {
+		if IsNotNil(v) && IsNotEmpty(v) {
+			result = v
+			break
+		}
+	}
+	return result
 }
 
 func isReflectZero(a any) bool {

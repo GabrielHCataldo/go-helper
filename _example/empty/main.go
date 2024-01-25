@@ -14,7 +14,11 @@ type exampleStruct struct {
 
 func main() {
 	emptyAndNotEmpty()
+	ifEmptyReturns()
+	returnNonEmptyValue()
 	nilAndNotNil()
+	ifNilReturns()
+	returnNonNilValue()
 }
 
 func nilAndNotNil() {
@@ -43,4 +47,49 @@ func emptyAndNotEmpty() {
 	nSlice = append(nSlice, "test string not empty")
 	isNotEmpty := helper.IsNotEmpty(anyPointer, nStruct, nBlankString, nMap, nSlice)
 	log.Println("is not empty?", isNotEmpty)
+}
+
+func ifEmptyReturns() {
+	var a1 string
+	var b1 string
+	b1 = "b value non empty"
+	result := helper.IfEmptyReturns(a1, b1)
+	log.Println("value not empty returned:", result)
+	var a2 string
+	var b2 string
+	a2 = "a value non empty"
+	result = helper.IfEmptyReturns(b2, a2)
+	log.Println("value not empty returned:", result)
+}
+
+func ifNilReturns() {
+	var a1 *string
+	var b1 string
+	b1 = "b value non nil"
+	result := helper.IfNilReturns(a1, b1)
+	log.Println("value not nil returned:", result)
+	var a2 string
+	var b2 *string
+	a2 = "a value non nil"
+	result = helper.IfNilReturns(b2, a2)
+	log.Println("value not nil returned:", result)
+}
+
+func returnNonNilValue() {
+	var a *string
+	var b *string
+	var c *string
+	value := "b value non empty"
+	b = &value
+	result := helper.ReturnNonNilValue(a, b, c)
+	log.Println("value not nil returned:", result)
+}
+
+func returnNonEmptyValue() {
+	var a string
+	var b string
+	var c string
+	c = "c value non empty"
+	result := helper.ReturnNonEmptyValue(a, b, c)
+	log.Println("value not empty returned:", result)
 }

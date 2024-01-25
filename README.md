@@ -3,7 +3,7 @@ Go Helper
 <!--suppress ALL -->
 <img align="right" src="gopher-helper.png" alt="">
 
-[![Project status](https://img.shields.io/badge/version-v1.2.9-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.2.9)
+[![Project status](https://img.shields.io/badge/version-v1.3.0-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.3.0)
 [![Go Report Card](https://goreportcard.com/badge/github.com/GabrielHCataldo/go-helper)](https://goreportcard.com/report/github.com/GabrielHCataldo/go-helper)
 [![Coverage Status](https://coveralls.io/repos/GabrielHCataldo/go-helper/badge.svg?branch=main&service=github)](https://coveralls.io/github/GabrielHCataldo/go-helper?branch=main)
 [![Open Source Helpers](https://www.codetriage.com/gabrielhcataldo/go-helper/badges/users.svg)](https://www.codetriage.com/gabrielhcataldo/go-helper)
@@ -68,6 +68,7 @@ type exampleStruct struct {
 }
 
 func main() {
+    // empty validations
     nStruct := exampleStruct{}
     nString := "  "
     isEmpty := helper.IsEmpty(nStruct, nString)
@@ -76,6 +77,20 @@ func main() {
     nStruct.Name = nString
     isNotEmpty := helper.IsNotEmpty(&nStruct, nString)
     log.Println("is not empty?", isNotEmpty)
+	
+    //return B value if A value is empty
+    var a1 string
+    var b1 string
+    a1 = "a value is not empty"
+    result := helper.IfEmptyReturns(a1, b1)
+    log.Println("result not empty:", result)
+	
+    //return value not empty
+    var a2 string
+    var b2 string
+    b2 = "b value is not empty"
+    result = helper.ReturnNonEmptyValue(a2, b2)
+    log.Println("result not empty:", result)
 }
 ```
 
@@ -83,6 +98,8 @@ Outputs:
 
     is empty? true
     is not empty? true
+    result not empty: a value is not empty
+    result not empty: b value is not empty
 
 See other types of values as examples by accessing
 the [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go).
@@ -109,13 +126,31 @@ func main() {
     anotherValue = []any{12, "test"}
     isNotNil := helper.IsNotNil(anyPointer, anotherValue)
     log.Println("is not nil?", isNotNil)
+    
+    //return B value if A value is nil
+    var a1 *string
+    var b1 string
+    b1 = "b value is not nil"
+    result1 := helper.IfNilReturns(a1, b1)
+    log.Println("result not nil:", result1)
+    
+    //return value not nil
+    var a2 *string
+    var b2 *string
+    v2 := "a value is not nil"
+    a2 = &v2
+    result2 := helper.ReturnNonNilValue(a2, b2)
+    log.Println("result not nil:", result2)
 }
+
 ```
 
 Outputs:
 
     is nil? true
     is not nil? true
+    result not nil: 0x14000223150
+    result not nil: 0x1400025d7f0
 
 See other types of values as examples by accessing
 the [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/empty/main.go).
@@ -155,7 +190,7 @@ func main() {
     equals = helper.EqualsIgnoreCase(s1, s2, s3, s4)
     log.Println("equals ignore case?", equals)
 
-	s1 = "value1"
+    s1 = "value1"
 
     notEquals = helper.IsNotEqualToIgnoreCase(s1, s2, s3, s4)
     log.Println("not equals ignore case?", notEquals)
@@ -168,6 +203,9 @@ Outputs:
     not equals? true
     equals ignore case? true
     not equals ignore case? true
+
+See other types of values as examples by accessing
+the [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/equal/main.go).
 
 ### Type validate
 With go-helper it is very simple to know the type of your variable, see the example:
@@ -221,6 +259,9 @@ Outputs:
     is int? true
     is bool? true
     is time? true
+
+See other types of values as examples by accessing
+the [link](https://github/GabrielHCataldo/go-helper/blob/main/_example/type/main.go).
 
 ### Convert
 With go-helper you don't need to worry about laborious and repetitive conversions to implement, see a powerful 
