@@ -19,15 +19,13 @@ Go Helper
 The go-helper project came to facilitate the use of validations, conversions, formatting in your go project with
 incredible flexibility and simple to use. Below we list some implemented features:
 
-- No more using != or == nil, use better described functions for that.
-- You don't need to use more lens to check if it is empty or not.
+- No more using !=, ==, >, among others, start using better described functions for this.
+- It is not necessary to use more len to check if it is empty or not, or greater than the same, just pass the values into intuitive functions.
 - Use robust validation functions out of the box.
 - Check all types of possible values in a simple and intuitive way.
-- Check single or multiple values if they are empty, null, equal, etc. without having to write lines and lines of
-  code.
-- Easy and intuitive rounding.
-- Format and Convert for you to use in the best way in your projects.
-- Use new framework validations easily.
+- Check single or multiple values if they are empty, null, equal, etc. without having to write lines and lines of code.
+- Easy rounding functions.
+- Format and Convert functions for you to use in the best way in your projects, without having to write repetitive lines of code.
 - Help us be the best and most complete golang utility library and help the community.
 
 Installation
