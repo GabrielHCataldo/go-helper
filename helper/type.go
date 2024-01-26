@@ -522,7 +522,7 @@ func IsObjectId(a any) bool {
 	if IsPointer(a) {
 		r = r.Elem()
 	}
-	return r.CanConvert(reflect.TypeOf(primitive.ObjectID{}))
+	return r.Type().String() == "primitive.ObjectID" && r.CanConvert(reflect.TypeOf(primitive.ObjectID{}))
 }
 
 // IsNotObjectId If value is not primitive.ObjectID return true, otherwise return false

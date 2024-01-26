@@ -106,6 +106,8 @@ func TestIsNotPostalCodePerCountry(t *testing.T) {
 func TestIsObjectId(t *testing.T) {
 	result := IsObjectId(primitive.NilObjectID)
 	log.Println("IsObjectId:", result)
+	result = IsObjectId([]uint8{12, 32, 34, 123})
+	log.Println("IsObjectId:", result)
 }
 
 func TestIsNotObjectId(t *testing.T) {
