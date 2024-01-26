@@ -13,10 +13,13 @@ import (
 )
 
 type testStruct struct {
-	Name      string
-	BirthDate time.Time
-	Emails    []string
-	Balance   float64
+	Id        primitive.ObjectID  `json:"id,omitempty" bson:"_id,omitempty"`
+	Name      string              `json:"name,omitempty" bson:"name,omitempty"`
+	BirthDate time.Time           `json:"birthDate,omitempty" bson:"birthDate,omitempty"`
+	Emails    []string            `json:"emails,omitempty" bson:"emails,omitempty"`
+	Balance   float64             `json:"balance,omitempty" bson:"balance,omitempty"`
+	Datetime  primitive.DateTime  `json:"datetime,omitempty" bson:"datetime,omitempty"`
+	Timestamp primitive.Timestamp `json:"timestamp,omitempty" bson:"timestamp,omitempty"`
 }
 
 type testGenericValues struct {
@@ -1529,10 +1532,13 @@ func initListTestGetFileJson() []testFile {
 
 func initTestStruct() *testStruct {
 	return &testStruct{
+		Id:        primitive.NewObjectID(),
 		Name:      "Foo Bar",
 		BirthDate: time.Now(),
 		Emails:    []string{"foobar@gmail.com", "foobar2@hotmail.com"},
 		Balance:   231.123,
+		Datetime:  primitive.NewDateTimeFromTime(time.Date(1999, 1, 21, 0, 0, 0, 0, time.Local)),
+		Timestamp: primitive.Timestamp{T: uint32(time.Now().Unix()), I: 0},
 	}
 }
 

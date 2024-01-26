@@ -168,9 +168,12 @@ func ConvertToString(a any) (string, error) {
 	if IsPointer(a) {
 		v = v.Elem()
 	}
-	if IsJson(a) || IsTime(a) || IsPrimitiveDateTime(a) {
+	if IsJson(a) {
 		b, err := json.Marshal(v.Interface())
 		return string(b), err
+	} else if IsTime(a) {
+		t := v.Interface().(time.Time)
+		return t.Format(time.RFC3339Nano), nil
 	} else if IsFile(a) {
 		f := v.Interface().(os.File)
 		b, err := ConvertFileToBytes(&f)
@@ -195,6 +198,9 @@ func ConvertToString(a any) (string, error) {
 		return a.(error).Error(), nil
 	} else if IsObjectId(a) {
 		return v.Interface().(primitive.ObjectID).Hex(), nil
+	} else if IsPrimitiveDateTime(a) {
+		t := v.Interface().(primitive.DateTime)
+		return t.Time().UTC().Format(time.RFC3339Nano), nil
 	}
 	return convertToStringByType(v.Interface())
 }
