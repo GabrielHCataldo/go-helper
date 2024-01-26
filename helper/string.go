@@ -12,21 +12,21 @@ import (
 
 // IsNumeric check any value is numeric, ex: v any is int return true, if string numeric return true, if bool return false.
 func IsNumeric(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	regex := regexp.MustCompile(`^[0-9]+$`)
 	return regex.MatchString(s)
 }
 
 // IsLetter check any value is letter, ex: v any is int return false, if string letter return true, if bool return true.
 func IsLetter(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	regex := regexp.MustCompile(`^[A-Za-z]+$`)
 	return regex.MatchString(s)
 }
 
 // IsStringJson check if string value is json return true, otherwise return false.
 func IsStringJson(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	var js json.RawMessage
 	return json.Unmarshal([]byte(s), &js) == nil
 }
@@ -38,7 +38,7 @@ func IsNotStringJson(a any) bool {
 
 // IsStringInt check if string value is int return true, otherwise return false.
 func IsStringInt(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	_, err := strconv.Atoi(s)
 	return err == nil
 }
@@ -50,7 +50,7 @@ func IsNotStringInt(a any) bool {
 
 // IsStringBool check if string value is bool return true, otherwise return false.
 func IsStringBool(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	_, err := strconv.ParseBool(s)
 	return err == nil
 }
@@ -62,7 +62,7 @@ func IsNotStringBool(a any) bool {
 
 // IsStringFloat check if string value is float return true, otherwise return false.
 func IsStringFloat(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	_, err := strconv.ParseFloat(s, 64)
 	return err == nil
 }
@@ -74,7 +74,7 @@ func IsNotStringFloat(a any) bool {
 
 // IsStringTime check if string value is time return true, otherwise return false.
 func IsStringTime(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	_, err := ConvertToTime(s)
 	return err == nil
 }
@@ -86,7 +86,7 @@ func IsNotStringTime(a any) bool {
 
 // GetFirstLastName get first and last name by string value or string pointer, ex: Gabriel Henrique Cataldo -> Gabriel Cataldo.
 func GetFirstLastName(a any) string {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	split := strings.Split(s, " ")
 	firstName := split[0]
 	lastName := split[len(split)-1]

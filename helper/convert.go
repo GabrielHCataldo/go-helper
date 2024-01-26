@@ -38,7 +38,7 @@ func ConvertToObjectId(a any) (primitive.ObjectID, error) {
 		return primitive.NilObjectID, errors.New("error convert to objectId: value is nil")
 	}
 	v := reflect.ValueOf(a)
-	if v.Type().Kind() == reflect.Pointer {
+	if IsPointer(a) {
 		v = v.Elem()
 	}
 	var objectId primitive.ObjectID
@@ -85,7 +85,7 @@ func SimpleConvertToPrimitiveDateTime(a any) primitive.DateTime {
 
 // ConvertByteUnit convert byte unit text to int ex: 1KB = 1024
 func ConvertByteUnit(a any) (int, error) {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	errDefault := errors.New("byte unit mal formatted ex: 100MB")
 	regex := regexp.MustCompile(`^(\d+)\s?(\w+)?$`)
 	match := regex.FindAllStringSubmatch(s, -1)
@@ -125,7 +125,7 @@ func SimpleConvertByteUnit(a any) int {
 
 // ConvertMegaByteUnit convert megabyte unit text to int ex: 1GB = 1024
 func ConvertMegaByteUnit(a any) (int, error) {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	errDefault := errors.New("byte unit mal formatted ex: 100MB")
 	regex := regexp.MustCompile(`^(\d+)\s?(\w+)?$`)
 	match := regex.FindAllStringSubmatch(s, -1)
@@ -168,17 +168,19 @@ func ConvertToString(a any) (string, error) {
 	if IsPointer(a) {
 		v = v.Elem()
 	}
-	if IsJson(a) || IsTime(a) || IsFile(a) || IsReader(a) || IsBuffer(a) || IsError(a) {
-		if s, ok := v.Interface().([]byte); ok {
-			return string(s), nil
-		}
-		if f, ok := v.Interface().(os.File); ok {
-			b, err := ConvertFileToBytes(&f)
-			return string(b), err
-		}
-		if bf, ok := v.Interface().(bytes.Buffer); ok {
-			return string(bf.Bytes()), nil
-		}
+	if IsJson(a) || IsTime(a) || IsPrimitiveDateTime(a) {
+		b, err := json.Marshal(v.Interface())
+		return string(b), err
+	} else if IsObjectId(a) {
+		return v.Interface().(primitive.ObjectID).Hex(), nil
+	} else if IsFile(a) {
+		f := v.Interface().(os.File)
+		b, err := ConvertFileToBytes(&f)
+		return string(b), err
+	} else if IsBuffer(a) {
+		bf := v.Interface().(bytes.Buffer)
+		return string(bf.Bytes()), nil
+	} else if IsReader(a) {
 		if r, ok := v.Interface().(bytes.Reader); ok {
 			bs, err := io.ReadAll(&r)
 			return string(bs), err
@@ -191,11 +193,8 @@ func ConvertToString(a any) (string, error) {
 			bs, err := io.ReadAll(r)
 			return string(bs), err
 		}
-		if e, ok := a.(error); ok {
-			return e.Error(), nil
-		}
-		b, err := json.Marshal(v.Interface())
-		return string(b), err
+	} else if IsError(a) {
+		return a.(error).Error(), nil
 	}
 	return convertToStringByType(v.Interface())
 }

@@ -13,7 +13,7 @@ import (
 
 // IsUrl If value is url return true, otherwise return false ex: "google.com" = true
 func IsUrl(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	_, err := url.ParseRequestURI(s)
 	return err == nil
 }
@@ -25,7 +25,7 @@ func IsNotUrl(a any) bool {
 
 // IsPhoneNumber If value is phone number by region return true, otherwise return false
 func IsPhoneNumber(a any, defaultRegion string) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	num, _ := phonenumbers.Parse(s, defaultRegion)
 	return num != nil && phonenumbers.IsValidNumber(num)
 }
@@ -37,7 +37,7 @@ func IsNotPhoneNumber(a any, defaultRegion string) bool {
 
 // IsEmail If value is email return true, otherwise return false
 func IsEmail(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	validate := validator.New()
 	err := validate.Var(s, "email,max=180")
 	return err == nil
@@ -50,7 +50,7 @@ func IsNotEmail(a any) bool {
 
 // IsCpf If value is cpf return true, otherwise return false
 func IsCpf(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	return cpfcnpj.ValidateCPF(s)
 }
 
@@ -61,7 +61,7 @@ func IsNotCpf(a any) bool {
 
 // IsCnpj If value is cnpj return true, otherwise return false
 func IsCnpj(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	return cpfcnpj.ValidateCNPJ(s)
 }
 
@@ -82,7 +82,7 @@ func IsNotCpfCnpj(a any) bool {
 
 // IsPostalCode If value is postal code return true, otherwise return false
 func IsPostalCode(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	var postalCodes []map[string]string
 	_ = GetFileJson("../postal-codes.json", &postalCodes)
 	matched := false
@@ -106,7 +106,7 @@ func IsNotPostalCode(a any) bool {
 
 // IsPostalCodePerCountry If value is postal code per country return true, otherwise return false
 func IsPostalCodePerCountry(a any, countryIso string) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	var postalCodes []map[string]string
 	_ = GetFileJson("../postal-codes.json", &postalCodes)
 	matched := false
@@ -131,7 +131,7 @@ func IsNotPostalCodePerCountry(a any, countryIso string) bool {
 
 // IsBase64 If value is string base64 return true, otherwise return false
 func IsBase64(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	regex := regexp.MustCompile(`^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$`)
 	return regex.MatchString(s)
 }
@@ -143,7 +143,7 @@ func IsNotBase64(a any) bool {
 
 // IsBCrypt If value is string bcrypt return true, otherwise return false
 func IsBCrypt(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	cost, err := bcrypt.Cost([]byte(s))
 	return err == nil && cost == bcrypt.DefaultCost
 }
@@ -156,7 +156,7 @@ func IsNotBCrypt(a any) bool {
 // IsBearer If value is string bearer return true, otherwise return false
 func IsBearer(a any) bool {
 	const bearer = "Bearer "
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	splitAuthorization := strings.Split(s, bearer)
 	return len(splitAuthorization) != 2 && splitAuthorization[0] == bearer
 }
@@ -168,7 +168,7 @@ func IsNotBearer(a any) bool {
 
 // IsPrivateIp check value is private ip
 func IsPrivateIp(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	var privateIPBlocks []*net.IPNet
 	for _, cidr := range []string{
 		"127.0.0.0/8",    // IPv4
@@ -203,7 +203,7 @@ func IsNotPrivateIp(a any) bool {
 
 // IsFullName If value contains first name and last name return true, otherwise return false
 func IsFullName(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	regex := regexp.MustCompile(`^([a-zA-Z]{2,}\s[a-zA-Z]+'?-?[a-zA-Z]+\s?([a-zA-Z]+)?)`)
 	return regex.MatchString(s)
 }
@@ -225,7 +225,7 @@ func IsNotBirthDate(a any) bool {
 
 // IsIOSDeviceId If value string is ios device id hex return true, otherwise return false
 func IsIOSDeviceId(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	regex := regexp.MustCompile(`[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}`)
 	return regex.MatchString(s)
 }
@@ -237,7 +237,7 @@ func IsNotIOSDeviceId(a any) bool {
 
 // IsAndroidDeviceId If value string is android device id hex return true, otherwise return false
 func IsAndroidDeviceId(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	regex := regexp.MustCompile(`[0-9a-fA-F]`)
 	return regex.MatchString(s)
 }
@@ -249,7 +249,7 @@ func IsNotAndroidDeviceId(a any) bool {
 
 // IsMobilePlatform If value string is "android", "ios" or "iphone os" (independently we always count lowercase) return true, otherwise return false
 func IsMobilePlatform(a any) bool {
-	s, _ := ConvertToString(a)
+	s := SimpleConvertToString(a)
 	platform := strings.ToLower(s)
 	return platform == "android" || platform == "ios" || platform == "iphone os"
 }

@@ -9,8 +9,8 @@ func Equals(a, b any, c ...any) bool {
 	c2 := c
 	for _, v := range c {
 		for _, v2 := range c2 {
-			s, _ := ConvertToString(v)
-			s2, _ := ConvertToString(v2)
+			s := SimpleConvertToString(v)
+			s2 := SimpleConvertToString(v2)
 			if s != s2 {
 				return false
 			}
@@ -53,12 +53,12 @@ func IsGreaterThan(a, b any, c ...any) bool {
 	for _, cv := range c {
 		fa, err := ConvertToFloat(a)
 		if IsNotNil(err) {
-			s, _ := ConvertToString(a)
+			s := SimpleConvertToString(a)
 			fa = float64(len(s))
 		}
 		fb, err := ConvertToFloat(cv)
 		if IsNotNil(err) {
-			s, _ := ConvertToString(cv)
+			s := SimpleConvertToString(cv)
 			fb = float64(len(s))
 		}
 		if fb >= fa {
@@ -75,12 +75,12 @@ func IsGreaterThanOrEqual(a, b any, c ...any) bool {
 	for _, cv := range c {
 		fa, err := ConvertToFloat(a)
 		if IsNotNil(err) {
-			s, _ := ConvertToString(a)
+			s := SimpleConvertToString(a)
 			fa = float64(len(s))
 		}
 		fb, err := ConvertToFloat(cv)
 		if IsNotNil(err) {
-			s, _ := ConvertToString(cv)
+			s := SimpleConvertToString(cv)
 			fb = float64(len(s))
 		}
 		if fb != fa && fb > fa {
@@ -97,12 +97,12 @@ func IsLessThan(a, b any, c ...any) bool {
 	for _, cv := range c {
 		fa, err := ConvertToFloat(a)
 		if IsNotNil(err) {
-			s, _ := ConvertToString(a)
+			s := SimpleConvertToString(a)
 			fa = float64(len(s))
 		}
 		fb, _ := ConvertToFloat(cv)
 		if IsNotNil(err) {
-			s, _ := ConvertToString(cv)
+			s := SimpleConvertToString(cv)
 			fb = float64(len(s))
 		}
 		if fa >= fb {
@@ -119,12 +119,12 @@ func IsLessThanOrEqual(a, b any, c ...any) bool {
 	for _, cv := range c {
 		fa, err := ConvertToFloat(a)
 		if IsNotNil(err) {
-			s, _ := ConvertToString(a)
+			s := SimpleConvertToString(a)
 			fa = float64(len(s))
 		}
 		fb, err := ConvertToFloat(cv)
 		if IsNotNil(err) {
-			s, _ := ConvertToString(cv)
+			s := SimpleConvertToString(cv)
 			fb = float64(len(s))
 		}
 		if fa != fb && fa > fb {

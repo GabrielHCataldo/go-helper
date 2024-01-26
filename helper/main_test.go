@@ -312,6 +312,14 @@ func initListTestConvertToString() []testGenericValue {
 			value: exampleEnumStr1,
 		},
 		{
+			name:  "success objectId",
+			value: primitive.NewObjectID(),
+		},
+		{
+			name:  "success datetime",
+			value: primitive.NewDateTimeFromTime(time.Now()),
+		},
+		{
 			name:    "failed",
 			value:   initChan(),
 			wantErr: true,

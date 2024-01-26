@@ -116,8 +116,7 @@ func IsStruct(a any) bool {
 	if IsPointer(a) {
 		t = t.Elem()
 	}
-	if (IsError(a) && IsNotStringJson(a.(error).Error())) || IsTime(a) || IsFile(a) || IsReader(a) || IsBuffer(a) ||
-		IsObjectId(a) {
+	if IsError(a) || IsTime(a) || IsFile(a) || IsReader(a) || IsBuffer(a) || IsObjectId(a) {
 		return false
 	}
 	return t != nil && t.Kind() == reflect.Struct
@@ -137,7 +136,7 @@ func IsSlice(a any) bool {
 	if IsPointer(a) {
 		t = t.Elem()
 	}
-	if IsObjectId(a) {
+	if IsError(a) || IsObjectId(a) {
 		return false
 	}
 	return t != nil && (t.Kind() == reflect.Slice || t.Kind() == reflect.Array)
@@ -540,7 +539,7 @@ func IsPrimitiveDateTime(a any) bool {
 	if IsPointer(a) {
 		r = r.Elem()
 	}
-	return EqualsIgnoreCase(r.Type().String(), "primitive.DateTime") &&
+	return r.Type().String() == "primitive.DateTime" &&
 		r.CanConvert(reflect.TypeOf(primitive.NewDateTimeFromTime(time.Time{})))
 }
 
