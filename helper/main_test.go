@@ -864,6 +864,10 @@ func initListTestConvertToTime() []testGenericValue {
 			value: exampleTime(time.Now()),
 		},
 		{
+			name:  "time primitive datetime",
+			value: primitive.NewDateTimeFromTime(time.Now()),
+		},
+		{
 			name:    "bool",
 			value:   true,
 			wantErr: true,

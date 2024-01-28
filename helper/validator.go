@@ -52,38 +52,31 @@ func validateBearer(fl validator.FieldLevel) bool {
 }
 
 func validateBeforeNow(fl validator.FieldLevel) bool {
-	timeValidate, err := ConvertToTime(fl.Field().Interface())
-	return err == nil && IsBeforeNow(timeValidate)
+	return IsBeforeNow(fl.Field().Interface())
 }
 
 func validateBeforeToday(fl validator.FieldLevel) bool {
-	timeValidate, err := ConvertToTime(fl.Field().Interface())
-	return err == nil && IsBeforeDateToday(timeValidate)
+	return IsBeforeDateToday(fl.Field().Interface())
 }
 
 func validateAfterNow(fl validator.FieldLevel) bool {
-	timeValidate, err := ConvertToTime(fl.Field().Interface())
-	return err == nil && IsAfterNow(timeValidate)
+	return IsAfterNow(fl.Field().Interface())
 }
 
 func validateAfterToday(fl validator.FieldLevel) bool {
-	timeValidate, err := ConvertToTime(fl.Field().Interface())
-	return err == nil && IsAfterDateToday(timeValidate)
+	return IsAfterDateToday(fl.Field().Interface())
 }
 
 func validateToday(fl validator.FieldLevel) bool {
-	timeValidate, err := ConvertToTime(fl.Field().Interface())
-	return err == nil && IsToday(timeValidate)
+	return IsToday(fl.Field().Interface())
 }
 
 func validateNow(fl validator.FieldLevel) bool {
-	timeValidate, err := ConvertToTime(fl.Field().Interface())
-	return err == nil && IsNow(timeValidate)
+	return IsNow(fl.Field().Interface())
 }
 
 func validateFullNow(fl validator.FieldLevel) bool {
-	timeValidate, err := ConvertToTime(fl.Field().Interface())
-	return err == nil && IsFullNow(timeValidate)
+	return IsFullNow(fl.Field().Interface())
 }
 
 func validateCpf(fl validator.FieldLevel) bool {

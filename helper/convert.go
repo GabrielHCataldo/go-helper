@@ -274,17 +274,13 @@ func ConvertToTime(a any) (time.Time, error) {
 	if v.Type().Kind() == reflect.Pointer {
 		v = v.Elem()
 	}
-	switch v.Kind() {
-	case reflect.Struct, reflect.Map, reflect.Slice, reflect.Array:
-		if t, ok := v.Interface().(time.Time); ok {
-			return t, nil
-		}
+	if IsJson(a) || IsTime(a) {
 		canConvert := v.CanConvert(reflect.TypeOf(time.Time{}))
 		if canConvert {
 			return v.Convert(reflect.TypeOf(time.Time{})).Interface().(time.Time), nil
 		}
 		return time.Time{}, errors.New("error type to parse time: " + v.Kind().String())
-	default:
+	} else {
 		return convertToTimeByType(v.Interface())
 	}
 }
@@ -635,6 +631,8 @@ func convertToTimeByType(a any) (time.Time, error) {
 		return time.Unix(int64(t), 0), nil
 	case float64:
 		return time.Unix(int64(t), 0), nil
+	case primitive.DateTime:
+		return t.Time(), nil
 	case string:
 		tm, err := time.Parse(time.Layout, t)
 		if err == nil {

@@ -69,7 +69,7 @@ func IsAfterDateToday(a any) bool {
 	t = time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
 	now := time.Now()
 	now = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, t.Location())
-	return t.Before(time.Now())
+	return t.After(time.Now())
 }
 
 // IsAfterDate If parameter A has a date after the date of parameter B, it returns true, otherwise it will return false.
@@ -109,7 +109,7 @@ func IsToday(a any) bool {
 	t = time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
 	now := time.Now()
 	now = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, t.Location())
-	return t.Equal(time.Now())
+	return t.Equal(now)
 }
 
 // IsNow If the parameter entered is now (not counting the nanosecond) it will return true, otherwise it will return false
@@ -121,7 +121,7 @@ func IsNow(a any) bool {
 	t = time.Date(t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second(), 0, t.Location())
 	now := time.Now()
 	now = time.Date(now.Year(), now.Month(), now.Day(), t.Hour(), t.Minute(), t.Second(), 0, t.Location())
-	return t.Equal(time.Now())
+	return t.Equal(now)
 }
 
 // IsFullNow If the parameter entered is now it will return true, otherwise it will return false
