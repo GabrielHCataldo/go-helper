@@ -168,7 +168,9 @@ func ConvertToString(a any) (string, error) {
 	if IsPointer(a) {
 		v = v.Elem()
 	}
-	if IsJson(a) {
+	if IsBytes(a) {
+		return string(v.Interface().([]byte)), nil
+	} else if IsJson(a) {
 		b, err := json.Marshal(v.Interface())
 		return string(b), err
 	} else if IsTime(a) {
@@ -298,15 +300,8 @@ func ConvertToBytes(a any) ([]byte, error) {
 	} else if IsJson(a) && IsNotError(a) && IsNotBytes(a) {
 		return json.Marshal(a)
 	} else {
-		var bs []byte
 		s, err := ConvertToString(a)
-		if IsNil(err) && IsBase64(s) {
-			bs, err = base64.StdEncoding.DecodeString(s)
-		}
-		if IsEmpty(bs) {
-			bs = []byte(s)
-		}
-		return bs, err
+		return []byte(s), err
 	}
 }
 
