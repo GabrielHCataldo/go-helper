@@ -431,7 +431,7 @@ func IsBytes(a any) bool {
 		vr = vr.Elem()
 	}
 	_, ok := vr.Interface().([]byte)
-	return ok || vr.CanConvert(reflect.TypeOf([]byte{}))
+	return ok
 }
 
 // IsNotBytes If value is not slice byte return true, otherwise return false
