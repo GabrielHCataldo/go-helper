@@ -1451,6 +1451,18 @@ func initListTestEquals() []testGenericValues {
 			name:  "nil diff",
 			value: []any{"test", nil},
 		},
+		{
+			name:  "slice string contains",
+			value: []any{[]string{"test", "test2", "test3"}, "test2"},
+		},
+		{
+			name:  "slice struct",
+			value: []any{[]testStruct{{}, {}, *structTest}, structTest},
+		},
+		{
+			name:  "slice map",
+			value: []any{[]map[string]any{{}, {}, *mapTest}, mapTest},
+		},
 	}
 }
 
@@ -1652,7 +1664,7 @@ func initTestStruct() *testStruct {
 	return &testStruct{
 		Id:        primitive.NewObjectID(),
 		Name:      "Foo Bar",
-		BirthDate: time.Now(),
+		BirthDate: time.Date(1999, 1, 21, 0, 0, 0, 0, time.Local),
 		Emails:    []string{"foobar@gmail.com", "foobar2@hotmail.com"},
 		Balance:   231.123,
 		Datetime:  primitive.NewDateTimeFromTime(time.Date(1999, 1, 21, 0, 0, 0, 0, time.Local)),
