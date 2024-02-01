@@ -7,19 +7,7 @@ import (
 
 // Equals compare values if are equals return true, otherwise return false
 func Equals(a, b any, c ...any) bool {
-	c = append(c, a)
-	c = append(c, b)
-	c2 := c
-	for _, v := range c {
-		for _, v2 := range c2 {
-			s := SimpleConvertToString(v)
-			s2 := SimpleConvertToString(v2)
-			if s != s2 {
-				return false
-			}
-		}
-	}
-	return true
+	return equals(false, a, b, c...)
 }
 
 // IsNotEqualTo compare values if aren't equals return true, otherwise return false
@@ -29,19 +17,7 @@ func IsNotEqualTo(a, b any, c ...any) bool {
 
 // EqualsIgnoreCase compare values if are equals ignoring case return true, otherwise return false
 func EqualsIgnoreCase(a, b any, c ...any) bool {
-	c = append(c, a)
-	c = append(c, b)
-	c2 := c
-	for _, v := range c {
-		for _, v2 := range c2 {
-			s := strings.ToLower(SimpleConvertToString(v))
-			s2 := strings.ToLower(SimpleConvertToString(v2))
-			if s != s2 {
-				return false
-			}
-		}
-	}
-	return true
+	return equals(true, a, b, c...)
 }
 
 // IsNotEqualToIgnoreCase compare values if aren't equals ignoring case return true, otherwise return false
@@ -52,15 +28,7 @@ func IsNotEqualToIgnoreCase(a, b any, c ...any) bool {
 // Contains if values passed in parameters B and C contain the value of parameter A, it returns true, otherwise
 // it returns false
 func Contains(a, b any, c ...any) bool {
-	c = append(c, b)
-	s := SimpleConvertToString(a)
-	for _, v := range c {
-		s2 := SimpleConvertToString(v)
-		if !strings.Contains(s, s2) {
-			return false
-		}
-	}
-	return true
+	return contains(false, a, b, c...)
 }
 
 // NotContains if values passed in parameters B and C do not contain the value of parameter A, it returns true, otherwise
@@ -72,15 +40,7 @@ func NotContains(a, b any, c ...any) bool {
 // ContainsIgnoreCase if values passed in parameters B and C contain the value of parameter A, it returns true, otherwise
 // it returns false
 func ContainsIgnoreCase(a, b any, c ...any) bool {
-	c = append(c, b)
-	s := strings.ToLower(SimpleConvertToString(a))
-	for _, v := range c {
-		s2 := strings.ToLower(SimpleConvertToString(v))
-		if !strings.Contains(s, s2) {
-			return false
-		}
-	}
-	return true
+	return contains(true, a, b, c...)
 }
 
 // NotContainsIgnoreCase if values passed in parameters B and C do not contain the value of parameter A, it returns true,
@@ -163,6 +123,44 @@ func IsLessThanOrEqual(a, b any, c ...any) bool {
 			fb = float64(Len(cv))
 		}
 		if fa != fb && fa > fb {
+			return false
+		}
+	}
+	return true
+}
+
+func equals(ignoreCase bool, a, b any, c ...any) bool {
+	c = append(c, a)
+	c = append(c, b)
+	c2 := c
+	for _, v := range c {
+		for _, v2 := range c2 {
+			s := SimpleConvertToString(v)
+			s2 := SimpleConvertToString(v2)
+			if ignoreCase {
+				s = strings.ToLower(s)
+				s2 = strings.ToLower(s2)
+			}
+			if s != s2 {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func contains(ignoreCase bool, a, b any, c ...any) bool {
+	c = append(c, b)
+	s := SimpleConvertToString(a)
+	if ignoreCase {
+		s = strings.ToLower(s)
+	}
+	for _, v := range c {
+		s2 := SimpleConvertToString(v)
+		if ignoreCase {
+			s2 = strings.ToLower(s2)
+		}
+		if !strings.Contains(s, s2) {
 			return false
 		}
 	}
