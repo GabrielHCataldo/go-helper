@@ -38,6 +38,9 @@ func IsNotEqualsLen(a any, len int) bool {
 // Contains if values passed in parameters B and C contain the value of parameter A, it returns true, otherwise
 // it returns false
 func Contains(a, b any, c ...any) bool {
+	if IsSlice(a) {
+		return containsSlice(a, b, c...)
+	}
 	return contains(false, a, b, c...)
 }
 
@@ -56,7 +59,7 @@ func ContainsIgnoreCase(a, b any, c ...any) bool {
 // NotContainsIgnoreCase if values passed in parameters B and C do not contain the value of parameter A, it returns true,
 // otherwise it returns false
 func NotContainsIgnoreCase(a, b any, c ...any) bool {
-	return !Contains(a, b, c...)
+	return !ContainsIgnoreCase(a, b, c...)
 }
 
 // IsGreaterThan compares whether A is greater than all values passed in other parameters, if the value is not numeric,
@@ -171,6 +174,20 @@ func contains(ignoreCase bool, a, b any, c ...any) bool {
 			s2 = strings.ToLower(s2)
 		}
 		if !strings.Contains(s, s2) {
+			return false
+		}
+	}
+	return true
+}
+
+func containsSlice(a, b any, c ...any) bool {
+	c = append(c, b)
+	a = getRealValue(a)
+	ra := reflect.ValueOf(a)
+	for _, v := range c {
+		v = getRealValue(ra)
+		rv := reflect.ValueOf(v)
+		if ra.Equal(rv) {
 			return false
 		}
 	}
