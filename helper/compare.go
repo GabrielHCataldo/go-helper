@@ -25,6 +25,16 @@ func IsNotEqualToIgnoreCase(a, b any, c ...any) bool {
 	return !EqualsIgnoreCase(a, b, c...)
 }
 
+// EqualsLen compares whether the size of the value of parameter A is equal to the suggested len parameter.
+func EqualsLen(a any, len int) bool {
+	return Len(a) == len
+}
+
+// IsNotEqualsLen compares whether the size of the value of parameter A is not equal to the suggested len parameter.
+func IsNotEqualsLen(a any, len int) bool {
+	return !EqualsLen(a, len)
+}
+
 // Contains if values passed in parameters B and C contain the value of parameter A, it returns true, otherwise
 // it returns false
 func Contains(a, b any, c ...any) bool {

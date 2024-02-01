@@ -21,6 +21,9 @@ import (
 // Len retrieves the size of the passed value, if it is not a slice, struct or map, the size of the parameter converted to
 // a string is returned.
 func Len(a any) int {
+	if IsNil(a) {
+		return 0
+	}
 	var i int
 	a = getRealValue(a)
 	r := reflect.ValueOf(a)

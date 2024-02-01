@@ -41,6 +41,24 @@ func TestIsNotEqualToIgnoreCase(t *testing.T) {
 	}
 }
 
+func TestEqualsLen(t *testing.T) {
+	for _, tt := range initListTestEquals() {
+		t.Run(tt.name, func(t *testing.T) {
+			empty := EqualsLen(tt.value[0], 4)
+			log.Println("EqualsLen:", empty)
+		})
+	}
+}
+
+func TestIsNotEqualsLen(t *testing.T) {
+	for _, tt := range initListTestEquals() {
+		t.Run(tt.name, func(t *testing.T) {
+			empty := IsNotEqualsLen(tt.value[0], 2)
+			log.Println("IsNotEqualsLen:", empty)
+		})
+	}
+}
+
 func TestContains(t *testing.T) {
 	for _, tt := range initListTestEquals() {
 		t.Run(tt.name, func(t *testing.T) {
