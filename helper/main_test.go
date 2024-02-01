@@ -453,6 +453,108 @@ func initListTestConvertToInt() []testGenericValue {
 	}
 }
 
+func initListTestLen() []testGenericValue {
+	return []testGenericValue{
+		{
+			name:  "success string",
+			value: "test",
+		},
+		{
+			name:  "success struct",
+			value: *initTestStruct(),
+		},
+		{
+			name:  "success pointer struct",
+			value: initTestStruct(),
+		},
+		{
+			name:  "success slice",
+			value: []int{12, 23, 45, 456, 467578},
+		},
+		{
+			name:    "success map",
+			value:   *initTestMap(),
+			wantErr: true,
+		},
+		{
+			name:  "success int",
+			value: 21,
+		},
+		{
+			name:  "success int8",
+			value: int8(21),
+		},
+		{
+			name:  "success int16",
+			value: int16(21232),
+		},
+		{
+			name:  "success int32",
+			value: int32(2112312312),
+		},
+		{
+			name:  "success int64",
+			value: int64(9123809),
+		},
+		{
+			name:  "success uint",
+			value: uint(21),
+		},
+		{
+			name:  "success uint8",
+			value: uint8(21),
+		},
+		{
+			name:  "success uint16",
+			value: uint16(21232),
+		},
+		{
+			name:  "success uint32",
+			value: uint32(2112312312),
+		},
+		{
+			name:  "success uint64",
+			value: uint64(9123809),
+		},
+		{
+			name:  "success float32",
+			value: float32(12.23),
+		},
+		{
+			name:  "success float64",
+			value: 12.23,
+		},
+		{
+			name:  "success bool",
+			value: true,
+		},
+		{
+			name:  "success bytes",
+			value: []byte{},
+		},
+		{
+			name:  "success time",
+			value: time.Now(),
+		},
+		{
+			name:  "success string int",
+			value: "234",
+		},
+		{
+			name:  "success string float",
+			value: "234.23",
+		},
+		{
+			name:  "success enum",
+			value: exampleEnumInt1,
+		},
+		{
+			name:  "success string bool",
+			value: "true",
+		},
+	}
+}
+
 func initListTestConvertToFloat() []testGenericValue {
 	return []testGenericValue{
 		{
@@ -1336,6 +1438,18 @@ func initListTestEquals() []testGenericValues {
 		{
 			name:  "bool",
 			value: []any{true, true},
+		},
+		{
+			name:  "nil",
+			value: []any{nil, nil},
+		},
+		{
+			name:  "nil diff",
+			value: []any{nil, "test"},
+		},
+		{
+			name:  "nil diff",
+			value: []any{"test", nil},
 		},
 	}
 }

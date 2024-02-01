@@ -1,6 +1,9 @@
 package helper
 
-import "strings"
+import (
+	"reflect"
+	"strings"
+)
 
 // Equals compare values if are equals return true, otherwise return false
 func Equals(a, b any, c ...any) bool {
@@ -46,20 +49,58 @@ func IsNotEqualToIgnoreCase(a, b any, c ...any) bool {
 	return !EqualsIgnoreCase(a, b, c...)
 }
 
-// IsGreaterThan compares whether A is greater than all values passed in others params, If the value is not numeric,
-// we will convert them to string and compare the size
+// Contains if values passed in parameters B and C contain the value of parameter A, it returns true, otherwise
+// it returns false
+func Contains(a, b any, c ...any) bool {
+	c = append(c, b)
+	s := SimpleConvertToString(a)
+	for _, v := range c {
+		s2 := SimpleConvertToString(v)
+		if !strings.Contains(s, s2) {
+			return false
+		}
+	}
+	return true
+}
+
+// NotContains if values passed in parameters B and C do not contain the value of parameter A, it returns true, otherwise
+// it returns false
+func NotContains(a, b any, c ...any) bool {
+	return !Contains(a, b, c...)
+}
+
+// ContainsIgnoreCase if values passed in parameters B and C contain the value of parameter A, it returns true, otherwise
+// it returns false
+func ContainsIgnoreCase(a, b any, c ...any) bool {
+	c = append(c, b)
+	s := strings.ToLower(SimpleConvertToString(a))
+	for _, v := range c {
+		s2 := strings.ToLower(SimpleConvertToString(v))
+		if !strings.Contains(s, s2) {
+			return false
+		}
+	}
+	return true
+}
+
+// NotContainsIgnoreCase if values passed in parameters B and C do not contain the value of parameter A, it returns true,
+// otherwise it returns false
+func NotContainsIgnoreCase(a, b any, c ...any) bool {
+	return !Contains(a, b, c...)
+}
+
+// IsGreaterThan compares whether A is greater than all values passed in other parameters, if the value is not numeric,
+// let's use the Len function and compare the size
 func IsGreaterThan(a, b any, c ...any) bool {
 	c = append(c, b)
 	for _, cv := range c {
 		fa, err := ConvertToFloat(a)
 		if IsNotNil(err) {
-			s := SimpleConvertToString(a)
-			fa = float64(len(s))
+			fa = float64(Len(a))
 		}
 		fb, err := ConvertToFloat(cv)
 		if IsNotNil(err) {
-			s := SimpleConvertToString(cv)
-			fb = float64(len(s))
+			fb = float64(Len(cv))
 		}
 		if fb >= fa {
 			return false
@@ -69,19 +110,17 @@ func IsGreaterThan(a, b any, c ...any) bool {
 }
 
 // IsGreaterThanOrEqual compares whether A is greater than or equal to all values passed in others params, If the value
-// is not numeric, we will convert them to string and compare the size
+// is not numeric, let's use the Len function and compare the size
 func IsGreaterThanOrEqual(a, b any, c ...any) bool {
 	c = append(c, b)
 	for _, cv := range c {
 		fa, err := ConvertToFloat(a)
 		if IsNotNil(err) {
-			s := SimpleConvertToString(a)
-			fa = float64(len(s))
+			fa = float64(Len(a))
 		}
 		fb, err := ConvertToFloat(cv)
 		if IsNotNil(err) {
-			s := SimpleConvertToString(cv)
-			fb = float64(len(s))
+			fb = float64(Len(cv))
 		}
 		if fb != fa && fb > fa {
 			return false
@@ -90,20 +129,18 @@ func IsGreaterThanOrEqual(a, b any, c ...any) bool {
 	return true
 }
 
-// IsLessThan compares whether A is less than all values passed in others params, If the value is not numeric, we will
-// convert them to string and compare the size
+// IsLessThan compares whether A is less than all values passed in others params, If the value is not numeric,
+// let's use the Len function and compare the size
 func IsLessThan(a, b any, c ...any) bool {
 	c = append(c, b)
 	for _, cv := range c {
 		fa, err := ConvertToFloat(a)
 		if IsNotNil(err) {
-			s := SimpleConvertToString(a)
-			fa = float64(len(s))
+			fa = float64(Len(a))
 		}
-		fb, _ := ConvertToFloat(cv)
+		fb, err := ConvertToFloat(cv)
 		if IsNotNil(err) {
-			s := SimpleConvertToString(cv)
-			fb = float64(len(s))
+			fb = float64(Len(cv))
 		}
 		if fa >= fb {
 			return false
@@ -113,23 +150,29 @@ func IsLessThan(a, b any, c ...any) bool {
 }
 
 // IsLessThanOrEqual compares whether A is less than or equal to all values passed in others params, If the value is
-// not numeric, we will convert them to string and compare the size
+// not numeric, let's use the Len function and compare the size
 func IsLessThanOrEqual(a, b any, c ...any) bool {
 	c = append(c, b)
 	for _, cv := range c {
 		fa, err := ConvertToFloat(a)
 		if IsNotNil(err) {
-			s := SimpleConvertToString(a)
-			fa = float64(len(s))
+			fa = float64(Len(a))
 		}
 		fb, err := ConvertToFloat(cv)
 		if IsNotNil(err) {
-			s := SimpleConvertToString(cv)
-			fb = float64(len(s))
+			fb = float64(Len(cv))
 		}
 		if fa != fb && fa > fb {
 			return false
 		}
 	}
 	return true
+}
+
+func getRealValue(a any) any {
+	ra := reflect.ValueOf(a)
+	if IsPointer(a) {
+		ra = ra.Elem()
+	}
+	return ra.Interface()
 }

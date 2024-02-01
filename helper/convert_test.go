@@ -124,6 +124,15 @@ func TestConvertToInt(t *testing.T) {
 	}
 }
 
+func TestLen(t *testing.T) {
+	for _, tt := range initListTestLen() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := Len(tt.value)
+			log.Println("result:", result)
+		})
+	}
+}
+
 func TestSimpleConvertToInt(t *testing.T) {
 	result := SimpleConvertToInt("")
 	log.Println("SimpleConvertToInt:", result)

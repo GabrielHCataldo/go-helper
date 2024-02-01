@@ -18,6 +18,24 @@ import (
 	"time"
 )
 
+// Len retrieves the size of the passed value, if it is not a slice, struct or map, the size of the parameter converted to
+// a string is returned.
+func Len(a any) int {
+	var i int
+	a = getRealValue(a)
+	r := reflect.ValueOf(a)
+	if IsSlice(a) {
+		i = r.Len()
+	} else if IsStruct(a) {
+		i = r.NumField()
+	} else if IsMap(a) {
+		i = len(r.MapKeys())
+	} else {
+		i = len(SimpleConvertToString(a))
+	}
+	return i
+}
+
 // ConvertToPointer convert any value to pointer
 func ConvertToPointer[T any](t T) *T {
 	return &t

@@ -41,6 +41,42 @@ func TestIsNotEqualToIgnoreCase(t *testing.T) {
 	}
 }
 
+func TestContains(t *testing.T) {
+	for _, tt := range initListTestEquals() {
+		t.Run(tt.name, func(t *testing.T) {
+			empty := Contains(tt.value[0], tt.value[1])
+			log.Println("Contains:", empty)
+		})
+	}
+}
+
+func TestContainsIgnoreCase(t *testing.T) {
+	for _, tt := range initListTestEquals() {
+		t.Run(tt.name, func(t *testing.T) {
+			empty := ContainsIgnoreCase(tt.value[0], tt.value[1])
+			log.Println("ContainsIgnoreCase:", empty)
+		})
+	}
+}
+
+func TestNotContains(t *testing.T) {
+	for _, tt := range initListTestEquals() {
+		t.Run(tt.name, func(t *testing.T) {
+			empty := NotContains(tt.value[0], tt.value[1])
+			log.Println("NotContains:", empty)
+		})
+	}
+}
+
+func TestNotContainsIgnoreCase(t *testing.T) {
+	for _, tt := range initListTestEquals() {
+		t.Run(tt.name, func(t *testing.T) {
+			empty := NotContainsIgnoreCase(tt.value[0], tt.value[1])
+			log.Println("NotContainsIgnoreCase:", empty)
+		})
+	}
+}
+
 func TestIsGreaterThan(t *testing.T) {
 	for _, tt := range initListTestGreaterThan() {
 		t.Run(tt.name, func(t *testing.T) {
