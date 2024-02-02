@@ -39,7 +39,7 @@ func IsNotEqualsLen(a any, len int) bool {
 // it returns false
 func Contains(a, b any, c ...any) bool {
 	if IsSlice(a) {
-		return containsSlice(a, b, c...)
+		return containsSlice(false, a, b, c...)
 	}
 	return contains(false, a, b, c...)
 }
@@ -53,6 +53,9 @@ func NotContains(a, b any, c ...any) bool {
 // ContainsIgnoreCase if values passed in parameters B and C contain the value of parameter A, it returns true, otherwise
 // it returns false
 func ContainsIgnoreCase(a, b any, c ...any) bool {
+	if IsSlice(a) {
+		return containsSlice(true, a, b, c...)
+	}
 	return contains(true, a, b, c...)
 }
 
@@ -180,18 +183,26 @@ func contains(ignoreCase bool, a, b any, c ...any) bool {
 	return true
 }
 
-func containsSlice(a, b any, c ...any) bool {
+func containsSlice(ignoreCase bool, a, b any, c ...any) bool {
 	c = append(c, b)
 	a = getRealValue(a)
 	ra := reflect.ValueOf(a)
 	for _, v := range c {
-		v = getRealValue(ra)
 		rv := reflect.ValueOf(v)
-		if ra.Equal(rv) {
-			return false
+		for i := 0; i < ra.Len(); i++ {
+			iv := ra.Index(i)
+			s := SimpleConvertToString(iv.Interface())
+			s2 := SimpleConvertToString(rv.Interface())
+			if ignoreCase {
+				s = strings.ToLower(s)
+				s2 = strings.ToLower(s2)
+			}
+			if s == s2 {
+				return true
+			}
 		}
 	}
-	return true
+	return false
 }
 
 func getRealValue(a any) any {
