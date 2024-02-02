@@ -1456,6 +1456,10 @@ func initListTestEquals() []testGenericValues {
 			value: []any{[]string{"test", "test2", "test3"}, "test2"},
 		},
 		{
+			name:  "slice string not contains",
+			value: []any{[]string{"test", "test2", "test3"}, "te"},
+		},
+		{
 			name:  "slice struct",
 			value: []any{[]testStruct{{}, {}, *structTest}, structTest},
 		},
