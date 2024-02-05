@@ -80,6 +80,22 @@ func FormatMoney(v float64, precision int, symbol, thousand, decimal string) str
 	return ac.FormatMoney(v)
 }
 
+// FormatMoneyBr format float to string money
+//
+// Usage:
+//
+// result := FormatMoneyBr(12.23)
+//
+// log.Println("money result:", result)
+//
+// Output:
+//
+// [INFO 2023/12/24 08:26:38] money result: R$ 12,23
+func FormatMoneyBr(v float64) string {
+	ac := accounting.Accounting{Symbol: "R$ ", Precision: 2, Thousand: ".", Decimal: ","}
+	return ac.FormatMoney(v)
+}
+
 // FormatPercentage format float to string percentage ex: 12.23 -> "12,23%"
 func FormatPercentage(v float64, precision int) string {
 	return accounting.FormatNumberFloat64(v, precision, ".", ",") + "%"

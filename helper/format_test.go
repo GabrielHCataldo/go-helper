@@ -59,6 +59,12 @@ func TestFormatMoney(t *testing.T) {
 	log.Println("FormatMoney:", result)
 }
 
+func TestFormatMoneyBr(t *testing.T) {
+	f := 12.23
+	result := FormatMoneyBr(f)
+	log.Println("FormatMoneyBr:", result)
+}
+
 func TestFormatPercentage(t *testing.T) {
 	f := 12.23
 	result := FormatPercentage(f, 2)
