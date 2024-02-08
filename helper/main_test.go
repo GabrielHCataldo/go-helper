@@ -1395,6 +1395,19 @@ func initListTestIsStringJson() []testGenericValue {
 	}
 }
 
+func initListTestIsStringSlice() []testGenericValue {
+	return []testGenericValue{
+		{
+			name:  "success",
+			value: "[{\"Name\":\"Foo Bar\",\"BirthDate\":\"2024-01-04T20:00:31.570313-03:00\",\"Emails\":[\"foobar@gmail.com\",\"foobar2@hotmail.com\"],\"Balance\":231.123}, 23, true]",
+		},
+		{
+			name:  "failed",
+			value: "{\"Name\":\"Foo Bar\",\"BirthDate\":\"2024-01-04T20:00:31.570313-03:00\",\"Emails\":[\"foobar@gmail.com\",\"foobar2@hotmail.com\"],\"Balance\":231.123}",
+		},
+	}
+}
+
 func initListTestIsStringInt() []testGenericValue {
 	return []testGenericValue{
 		{

@@ -26,8 +26,8 @@ func TestIsLetter(t *testing.T) {
 func TestIsStringJson(t *testing.T) {
 	for _, tt := range initListTestIsStringJson() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := IsStringJson(tt.value)
-			log.Println("IsStringJson:", result)
+			result := IsStringMap(tt.value)
+			log.Println("IsStringMap:", result)
 		})
 	}
 }
@@ -35,8 +35,26 @@ func TestIsStringJson(t *testing.T) {
 func TestIsNotStringJson(t *testing.T) {
 	for _, tt := range initListTestIsStringJson() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := IsNotStringJson(tt.value)
-			log.Println("IsNotStringJson:", result)
+			result := IsNotStringMap(tt.value)
+			log.Println("IsNotStringMap:", result)
+		})
+	}
+}
+
+func TestIsStringSlice(t *testing.T) {
+	for _, tt := range initListTestIsStringSlice() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsStringSlice(tt.value)
+			log.Println("IsStringSlice:", result)
+		})
+	}
+}
+
+func TestIsNotStringSlice(t *testing.T) {
+	for _, tt := range initListTestIsStringSlice() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsNotStringSlice(tt.value)
+			log.Println("IsNotStringSlice:", result)
 		})
 	}
 }

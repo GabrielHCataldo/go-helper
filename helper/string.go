@@ -24,16 +24,28 @@ func IsLetter(a any) bool {
 	return regex.MatchString(s)
 }
 
-// IsStringJson check if string value is json return true, otherwise return false.
-func IsStringJson(a any) bool {
-	s := SimpleConvertToString(a)
-	var js json.RawMessage
-	return json.Unmarshal([]byte(s), &js) == nil
+// IsStringMap check if string value is json return true, otherwise return false.
+func IsStringMap(a any) bool {
+	bs := SimpleConvertToBytes(a)
+	var js map[string]any
+	return json.Unmarshal(bs, &js) == nil
 }
 
-// IsNotStringJson check if string value is not json return true, otherwise return false.
-func IsNotStringJson(a any) bool {
-	return !IsStringJson(a)
+// IsNotStringMap check if string value is not json return true, otherwise return false.
+func IsNotStringMap(a any) bool {
+	return !IsStringMap(a)
+}
+
+// IsStringSlice check if string value is slice return true, otherwise return false.
+func IsStringSlice(a any) bool {
+	bs := SimpleConvertToBytes(a)
+	var slice []any
+	return json.Unmarshal(bs, &slice) == nil
+}
+
+// IsNotStringSlice check if string value is not slice return true, otherwise return false.
+func IsNotStringSlice(a any) bool {
+	return !IsStringSlice(a)
 }
 
 // IsStringInt check if string value is int return true, otherwise return false.
