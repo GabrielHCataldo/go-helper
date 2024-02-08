@@ -496,6 +496,11 @@ func ConvertToDest(a, dest any) error {
 	}
 }
 
+// SimpleConvertToDest convert value to dest param without error
+func SimpleConvertToDest(a, dest any) {
+	_ = ConvertToDest(a, dest)
+}
+
 func convertToStringByType(a any) (string, error) {
 	switch t := a.(type) {
 	case int:
