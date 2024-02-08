@@ -326,7 +326,7 @@ func TestConvertToDest(t *testing.T) {
 				log.Printf("ConvertToDest() err = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
 			} else {
-				log.Println("result:", tt.dest, "error:", err)
+				log.Println("result:", SimpleConvertToString(tt.dest), "error:", err)
 			}
 		})
 	}

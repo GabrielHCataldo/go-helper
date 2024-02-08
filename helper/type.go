@@ -78,10 +78,6 @@ func IsJson(a any) bool {
 	if IsNil(a) {
 		return false
 	}
-	t := reflect.TypeOf(a)
-	if IsPointer(a) {
-		t = t.Elem()
-	}
 	return IsStruct(a) || IsMap(a) || IsSlice(a)
 }
 
@@ -96,7 +92,7 @@ func IsMap(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Map
@@ -113,7 +109,7 @@ func IsStruct(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	if IsError(a) || IsTime(a) || IsFile(a) || IsReader(a) || IsBuffer(a) || IsObjectId(a) {
@@ -133,7 +129,7 @@ func IsSlice(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	if IsError(a) || IsObjectId(a) {
@@ -153,7 +149,7 @@ func IsString(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.String
@@ -170,7 +166,7 @@ func IsInt(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && (t.Kind() == reflect.Int || t.Kind() == reflect.Int8 || t.Kind() == reflect.Int16 ||
@@ -188,7 +184,7 @@ func IsInt8(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Int8
@@ -205,7 +201,7 @@ func IsInt16(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Int16
@@ -222,7 +218,7 @@ func IsInt32(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Int32
@@ -239,7 +235,7 @@ func IsInt64(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Int64
@@ -256,7 +252,7 @@ func IsUint(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && (t.Kind() == reflect.Uint || t.Kind() == reflect.Uint8 || t.Kind() == reflect.Uint16 ||
@@ -274,7 +270,7 @@ func IsUint8(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Uint8
@@ -291,7 +287,7 @@ func IsUint16(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Uint16
@@ -308,7 +304,7 @@ func IsUint32(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Uint32
@@ -325,7 +321,7 @@ func IsUint64(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Uint64
@@ -342,7 +338,7 @@ func IsFloat(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && (t.Kind() == reflect.Float32 || t.Kind() == reflect.Float64)
@@ -359,7 +355,7 @@ func IsFloat32(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Float32
@@ -376,7 +372,7 @@ func IsFloat64(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Float64
@@ -393,7 +389,7 @@ func IsBool(a any) bool {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Bool
@@ -410,7 +406,7 @@ func IsTime(a any) bool {
 		return false
 	}
 	vr := reflect.ValueOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		vr = vr.Elem()
 	}
 	return vr.CanConvert(reflect.TypeOf(time.Time{}))
@@ -427,7 +423,7 @@ func IsBytes(a any) bool {
 		return false
 	}
 	vr := reflect.ValueOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		vr = vr.Elem()
 	}
 	_, ok := vr.Interface().([]byte)
@@ -445,7 +441,7 @@ func IsError(a any) bool {
 		return false
 	}
 	vr := reflect.ValueOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		vr = vr.Elem()
 	}
 	return okCastError(a) || okCastError(vr.Interface())
@@ -462,7 +458,7 @@ func IsFile(a any) bool {
 		return false
 	}
 	vr := reflect.ValueOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		vr = vr.Elem()
 	}
 	_, ok := vr.Interface().(os.File)
@@ -480,7 +476,7 @@ func IsReader(a any) bool {
 		return false
 	}
 	vr := reflect.ValueOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		vr = vr.Elem()
 	}
 	_, ok := vr.Interface().(bytes.Reader)
@@ -501,7 +497,7 @@ func IsBuffer(a any) bool {
 		return false
 	}
 	vr := reflect.ValueOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		vr = vr.Elem()
 	}
 	_, ok := vr.Interface().(bytes.Buffer)
@@ -519,7 +515,7 @@ func IsObjectId(a any) bool {
 		return false
 	}
 	r := reflect.ValueOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		r = r.Elem()
 	}
 	return r.Type().String() == "primitive.ObjectID" && r.CanConvert(reflect.TypeOf(primitive.ObjectID{}))
@@ -536,7 +532,7 @@ func IsPrimitiveDateTime(a any) bool {
 		return false
 	}
 	r := reflect.ValueOf(a)
-	if IsPointer(a) {
+	if IsPointer(a) || IsInterface(a) {
 		r = r.Elem()
 	}
 	return r.Type().String() == "primitive.DateTime" &&

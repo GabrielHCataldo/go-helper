@@ -323,6 +323,14 @@ func initListTestConvertToString() []testGenericValue {
 			value: primitive.NewDateTimeFromTime(time.Now()),
 		},
 		{
+			name:  "success interface",
+			value: any(initTestMap()),
+		},
+		{
+			name:  "success interface",
+			value: any(initMapInterface()),
+		},
+		{
 			name:    "failed",
 			value:   initChan(),
 			wantErr: true,
@@ -982,6 +990,7 @@ func initListTestConvertToTime() []testGenericValue {
 }
 
 func initListTestConvertToDest() []testGenericDestValue {
+	var a any
 	var s string
 	var i int
 	var f float64
@@ -1062,6 +1071,41 @@ func initListTestConvertToDest() []testGenericDestValue {
 			name:  "success dateTime",
 			value: primitive.NewDateTimeFromTime(time.Now()).Time(),
 			dest:  &dt,
+		},
+		{
+			name:  "success interface",
+			value: initMapInterface(),
+			dest:  &a,
+		},
+		{
+			name:  "success interface",
+			value: initTestMap(),
+			dest:  &a,
+		},
+		{
+			name:  "success interface",
+			value: *initTestStruct(),
+			dest:  &a,
+		},
+		{
+			name:  "success interface",
+			value: valueStr,
+			dest:  &a,
+		},
+		{
+			name:  "success interface",
+			value: 1235,
+			dest:  &a,
+		},
+		{
+			name:  "success interface",
+			value: 1235.23,
+			dest:  &a,
+		},
+		{
+			name:  "success interface",
+			value: time.Now(),
+			dest:  &a,
 		},
 		{
 			name:    "failed",
@@ -1693,6 +1737,11 @@ func initPointerNil() *any {
 
 func initMapNil() map[string]any {
 	return nil
+}
+
+func initMapInterface() *any {
+	mapTest := any(initTestMap())
+	return &mapTest
 }
 
 func initSliceNil() []any {

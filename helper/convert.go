@@ -191,9 +191,6 @@ func ConvertToString(a any) (string, error) {
 	}
 	if IsBytes(a) {
 		return string(v.Interface().([]byte)), nil
-	} else if IsJson(a) {
-		b, err := json.Marshal(v.Interface())
-		return string(b), err
 	} else if IsTime(a) {
 		t := v.Interface().(time.Time)
 		return t.Format(time.RFC3339Nano), nil
@@ -224,6 +221,9 @@ func ConvertToString(a any) (string, error) {
 	} else if IsPrimitiveDateTime(a) {
 		t := v.Interface().(primitive.DateTime)
 		return t.Time().UTC().Format(time.RFC3339Nano), nil
+	} else if IsJson(a) || IsInterface(a) {
+		b, err := json.Marshal(v.Interface())
+		return string(b), err
 	}
 	return convertToStringByType(v.Interface())
 }
@@ -297,7 +297,7 @@ func ConvertToTime(a any) (time.Time, error) {
 	if v.Type().Kind() == reflect.Pointer {
 		v = v.Elem()
 	}
-	if IsJson(a) || IsTime(a) {
+	if IsJson(a) || IsInterface(a) || IsTime(a) {
 		canConvert := v.CanConvert(reflect.TypeOf(time.Time{}))
 		if canConvert {
 			return v.Convert(reflect.TypeOf(time.Time{})).Interface().(time.Time), nil
@@ -318,7 +318,7 @@ func SimpleConvertToTime(a any) time.Time {
 func ConvertToBytes(a any) ([]byte, error) {
 	if IsNil(a) {
 		return []byte{}, errors.New("error convert to bytes: value is nil")
-	} else if IsJson(a) && IsNotError(a) && IsNotBytes(a) {
+	} else if (IsJson(a) || IsInterface(a)) && IsNotError(a) && IsNotBytes(a) {
 		return json.Marshal(a)
 	} else {
 		s, err := ConvertToString(a)
@@ -438,10 +438,7 @@ func ConvertToDest(a, dest any) error {
 	}
 	vInterface := v.Interface()
 	rDest := reflect.ValueOf(dest)
-	if IsJson(dest) {
-		b, _ := ConvertToBytes(a)
-		return json.Unmarshal(b, dest)
-	} else if IsInt(dest) {
+	if IsInt(dest) {
 		i, err := ConvertToInt(vInterface)
 		rDest.Elem().Set(reflect.ValueOf(i))
 		return err
@@ -483,6 +480,17 @@ func ConvertToDest(a, dest any) error {
 		bf, err := ConvertToPrimitiveDateTime(vInterface)
 		rDest.Elem().Set(reflect.ValueOf(bf))
 		return err
+	} else if IsJson(dest) {
+		b, _ := ConvertToBytes(a)
+		return json.Unmarshal(b, dest)
+	} else if IsInterface(dest) {
+		if IsJson(a) {
+			b, _ := ConvertToBytes(a)
+			return json.Unmarshal(b, dest)
+		} else {
+			rDest.Elem().Set(reflect.ValueOf(a))
+			return nil
+		}
 	} else {
 		return errors.New("error convert to dest: unknown value dest")
 	}
