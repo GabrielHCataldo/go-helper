@@ -484,7 +484,7 @@ func ConvertToDest(a, dest any) error {
 		b, _ := ConvertToBytes(a)
 		return json.Unmarshal(b, dest)
 	} else if IsInterface(dest) {
-		if IsJson(a) {
+		if IsJson(a) || IsStringMap(a) || IsStringSlice(a) {
 			b, _ := ConvertToBytes(a)
 			return json.Unmarshal(b, dest)
 		} else {
