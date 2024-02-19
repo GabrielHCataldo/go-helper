@@ -419,6 +419,9 @@ func IsNotTime(a any) bool {
 
 // IsBytes If value is slice byte return true, otherwise return false
 func IsBytes(a any) bool {
+	if IsNil(a) {
+		return false
+	}
 	vr := reflect.ValueOf(a)
 	if IsPointer(a) || IsInterface(a) {
 		vr = vr.Elem()
