@@ -440,15 +440,21 @@ func ConvertToDest(a, dest any) error {
 	rDest := reflect.ValueOf(dest)
 	if IsInt(dest) {
 		i, err := ConvertToInt(vInterface)
-		rDest.Elem().Set(reflect.ValueOf(i))
+		rs := reflect.ValueOf(i)
+		converted := rs.Convert(rDest.Elem().Type())
+		rDest.Elem().Set(converted)
 		return err
 	} else if IsFloat(dest) {
 		f, err := ConvertToFloat(vInterface)
-		rDest.Elem().Set(reflect.ValueOf(f))
+		rs := reflect.ValueOf(f)
+		converted := rs.Convert(rDest.Elem().Type())
+		rDest.Elem().Set(converted)
 		return err
 	} else if IsBool(dest) {
 		b, err := ConvertToBool(vInterface)
-		rDest.Elem().Set(reflect.ValueOf(b))
+		rs := reflect.ValueOf(b)
+		converted := rs.Convert(rDest.Elem().Type())
+		rDest.Elem().Set(converted)
 		return err
 	} else if IsString(dest) {
 		s, err := ConvertToString(vInterface)
@@ -458,29 +464,41 @@ func ConvertToDest(a, dest any) error {
 		return err
 	} else if IsTime(dest) {
 		tm, err := ConvertToTime(vInterface)
-		rDest.Elem().Set(reflect.ValueOf(tm))
+		rs := reflect.ValueOf(tm)
+		converted := rs.Convert(rDest.Elem().Type())
+		rDest.Elem().Set(converted)
 		return err
 	} else if IsFile(dest) {
 		f, err := ConvertToFile(vInterface)
 		if IsNil(err) {
-			rDest.Elem().Set(reflect.ValueOf(ConvertPointerToValue(f)))
+			rs := reflect.ValueOf(ConvertPointerToValue(f))
+			converted := rs.Convert(rDest.Elem().Type())
+			rDest.Elem().Set(converted)
 		}
 		return err
 	} else if IsReader(dest) {
 		r, err := ConvertToReader(vInterface)
-		rDest.Elem().Set(reflect.ValueOf(ConvertPointerToValue(r)))
+		rs := reflect.ValueOf(ConvertPointerToValue(r))
+		converted := rs.Convert(rDest.Elem().Type())
+		rDest.Elem().Set(converted)
 		return err
 	} else if IsBuffer(dest) {
 		bf, err := ConvertToBuffer(vInterface)
-		rDest.Elem().Set(reflect.ValueOf(ConvertPointerToValue(bf)))
+		rs := reflect.ValueOf(ConvertPointerToValue(bf))
+		converted := rs.Convert(rDest.Elem().Type())
+		rDest.Elem().Set(converted)
 		return err
 	} else if IsObjectId(dest) {
 		bf, err := ConvertToObjectId(vInterface)
-		rDest.Elem().Set(reflect.ValueOf(bf))
+		rs := reflect.ValueOf(bf)
+		converted := rs.Convert(rDest.Elem().Type())
+		rDest.Elem().Set(converted)
 		return err
 	} else if IsPrimitiveDateTime(dest) {
-		bf, err := ConvertToPrimitiveDateTime(vInterface)
-		rDest.Elem().Set(reflect.ValueOf(bf))
+		pdt, err := ConvertToPrimitiveDateTime(vInterface)
+		rs := reflect.ValueOf(pdt)
+		converted := rs.Convert(rDest.Elem().Type())
+		rDest.Elem().Set(converted)
 		return err
 	} else if IsJson(dest) {
 		b, _ := ConvertToBytes(a)
@@ -490,7 +508,9 @@ func ConvertToDest(a, dest any) error {
 			b, _ := ConvertToBytes(a)
 			return json.Unmarshal(b, dest)
 		} else {
-			rDest.Elem().Set(reflect.ValueOf(a))
+			rs := reflect.ValueOf(a)
+			converted := rs.Convert(rDest.Elem().Type())
+			rDest.Elem().Set(converted)
 			return nil
 		}
 	} else {
