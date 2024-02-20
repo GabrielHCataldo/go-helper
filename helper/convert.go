@@ -452,7 +452,9 @@ func ConvertToDest(a, dest any) error {
 		return err
 	} else if IsString(dest) {
 		s, err := ConvertToString(vInterface)
-		rDest.Elem().Set(reflect.ValueOf(s).Convert(rDest.Type()))
+		rs := reflect.ValueOf(s)
+		converted := rs.Convert(rDest.Elem().Type())
+		rDest.Elem().Set(converted)
 		return err
 	} else if IsTime(dest) {
 		tm, err := ConvertToTime(vInterface)
