@@ -3,7 +3,6 @@ package helper
 import (
 	"encoding/json"
 	"fmt"
-	"math/rand"
 	"os"
 	"regexp"
 	"strconv"
@@ -128,7 +127,7 @@ func GetFileJson(uri string, dest any) error {
 
 // RandomNumberStr generate random numbers string by min and max parameters
 func RandomNumberStr(min, max int) string {
-	return strconv.Itoa(rand.Intn(MinInt(min-max, 1)+1) + min)
+	return strconv.Itoa(RandomNumber(min, max))
 }
 
 // CleanAllRepeatSpaces clean all repeat space, ex: Get All Girls in   the   \n party -> Get All Girls in the party

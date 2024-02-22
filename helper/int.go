@@ -54,5 +54,5 @@ func MaxInt64(v, max int64) int64 {
 
 // RandomNumber random number generator with range min and max
 func RandomNumber(min, max int) int {
-	return rand.Intn(MinInt(min-max, 1)+1) + min
+	return rand.Intn(max-min) + min
 }
