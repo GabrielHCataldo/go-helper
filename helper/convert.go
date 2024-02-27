@@ -243,7 +243,11 @@ func ConvertToInt(a any) (int, error) {
 	if v.Type().Kind() == reflect.Pointer {
 		v = v.Elem()
 	}
-	return convertToIntByType(v.Interface())
+	va := v.Interface()
+	if IsJson(a) {
+		va = SimpleConvertToString(va)
+	}
+	return convertToIntByType(va)
 }
 
 // SimpleConvertToInt convert any value to int, if err return empty value
@@ -261,7 +265,11 @@ func ConvertToFloat(a any) (float64, error) {
 	if v.Type().Kind() == reflect.Pointer {
 		v = v.Elem()
 	}
-	return convertToFloatByType(v.Interface())
+	va := v.Interface()
+	if IsJson(a) {
+		va = SimpleConvertToString(va)
+	}
+	return convertToFloatByType(va)
 }
 
 // SimpleConvertToFloat convert any value to float, if err return empty value
@@ -278,6 +286,10 @@ func ConvertToBool(a any) (bool, error) {
 	v := reflect.ValueOf(a)
 	if v.Type().Kind() == reflect.Pointer {
 		v = v.Elem()
+	}
+	va := v.Interface()
+	if IsJson(a) {
+		va = SimpleConvertToString(va)
 	}
 	return convertToBoolByType(v.Interface())
 }
