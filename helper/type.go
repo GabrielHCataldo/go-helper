@@ -518,6 +518,13 @@ func IsObjectId(a any) bool {
 	if IsPointer(a) || IsInterface(a) {
 		r = r.Elem()
 	}
+	s, ok := r.Interface().(string)
+	if ok {
+		_, err := primitive.ObjectIDFromHex(s)
+		if IsNil(err) {
+			return true
+		}
+	}
 	return r.Type().String() == "primitive.ObjectID" && r.CanConvert(reflect.TypeOf(primitive.ObjectID{}))
 }
 

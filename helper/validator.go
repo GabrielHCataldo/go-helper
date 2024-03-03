@@ -27,6 +27,8 @@ func Validate() *validator.Validate {
 		_ = customValidate.RegisterValidation("cpf", validateCpf)
 		_ = customValidate.RegisterValidation("cnpj", validateCnpj)
 		_ = customValidate.RegisterValidation("cpfcnpj", validateCpfCnpj)
+		_ = customValidate.RegisterValidation("multiple_mongodb", validateMultipleMongoDb)
+		_ = customValidate.RegisterValidation("multiple_enum", validateMultipleEnum)
 	}
 	return customValidate
 }
@@ -96,7 +98,33 @@ func validatePostalCode(fl validator.FieldLevel) bool {
 	return IsPostalCode(fl.Field().String())
 }
 
+func validateMultipleMongoDb(fl validator.FieldLevel) bool {
+	if IsNotSlice(fl.Field().Interface()) {
+		return false
+	}
+	for i := 0; i < fl.Field().Len(); i++ {
+		fieldValueSlice := fl.Field().Index(i).Interface()
+		if IsNotObjectId(fieldValueSlice) {
+			return false
+		}
+	}
+	return true
+}
+
+func validateMultipleEnum(fl validator.FieldLevel) bool {
+	if IsNotSlice(fl.Field().Interface()) {
+		return false
+	}
+	for i := 0; i < fl.Field().Len(); i++ {
+		fieldValueSlice, ok := fl.Field().Index(i).Interface().(BaseEnum)
+		if !ok || !fieldValueSlice.IsEnumValid() {
+			return false
+		}
+	}
+	return true
+}
+
 func validateEnum(fl validator.FieldLevel) bool {
-	value := fl.Field().Interface().(BaseEnum)
-	return value.IsEnumValid()
+	value, ok := fl.Field().Interface().(BaseEnum)
+	return ok && value.IsEnumValid()
 }
