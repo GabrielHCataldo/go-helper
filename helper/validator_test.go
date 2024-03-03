@@ -33,8 +33,9 @@ type validatorStruct struct {
 	Cpf             string     `validate:"required,cpf"`
 	Cnpj            string     `validate:"required,cnpj"`
 	CpfCnpj         string     `validate:"required,cpfcnpj"`
-	MultipleMongoDb []string   `validate:"required,multiple_mongodb"`
-	MultipleEnum    []enumTest `validate:"required,multiple_enum"`
+	MongoDb         string     `validate:"required,mongodb"`
+	MultipleMongoDb []string   `validate:"required,mongodb"`
+	MultipleEnum    []enumTest `validate:"required,enum"`
 }
 
 func (e enumTest) IsEnumValid() bool {
@@ -63,8 +64,9 @@ func initValidatorStruct() validatorStruct {
 		Cpf:             "11664947051",
 		Cnpj:            "52977110000101",
 		CpfCnpj:         "11664947051",
-		MultipleMongoDb: []string{primitive.NewObjectID().Hex(), "test"},
-		MultipleEnum:    []enumTest{enumTest0, 33},
+		MongoDb:         primitive.NewObjectID().Hex(),
+		MultipleMongoDb: []string{primitive.NewObjectID().Hex()},
+		MultipleEnum:    []enumTest{enumTest0},
 	}
 }
 
