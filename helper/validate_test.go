@@ -108,6 +108,12 @@ func TestIsObjectId(t *testing.T) {
 	log.Println("IsObjectId:", result)
 	result = IsObjectId([]uint8{12, 32, 34, 123})
 	log.Println("IsObjectId:", result)
+	result = IsObjectId("ashaushas")
+	log.Println("IsObjectId:", result)
+	result = IsObjectId(primitive.NewObjectID())
+	log.Println("IsObjectId:", result)
+	result = IsObjectId(primitive.NewObjectID().Hex())
+	log.Println("IsObjectId:", result)
 }
 
 func TestIsNotObjectId(t *testing.T) {

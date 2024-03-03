@@ -189,7 +189,9 @@ func ConvertToString(a any) (string, error) {
 	if IsPointer(a) {
 		v = v.Elem()
 	}
-	if IsBytes(a) {
+	if IsString(a) {
+		return v.String(), nil
+	} else if IsBytes(a) {
 		return string(v.Interface().([]byte)), nil
 	} else if IsTime(a) {
 		t := v.Interface().(time.Time)
@@ -563,8 +565,6 @@ func convertToStringByType(a any) (string, error) {
 		return strconv.FormatFloat(float64(t), 'f', -1, 32), nil
 	case float64:
 		return strconv.FormatFloat(t, 'f', -1, 64), nil
-	case string:
-		return t, nil
 	default:
 		v := reflect.ValueOf(a)
 		canConvert := v.CanConvert(reflect.TypeOf(""))

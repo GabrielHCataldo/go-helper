@@ -319,6 +319,10 @@ func initListTestConvertToString() []testGenericValue {
 			value: primitive.NewObjectID(),
 		},
 		{
+			name:  "success objectId hex",
+			value: primitive.NewObjectID().Hex(),
+		},
+		{
 			name:  "success datetime",
 			value: primitive.NewDateTimeFromTime(time.Now()),
 		},
