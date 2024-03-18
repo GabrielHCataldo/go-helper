@@ -91,7 +91,7 @@ func isReflectZero(a any) bool {
 	} else if IsObjectId(a) {
 		return SimpleConvertToObjectId(a).IsZero()
 	} else if IsPrimitiveDateTime(a) {
-		return SimpleConvertToPrimitiveDateTime(a).Time().IsZero()
+		return SimpleConvertToPrimitiveDateTime(a) == 0
 	}
 	return !elem.IsValid() || elem.IsZero() || IsNil(a)
 }
