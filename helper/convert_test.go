@@ -52,9 +52,9 @@ func TestSimpleConvertToPrimitiveDateTime(t *testing.T) {
 func TestConvertByteUnit(t *testing.T) {
 	for _, tt := range initListTestConvertByteUnit() {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := ConvertByteUnitToFloat(tt.value)
+			result, err := ConvertByteUnitStrToFloat(tt.value)
 			if (err != nil) != tt.wantErr {
-				log.Printf("ConvertByteUnitToFloat() error = %v, wantErr %v", err, tt.wantErr)
+				log.Printf("ConvertByteUnitStrToFloat() error = %v, wantErr %v", err, tt.wantErr)
 				t.Fail()
 			} else if err != nil {
 				log.Println("err expected:", err)
@@ -66,7 +66,7 @@ func TestConvertByteUnit(t *testing.T) {
 }
 
 func TestSimpleConvertByteUnit(t *testing.T) {
-	result := SimpleConvertByteUnitToFloat("")
+	result := SimpleConvertByteUnitStrToFloat("")
 	log.Println("SimpleConvertByteUnit:", result)
 }
 

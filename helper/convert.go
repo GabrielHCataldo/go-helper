@@ -108,8 +108,8 @@ func SimpleConvertToPrimitiveDateTime(a any) primitive.DateTime {
 	return d
 }
 
-// ConvertByteUnitToFloat convert byte unit text to int ex: 1KB = 1024.0
-func ConvertByteUnitToFloat(a any) (float64, error) {
+// ConvertByteUnitStrToFloat convert byte unit text to int ex: 1KB = 1024.0
+func ConvertByteUnitStrToFloat(a any) (float64, error) {
 	s := SimpleConvertToString(a)
 
 	regex := regexp.MustCompile(`^(\d+)\s?(\w+)?$`)
@@ -125,19 +125,19 @@ func ConvertByteUnitToFloat(a any) (float64, error) {
 	return convertToBytes(qty, unit)
 }
 
-// SimpleConvertByteUnitToFloat convert byte unit text to int ex: 1KB = 1024, if err return empty value
-func SimpleConvertByteUnitToFloat(a any) float64 {
-	r, _ := ConvertByteUnitToFloat(a)
+// SimpleConvertByteUnitStrToFloat convert byte unit text to int ex: 1KB = 1024, if err return empty value
+func SimpleConvertByteUnitStrToFloat(a any) float64 {
+	r, _ := ConvertByteUnitStrToFloat(a)
 	return r
 }
 
-// ConvertFloatToByteUnitStr takes an integer value in bytes and converts it to a human-readable byte unit string.
+// ConvertToByteUnitStr takes an integer value in bytes and converts it to a human-readable byte unit string.
 // If the value is less than 1024, it returns the value with the unit "B" appended.
 // If the value is greater than or equal to 1024, it calculates the appropriate unit (KB, MB, GB, etc.) and
 // returns the value with the corresponding unit appended.
 // The value is rounded to one decimal place.
 // This function does not handle negative values.
-func ConvertFloatToByteUnitStr(a any) string {
+func ConvertToByteUnitStr(a any) string {
 	in := SimpleConvertToFloat(a)
 	const unit = 1024.0
 	if in < unit {
@@ -174,7 +174,7 @@ func SimpleConvertMegaByteUnitToFloat(a any) float64 {
 	return r
 }
 
-// ConvertIntToMegaByteUnitStr converts an integer value to a string representation
+// ConvertToMegaByteUnitStr converts an integer value to a string representation
 // in megabyte units.
 // It takes in a parameter `a` which can be of any type that can be converted to an integer.
 // The function returns a string representation of the passed value in megabyte units.
@@ -182,7 +182,7 @@ func SimpleConvertMegaByteUnitToFloat(a any) float64 {
 // If the value is greater than or equal to 1MB, it converts the value to the nearest megabyte,
 // appends the appropriate unit symbol (K, M, G, T, P, E, Z, Y) based on the magnitude of the value,
 // and appends the string "B" at the end (e.g. "4.5MB", "10.2GB", "3.7TB", etc.).
-func ConvertIntToMegaByteUnitStr(a any) string {
+func ConvertToMegaByteUnitStr(a any) string {
 	const unit = 1024.0 * 1024.0
 
 	in := SimpleConvertToFloat(a)
