@@ -73,7 +73,7 @@ func TestSimpleConvertByteUnit(t *testing.T) {
 func TestConvertMegaByteUnit(t *testing.T) {
 	for _, tt := range initListTestConvertMegaByteUnit() {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := ConvertMegaByteUnitToFloat(tt.value)
+			result, err := ConvertMegaByteUnitStrToFloat(tt.value)
 			if (err != nil) != tt.wantErr {
 				log.Printf("ConvertMegaByteUnit() error = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
@@ -87,7 +87,7 @@ func TestConvertMegaByteUnit(t *testing.T) {
 }
 
 func TestSimpleConvertMegaByteUnit(t *testing.T) {
-	result := SimpleConvertMegaByteUnitToFloat("")
+	result := SimpleConvertMegaByteUnitStrToFloat("")
 	log.Println("SimpleConvertMegaByteUnit:", result)
 }
 

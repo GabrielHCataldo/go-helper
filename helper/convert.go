@@ -151,8 +151,8 @@ func ConvertToByteUnitStr(a any) string {
 	return fmt.Sprintf("%.1f%cB", in/div, "KMGTPEZY"[exp])
 }
 
-// ConvertMegaByteUnitToFloat convert megabyte unit text to int ex: 1GB = 1024
-func ConvertMegaByteUnitToFloat(a any) (float64, error) {
+// ConvertMegaByteUnitStrToFloat convert megabyte unit text to int ex: 1GB = 1024
+func ConvertMegaByteUnitStrToFloat(a any) (float64, error) {
 	s := SimpleConvertToString(a)
 
 	regex := regexp.MustCompile(`^(\d+)\s?(\w+)?$`)
@@ -168,9 +168,9 @@ func ConvertMegaByteUnitToFloat(a any) (float64, error) {
 	return convertToMegaBytes(qty, unit)
 }
 
-// SimpleConvertMegaByteUnitToFloat convert megabyte unit text to int ex: 1GB = 1024, if err return empty value
-func SimpleConvertMegaByteUnitToFloat(a any) float64 {
-	r, _ := ConvertMegaByteUnitToFloat(a)
+// SimpleConvertMegaByteUnitStrToFloat convert megabyte unit text to int ex: 1GB = 1024, if err return empty value
+func SimpleConvertMegaByteUnitStrToFloat(a any) float64 {
+	r, _ := ConvertMegaByteUnitStrToFloat(a)
 	return r
 }
 
