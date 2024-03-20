@@ -52,9 +52,9 @@ func TestSimpleConvertToPrimitiveDateTime(t *testing.T) {
 func TestConvertByteUnit(t *testing.T) {
 	for _, tt := range initListTestConvertByteUnit() {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := ConvertByteUnit(tt.value)
+			result, err := ConvertByteUnitToFloat(tt.value)
 			if (err != nil) != tt.wantErr {
-				log.Printf("ConvertByteUnit() error = %v, wantErr %v", err, tt.wantErr)
+				log.Printf("ConvertByteUnitToFloat() error = %v, wantErr %v", err, tt.wantErr)
 				t.Fail()
 			} else if err != nil {
 				log.Println("err expected:", err)
@@ -66,14 +66,14 @@ func TestConvertByteUnit(t *testing.T) {
 }
 
 func TestSimpleConvertByteUnit(t *testing.T) {
-	result := SimpleConvertByteUnit("")
+	result := SimpleConvertByteUnitToFloat("")
 	log.Println("SimpleConvertByteUnit:", result)
 }
 
 func TestConvertMegaByteUnit(t *testing.T) {
 	for _, tt := range initListTestConvertMegaByteUnit() {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := ConvertMegaByteUnit(tt.value)
+			result, err := ConvertMegaByteUnitToFloat(tt.value)
 			if (err != nil) != tt.wantErr {
 				log.Printf("ConvertMegaByteUnit() error = %v, wantErr = %v", err, tt.wantErr)
 				t.Fail()
@@ -87,7 +87,7 @@ func TestConvertMegaByteUnit(t *testing.T) {
 }
 
 func TestSimpleConvertMegaByteUnit(t *testing.T) {
-	result := SimpleConvertMegaByteUnit("")
+	result := SimpleConvertMegaByteUnitToFloat("")
 	log.Println("SimpleConvertMegaByteUnit:", result)
 }
 

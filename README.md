@@ -3,7 +3,7 @@ Go Helper
 <!--suppress ALL -->
 <img align="right" src="gopher-helper.png" alt="">
 
-[![Project status](https://img.shields.io/badge/version-v1.5.9-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.5.9)
+[![Project status](https://img.shields.io/badge/version-v1.6.0-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.6.0)
 [![Go Report Card](https://goreportcard.com/badge/github.com/GabrielHCataldo/go-helper)](https://goreportcard.com/report/github.com/GabrielHCataldo/go-helper)
 [![Coverage Status](https://coveralls.io/repos/GabrielHCataldo/go-helper/badge.svg?branch=main&service=github)](https://coveralls.io/github/GabrielHCataldo/go-helper?branch=main)
 [![Open Source Helpers](https://www.codetriage.com/gabrielhcataldo/go-helper/badges/users.svg)](https://www.codetriage.com/gabrielhcataldo/go-helper)

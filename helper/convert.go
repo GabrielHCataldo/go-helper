@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io"
 	"log"
@@ -17,6 +18,9 @@ import (
 	"strings"
 	"time"
 )
+
+var ErrInvalidFormatByteUnit = errors.New("byte unit invalid format ex: 123.3MB")
+var ErrInvalidFormatMegaByteUnit = errors.New("megabyte unit invalid format ex: 102.3MB")
 
 // Len retrieves the size of the passed value, if it is not a slice, struct or map, the size of the parameter converted to
 // a string is returned.
@@ -104,80 +108,93 @@ func SimpleConvertToPrimitiveDateTime(a any) primitive.DateTime {
 	return d
 }
 
-// ConvertByteUnit convert byte unit text to int ex: 1KB = 1024
-func ConvertByteUnit(a any) (int, error) {
+// ConvertByteUnitToFloat convert byte unit text to int ex: 1KB = 1024.0
+func ConvertByteUnitToFloat(a any) (float64, error) {
 	s := SimpleConvertToString(a)
-	errDefault := errors.New("byte unit mal formatted ex: 100MB")
+
 	regex := regexp.MustCompile(`^(\d+)\s?(\w+)?$`)
 	match := regex.FindAllStringSubmatch(s, -1)
-	if len(match) == 0 || len(match[0]) == 0 || len(match[0]) < 3 {
-		return 0, errDefault
+
+	if len(match) == 0 || len(match[0]) < 3 {
+		return 0, ErrInvalidFormatByteUnit
 	}
-	vInt, _ := strconv.Atoi(match[0][1])
-	switch match[0][2] {
-	case "B":
-		return vInt, nil
-	case "KB":
-		return vInt * 1024, nil
-	case "MB":
-		return vInt * int(math.Pow(1024, 2)), nil
-	case "GB":
-		return vInt * int(math.Pow(1024, 3)), nil
-	case "TB":
-		return vInt * int(math.Pow(1024, 4)), nil
-	case "PB":
-		return vInt * int(math.Pow(1024, 5)), nil
-	case "EB":
-		return vInt * int(math.Pow(1024, 6)), nil
-	case "ZB":
-		return vInt * int(math.Pow(1024, 7)), nil
-	case "YB":
-		return vInt * int(math.Pow(1024, 8)), nil
-	default:
-		return 0, errDefault
-	}
+
+	qty, _ := strconv.ParseFloat(match[0][1], 64)
+	unit := match[0][2]
+
+	return convertToBytes(qty, unit)
 }
 
-// SimpleConvertByteUnit convert byte unit text to int ex: 1KB = 1024, if err return empty value
-func SimpleConvertByteUnit(a any) int {
-	r, _ := ConvertByteUnit(a)
+// SimpleConvertByteUnitToFloat convert byte unit text to int ex: 1KB = 1024, if err return empty value
+func SimpleConvertByteUnitToFloat(a any) float64 {
+	r, _ := ConvertByteUnitToFloat(a)
 	return r
 }
 
-// ConvertMegaByteUnit convert megabyte unit text to int ex: 1GB = 1024
-func ConvertMegaByteUnit(a any) (int, error) {
-	s := SimpleConvertToString(a)
-	errDefault := errors.New("byte unit mal formatted ex: 100MB")
-	regex := regexp.MustCompile(`^(\d+)\s?(\w+)?$`)
-	match := regex.FindAllStringSubmatch(s, -1)
-	if len(match) == 0 || len(match[0]) == 0 || len(match[0]) < 3 {
-		return 0, errDefault
+// ConvertFloatToByteUnitStr takes an integer value in bytes and converts it to a human-readable byte unit string.
+// If the value is less than 1024, it returns the value with the unit "B" appended.
+// If the value is greater than or equal to 1024, it calculates the appropriate unit (KB, MB, GB, etc.) and
+// returns the value with the corresponding unit appended.
+// The value is rounded to one decimal place.
+// This function does not handle negative values.
+func ConvertFloatToByteUnitStr(a any) string {
+	in := SimpleConvertToFloat(a)
+	const unit = 1024.0
+	if in < unit {
+		return fmt.Sprintf("%.1fB", in)
 	}
-	vInt, _ := strconv.Atoi(match[0][1])
-	switch match[0][2] {
-	case "MB":
-		return vInt, nil
-	case "GB":
-		return vInt * 1024, nil
-	case "TB":
-		return vInt * int(math.Pow(1024, 2)), nil
-	case "PB":
-		return vInt * int(math.Pow(1024, 3)), nil
-	case "EB":
-		return vInt * int(math.Pow(1024, 4)), nil
-	case "ZB":
-		return vInt * int(math.Pow(1024, 5)), nil
-	case "YB":
-		return vInt * int(math.Pow(1024, 6)), nil
-	default:
-		return 0, errDefault
+	div, exp := unit, 0
+	for n := in / unit; n >= unit; n /= unit {
+		div *= unit
+		exp++
 	}
+	return fmt.Sprintf("%.1f%cB", in/div, "KMGTPEZY"[exp])
 }
 
-// SimpleConvertMegaByteUnit convert megabyte unit text to int ex: 1GB = 1024, if err return empty value
-func SimpleConvertMegaByteUnit(a any) int {
-	r, _ := ConvertMegaByteUnit(a)
+// ConvertMegaByteUnitToFloat convert megabyte unit text to int ex: 1GB = 1024
+func ConvertMegaByteUnitToFloat(a any) (float64, error) {
+	s := SimpleConvertToString(a)
+
+	regex := regexp.MustCompile(`^(\d+)\s?(\w+)?$`)
+	match := regex.FindAllStringSubmatch(s, -1)
+
+	if len(match) == 0 || len(match[0]) < 3 {
+		return 0, ErrInvalidFormatMegaByteUnit
+	}
+
+	qty, _ := strconv.ParseFloat(match[0][1], 64)
+	unit := match[0][2]
+
+	return convertToMegaBytes(qty, unit)
+}
+
+// SimpleConvertMegaByteUnitToFloat convert megabyte unit text to int ex: 1GB = 1024, if err return empty value
+func SimpleConvertMegaByteUnitToFloat(a any) float64 {
+	r, _ := ConvertMegaByteUnitToFloat(a)
 	return r
+}
+
+// ConvertIntToMegaByteUnitStr converts an integer value to a string representation
+// in megabyte units.
+// It takes in a parameter `a` which can be of any type that can be converted to an integer.
+// The function returns a string representation of the passed value in megabyte units.
+// If the value is less than 1MB, it returns the value followed by the string "B" (e.g. "256B").
+// If the value is greater than or equal to 1MB, it converts the value to the nearest megabyte,
+// appends the appropriate unit symbol (K, M, G, T, P, E, Z, Y) based on the magnitude of the value,
+// and appends the string "B" at the end (e.g. "4.5MB", "10.2GB", "3.7TB", etc.).
+func ConvertIntToMegaByteUnitStr(a any) string {
+	const unit = 1024.0 * 1024.0
+
+	in := SimpleConvertToFloat(a)
+	if in < unit {
+		return fmt.Sprintf("%.1fB", in)
+	}
+	div, exp := unit, 0
+	for n := in / unit; n >= unit; n /= unit {
+		div *= unit
+		exp++
+	}
+	return fmt.Sprintf("%.1f%cB", in/div, "KMGTPEZY"[exp])
 }
 
 // ConvertToString convert any value to beautiful string
@@ -535,6 +552,42 @@ func ConvertToDest(a, dest any) error {
 // SimpleConvertToDest convert value to dest param without error
 func SimpleConvertToDest(a, dest any) {
 	_ = ConvertToDest(a, dest)
+}
+
+func convertToBytes(qty float64, unit string) (float64, error) {
+	unitMap := map[string]float64{
+		"B":  0,
+		"KB": 1,
+		"MB": 2,
+		"GB": 3,
+		"TB": 4,
+		"PB": 5,
+		"EB": 6,
+		"ZB": 7,
+		"YB": 8,
+	}
+
+	if exp, ok := unitMap[unit]; ok {
+		return qty * math.Pow(1024, exp), nil
+	}
+	return 0, ErrInvalidFormatByteUnit
+}
+
+func convertToMegaBytes(qty float64, unit string) (float64, error) {
+	unitMap := map[string]float64{
+		"MB": 0,
+		"GB": 1,
+		"TB": 2,
+		"PB": 3,
+		"EB": 4,
+		"ZB": 5,
+		"YB": 6,
+	}
+
+	if exp, ok := unitMap[unit]; ok {
+		return qty * math.Pow(1024, exp), nil
+	}
+	return 0, ErrInvalidFormatMegaByteUnit
 }
 
 func convertToStringByType(a any) (string, error) {
