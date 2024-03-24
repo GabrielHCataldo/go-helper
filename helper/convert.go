@@ -4,9 +4,9 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/base64"
-	"encoding/json"
 	"errors"
 	"fmt"
+	jsoniter "github.com/json-iterator/go"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io"
 	"log"
@@ -241,7 +241,7 @@ func ConvertToString(a any) (string, error) {
 		t := v.Interface().(primitive.DateTime)
 		return t.Time().UTC().Format(time.RFC3339Nano), nil
 	} else if IsJson(a) || IsInterface(a) {
-		b, err := json.Marshal(v.Interface())
+		b, err := jsoniter.Marshal(v.Interface())
 		return string(b), err
 	}
 	return convertToStringByType(v.Interface())
@@ -350,7 +350,7 @@ func ConvertToBytes(a any) ([]byte, error) {
 	if IsNil(a) {
 		return []byte{}, errors.New("error convert to bytes: value is nil")
 	} else if (IsJson(a) || IsInterface(a)) && IsNotError(a) && IsNotBytes(a) {
-		return json.Marshal(a)
+		return jsoniter.Marshal(a)
 	} else {
 		s, err := ConvertToString(a)
 		return []byte(s), err
@@ -533,11 +533,11 @@ func ConvertToDest(a, dest any) error {
 		return err
 	} else if IsJson(dest) {
 		b, _ := ConvertToBytes(a)
-		return json.Unmarshal(b, dest)
+		return jsoniter.Unmarshal(b, dest)
 	} else if IsInterface(dest) {
 		if IsJson(a) || IsStringMap(a) || IsStringSlice(a) {
 			b, _ := ConvertToBytes(a)
-			return json.Unmarshal(b, dest)
+			return jsoniter.Unmarshal(b, dest)
 		} else {
 			rs := reflect.ValueOf(a)
 			converted := rs.Convert(rDest.Elem().Type())

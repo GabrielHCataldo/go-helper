@@ -3,6 +3,7 @@ package helper
 import (
 	"encoding/json"
 	"fmt"
+	jsoniter "github.com/json-iterator/go"
 	"os"
 	"regexp"
 	"strconv"
@@ -122,7 +123,7 @@ func GetFileJson(uri string, dest any) error {
 	if err != nil {
 		return err
 	}
-	return json.Unmarshal(bytes, dest)
+	return jsoniter.Unmarshal(bytes, dest)
 }
 
 // RandomNumberStr generate random numbers string by min and max parameters
