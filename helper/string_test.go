@@ -26,8 +26,8 @@ func TestIsLetter(t *testing.T) {
 func TestIsStringJson(t *testing.T) {
 	for _, tt := range initListTestIsStringJson() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := IsStringMap(tt.value)
-			log.Println("IsStringMap:", result)
+			result := IsMap(tt.value)
+			log.Println("IsMap:", result)
 		})
 	}
 }
@@ -35,7 +35,7 @@ func TestIsStringJson(t *testing.T) {
 func TestIsNotStringJson(t *testing.T) {
 	for _, tt := range initListTestIsStringJson() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := IsNotStringMap(tt.value)
+			result := IsNotMap(tt.value)
 			log.Println("IsNotStringMap:", result)
 		})
 	}
@@ -44,7 +44,7 @@ func TestIsNotStringJson(t *testing.T) {
 func TestIsStringSlice(t *testing.T) {
 	for _, tt := range initListTestIsStringSlice() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := IsStringSlice(tt.value)
+			result := IsSlice(tt.value)
 			log.Println("IsStringSlice:", result)
 		})
 	}
@@ -53,8 +53,8 @@ func TestIsStringSlice(t *testing.T) {
 func TestIsNotStringSlice(t *testing.T) {
 	for _, tt := range initListTestIsStringSlice() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := IsNotStringSlice(tt.value)
-			log.Println("IsNotStringSlice:", result)
+			result := IsNotSlice(tt.value)
+			log.Println("IsNotSlice:", result)
 		})
 	}
 }
@@ -62,7 +62,7 @@ func TestIsNotStringSlice(t *testing.T) {
 func TestIsStringInt(t *testing.T) {
 	for _, tt := range initListTestIsStringInt() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := IsStringInt(tt.value)
+			result := IsInt(tt.value)
 			log.Println("IsStringInt:", result)
 		})
 	}
@@ -71,7 +71,7 @@ func TestIsStringInt(t *testing.T) {
 func TestIsNotStringInt(t *testing.T) {
 	for _, tt := range initListTestIsStringInt() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := IsNotStringInt(tt.value)
+			result := IsNotInt(tt.value)
 			log.Println("IsNotStringInt:", result)
 		})
 	}
@@ -80,7 +80,7 @@ func TestIsNotStringInt(t *testing.T) {
 func TestIsStringBool(t *testing.T) {
 	for _, tt := range initListTestIsStringBool() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := IsStringBool(tt.value)
+			result := IsBool(tt.value)
 			log.Println("IsStringBool:", result)
 		})
 	}
@@ -89,7 +89,7 @@ func TestIsStringBool(t *testing.T) {
 func TestIsNotStringBool(t *testing.T) {
 	for _, tt := range initListTestIsStringBool() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := IsNotStringBool(tt.value)
+			result := IsNotBool(tt.value)
 			log.Println("IsNotStringBool:", result)
 		})
 	}
@@ -98,7 +98,7 @@ func TestIsNotStringBool(t *testing.T) {
 func TestIsStringFloat(t *testing.T) {
 	for _, tt := range initListTestIsStringFloat() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := IsStringFloat(tt.value)
+			result := IsFloat(tt.value)
 			log.Println("IsStringFloat:", result)
 		})
 	}
@@ -107,8 +107,8 @@ func TestIsStringFloat(t *testing.T) {
 func TestIsNotStringFloat(t *testing.T) {
 	for _, tt := range initListTestIsStringFloat() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := IsNotStringFloat(tt.value)
-			log.Println("IsNotStringFloat:", result)
+			result := IsNotFloat(tt.value)
+			log.Println("IsNotFloat:", result)
 		})
 	}
 }
@@ -116,7 +116,7 @@ func TestIsNotStringFloat(t *testing.T) {
 func TestIsStringTime(t *testing.T) {
 	for _, tt := range initListTestIsStringTime() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := IsStringTime(tt.value)
+			result := IsTime(tt.value)
 			log.Println("IsStringTime:", result)
 		})
 	}
@@ -125,7 +125,7 @@ func TestIsStringTime(t *testing.T) {
 func TestIsNotStringTime(t *testing.T) {
 	for _, tt := range initListTestIsStringTime() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := IsNotStringTime(tt.value)
+			result := IsNotTime(tt.value)
 			log.Println("IsNotStringTime:", result)
 		})
 	}

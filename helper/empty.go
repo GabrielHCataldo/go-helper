@@ -79,18 +79,18 @@ func ReturnNonEmptyValue[T any](a ...T) T {
 
 func isReflectZero(a any) bool {
 	elem := reflect.ValueOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		elem = elem.Elem()
 	}
-	if IsString(a) {
+	if IsStringType(a) {
 		return len(strings.TrimSpace(CleanAllRepeatSpaces(elem.String()))) == 0
-	} else if IsSlice(a) {
+	} else if IsSliceType(a) {
 		return elem.Len() == 0
-	} else if IsMap(a) {
+	} else if IsMapType(a) {
 		return len(elem.MapKeys()) == 0
-	} else if IsObjectId(a) {
+	} else if IsObjectIdType(a) {
 		return SimpleConvertToObjectId(a).IsZero()
-	} else if IsPrimitiveDateTime(a) {
+	} else if IsPrimitiveDateTimeType(a) {
 		return SimpleConvertToPrimitiveDateTime(a) == 0
 	}
 	return !elem.IsValid() || elem.IsZero() || IsNil(a)

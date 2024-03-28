@@ -3,480 +3,578 @@ package helper
 import (
 	"bufio"
 	"bytes"
+	"encoding/json"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io"
 	"os"
 	"reflect"
+	"strconv"
 	"strings"
 	"time"
 )
 
-// IsPointer If value is pointer return true, otherwise return false
-func IsPointer(a any) bool {
+// IsJson check if value is json valid return true, otherwise return false.
+func IsJson(a any) bool {
+	bs := SimpleConvertToBytes(a)
+	var js any
+	return json.Unmarshal(bs, &js) == nil
+}
+
+// IsNotJson check if value is not json return true, otherwise return false.
+func IsNotJson(a any) bool {
+	return !IsJson(a)
+}
+
+// IsMap check if value is map return true, otherwise return false.
+func IsMap(a any) bool {
+	bs := SimpleConvertToBytes(a)
+	var js map[string]any
+	return json.Unmarshal(bs, &js) == nil
+}
+
+// IsNotMap check if value is not map return true, otherwise return false.
+func IsNotMap(a any) bool {
+	return !IsMap(a)
+}
+
+// IsSlice check if value is slice return true, otherwise return false.
+func IsSlice(a any) bool {
+	bs := SimpleConvertToBytes(a)
+	var slice []any
+	return json.Unmarshal(bs, &slice) == nil
+}
+
+// IsNotSlice check if value is not slice return true, otherwise return false.
+func IsNotSlice(a any) bool {
+	return !IsSlice(a)
+}
+
+// IsSliceOfMaps check if string value is slice of maps return true, otherwise return false.
+func IsSliceOfMaps(a any) bool {
+	bs := SimpleConvertToBytes(a)
+	var slice []map[string]any
+	return json.Unmarshal(bs, &slice) == nil
+}
+
+// IsNotSliceOfMaps check if value is not slice of maps return true, otherwise return false.
+func IsNotSliceOfMaps(a any) bool {
+	return !IsSliceOfMaps(a)
+}
+
+// IsInt check if value is int return true, otherwise return false.
+func IsInt(a any) bool {
+	s := SimpleConvertToString(a)
+	_, err := strconv.Atoi(s)
+	return err == nil
+}
+
+// IsNotInt check if value is not int return true, otherwise return false.
+func IsNotInt(a any) bool {
+	return !IsInt(a)
+}
+
+// IsBool check if value is bool return true, otherwise return false.
+func IsBool(a any) bool {
+	s := SimpleConvertToString(a)
+	_, err := strconv.ParseBool(s)
+	return err == nil
+}
+
+// IsNotBool check if value is not bool return true, otherwise return false.
+func IsNotBool(a any) bool {
+	return !IsBool(a)
+}
+
+// IsFloat check if value is float return true, otherwise return false.
+func IsFloat(a any) bool {
+	s := SimpleConvertToString(a)
+	_, err := strconv.ParseFloat(s, 64)
+	return err == nil
+}
+
+// IsNotFloat check if value is not float return true, otherwise return false.
+func IsNotFloat(a any) bool {
+	return !IsFloat(a)
+}
+
+// IsTime check if value is time return true, otherwise return false.
+func IsTime(a any) bool {
+	s := SimpleConvertToString(a)
+	_, err := ConvertToTime(s)
+	return err == nil
+}
+
+// IsNotTime check if value is not time return true, otherwise return false.
+func IsNotTime(a any) bool {
+	return !IsTime(a)
+}
+
+// IsPointerType If value is pointer return true, otherwise return false
+func IsPointerType(a any) bool {
 	t := reflect.TypeOf(a)
 	return t != nil && t.Kind() == reflect.Pointer
 }
 
-// IsNotPointer If value is not pointer return true, otherwise return false
-func IsNotPointer(a any) bool {
-	return !IsPointer(a)
+// IsNotPointerType If value is not pointer return true, otherwise return false
+func IsNotPointerType(a any) bool {
+	return !IsPointerType(a)
 }
 
-// IsFunc If value is func return true, otherwise return false
-func IsFunc(a any) bool {
+// IsFuncType If value is func return true, otherwise return false
+func IsFuncType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointerType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Func
 }
 
-// IsNotFunc If value is not func return true, otherwise return false
-func IsNotFunc(a any) bool {
-	return !IsFunc(a)
+// IsNotFuncType If value is not func return true, otherwise return false
+func IsNotFuncType(a any) bool {
+	return !IsFuncType(a)
 }
 
-// IsChan If value is chan return true, otherwise return false
-func IsChan(a any) bool {
+// IsChanType If value is chan return true, otherwise return false
+func IsChanType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointerType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Chan
 }
 
-// IsNotChan If value is not chan return true, otherwise return false
-func IsNotChan(a any) bool {
-	return !IsChan(a)
+// IsNotChanType If value is not chan return true, otherwise return false
+func IsNotChanType(a any) bool {
+	return !IsChanType(a)
 }
 
-// IsInterface If value is interface return true, otherwise return false
-func IsInterface(a any) bool {
+// IsInterfaceType If value is interface return true, otherwise return false
+func IsInterfaceType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) {
+	if IsPointerType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Interface
 }
 
-// IsNotInterface If value is interface return true, otherwise return false
-func IsNotInterface(a any) bool {
-	return !IsInterface(a)
+// IsNotInterfaceType If value is interface return true, otherwise return false
+func IsNotInterfaceType(a any) bool {
+	return !IsInterfaceType(a)
 }
 
-// IsJson If value is struct, map, slice or array return true, otherwise return false
-func IsJson(a any) bool {
+// IsJsonType If value is struct, map, slice or array return true, otherwise return false
+func IsJsonType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
-	return IsStruct(a) || IsMap(a) || IsSlice(a)
+	return IsStructType(a) || IsMapType(a) || IsSliceType(a)
 }
 
-// IsNotJson If value is not struct, map, slice or array return true, otherwise return false
-func IsNotJson(a any) bool {
-	return !IsJson(a)
+// IsNotJsonType If value is not struct, map, slice or array return true, otherwise return false
+func IsNotJsonType(a any) bool {
+	return !IsJsonType(a)
 }
 
-// IsMap If value is map return true, otherwise return false
-func IsMap(a any) bool {
+// IsMapType If value is map return true, otherwise return false
+func IsMapType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Map
 }
 
-// IsNotMap If value is not map return true, otherwise return false
-func IsNotMap(a any) bool {
-	return !IsMap(a)
+// IsNotMapType If value is not map return true, otherwise return false
+func IsNotMapType(a any) bool {
+	return !IsMapType(a)
 }
 
-// IsStruct If value is struct return true, otherwise return false
-func IsStruct(a any) bool {
+// IsStructType If value is struct return true, otherwise return false
+func IsStructType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
-	if IsError(a) || IsTime(a) || IsFile(a) || IsReader(a) || IsBuffer(a) || IsObjectId(a) {
+	if IsErrorType(a) || IsTimeType(a) || IsFileType(a) || IsReaderType(a) || IsBufferType(a) || IsObjectIdType(a) {
 		return false
 	}
 	return t != nil && t.Kind() == reflect.Struct
 }
 
-// IsNotStruct If value is not struct return true, otherwise return false
-func IsNotStruct(a any) bool {
-	return !IsStruct(a)
+// IsNotStructType If value is not struct return true, otherwise return false
+func IsNotStructType(a any) bool {
+	return !IsStructType(a)
 }
 
-// IsSlice If value is slice or array return true, otherwise return false
-func IsSlice(a any) bool {
+// IsSliceType If value is slice or array return true, otherwise return false
+func IsSliceType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
-	if IsError(a) || IsObjectId(a) {
+	if IsErrorType(a) || IsObjectIdType(a) {
 		return false
 	}
 	return t != nil && (t.Kind() == reflect.Slice || t.Kind() == reflect.Array)
 }
 
-// IsNotSlice If value is not slice or array return true, otherwise return false
-func IsNotSlice(a any) bool {
-	return !IsSlice(a)
+// IsNotSliceType If value is not slice or array return true, otherwise return false
+func IsNotSliceType(a any) bool {
+	return !IsSliceType(a)
 }
 
-// IsString If value is string return true, otherwise return false
-func IsString(a any) bool {
+// IsStringType If value is string return true, otherwise return false
+func IsStringType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.String
 }
 
-// IsNotString If value is not string return true, otherwise return false
-func IsNotString(a any) bool {
-	return !IsString(a)
+// IsNotStringType If value is not string return true, otherwise return false
+func IsNotStringType(a any) bool {
+	return !IsStringType(a)
 }
 
-// IsInt If value is int, int8, int16, int32 or int64 return true, otherwise return false
-func IsInt(a any) bool {
-	if IsNil(a) || IsPrimitiveDateTime(a) {
+// IsIntType If value is int, int8, int16, int32 or int64 return true, otherwise return false
+func IsIntType(a any) bool {
+	if IsNil(a) || IsPrimitiveDateTimeType(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && (t.Kind() == reflect.Int || t.Kind() == reflect.Int8 || t.Kind() == reflect.Int16 ||
 		t.Kind() == reflect.Int32 || t.Kind() == reflect.Int64)
 }
 
-// IsNotInt If value is not int, int8, int16, int32 or int64 return true, otherwise return false
-func IsNotInt(a any) bool {
-	return !IsInt(a)
+// IsNotIntType If value is not int, int8, int16, int32 or int64 return true, otherwise return false
+func IsNotIntType(a any) bool {
+	return !IsIntType(a)
 }
 
-// IsInt8 If value is int8 return true, otherwise return false
-func IsInt8(a any) bool {
+// IsInt8Type If value is int8 return true, otherwise return false
+func IsInt8Type(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Int8
 }
 
-// IsNotInt8 If value is not int8 return true, otherwise return false
-func IsNotInt8(a any) bool {
-	return !IsInt8(a)
+// IsNotInt8Type If value is not int8 return true, otherwise return false
+func IsNotInt8Type(a any) bool {
+	return !IsInt8Type(a)
 }
 
-// IsInt16 If value is int16 return true, otherwise return false
-func IsInt16(a any) bool {
+// IsInt16Type If value is int16 return true, otherwise return false
+func IsInt16Type(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Int16
 }
 
-// IsNotInt16 If value is not int16 return true, otherwise return false
-func IsNotInt16(a any) bool {
-	return !IsInt16(a)
+// IsNotInt16Type If value is not int16 return true, otherwise return false
+func IsNotInt16Type(a any) bool {
+	return !IsInt16Type(a)
 }
 
-// IsInt32 If value is int32 return true, otherwise return false
-func IsInt32(a any) bool {
+// IsInt32Type If value is int32 return true, otherwise return false
+func IsInt32Type(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Int32
 }
 
-// IsNotInt32 If value is not int32 return true, otherwise return false
-func IsNotInt32(a any) bool {
-	return !IsInt32(a)
+// IsNotInt32Type If value is not int32 return true, otherwise return false
+func IsNotInt32Type(a any) bool {
+	return !IsInt32Type(a)
 }
 
-// IsInt64 If value is int64 return true, otherwise return false
-func IsInt64(a any) bool {
+// IsInt64Type If value is int64 return true, otherwise return false
+func IsInt64Type(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Int64
 }
 
-// IsNotInt64 If value is not int64 return true, otherwise return false
-func IsNotInt64(a any) bool {
-	return !IsInt64(a)
+// IsNotInt64Type If value is not int64 return true, otherwise return false
+func IsNotInt64Type(a any) bool {
+	return !IsInt64Type(a)
 }
 
-// IsUint If value is uint, uint8, uint16, uint32 or uint64 return true, otherwise return false
-func IsUint(a any) bool {
+// IsUintType If value is uint, uint8, uint16, uint32 or uint64 return true, otherwise return false
+func IsUintType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && (t.Kind() == reflect.Uint || t.Kind() == reflect.Uint8 || t.Kind() == reflect.Uint16 ||
 		t.Kind() == reflect.Uint32 || t.Kind() == reflect.Uint64)
 }
 
-// IsNotUint If value is not uint, uint8, uint16, uint32 or uint64 return true, otherwise return false
-func IsNotUint(a any) bool {
-	return !IsUint(a)
+// IsNotUintType If value is not uint, uint8, uint16, uint32 or uint64 return true, otherwise return false
+func IsNotUintType(a any) bool {
+	return !IsUintType(a)
 }
 
-// IsUint8 If value is uint8 return true, otherwise return false
-func IsUint8(a any) bool {
+// IsUint8Type If value is uint8 return true, otherwise return false
+func IsUint8Type(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Uint8
 }
 
-// IsNotUint8 If value is not uint8 return true, otherwise return false
-func IsNotUint8(a any) bool {
-	return !IsUint8(a)
+// IsNotUint8Type If value is not uint8 return true, otherwise return false
+func IsNotUint8Type(a any) bool {
+	return !IsUint8Type(a)
 }
 
-// IsUint16 If value is uint16 return true, otherwise return false
-func IsUint16(a any) bool {
+// IsUint16Type If value is uint16 return true, otherwise return false
+func IsUint16Type(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Uint16
 }
 
-// IsNotUint16 If value is not uint16 return true, otherwise return false
-func IsNotUint16(a any) bool {
-	return !IsUint16(a)
+// IsNotUint16Type If value is not uint16 return true, otherwise return false
+func IsNotUint16Type(a any) bool {
+	return !IsUint16Type(a)
 }
 
-// IsUint32 If value is uint32 return true, otherwise return false
-func IsUint32(a any) bool {
+// IsUint32Type If value is uint32 return true, otherwise return false
+func IsUint32Type(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Uint32
 }
 
-// IsNotUint32 If value is not uint32 return true, otherwise return false
-func IsNotUint32(a any) bool {
-	return !IsUint32(a)
+// IsNotUint32Type If value is not uint32 return true, otherwise return false
+func IsNotUint32Type(a any) bool {
+	return !IsUint32Type(a)
 }
 
-// IsUint64 If value is uint64 return true, otherwise return false
-func IsUint64(a any) bool {
+// IsUint64Type If value is uint64 return true, otherwise return false
+func IsUint64Type(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Uint64
 }
 
-// IsNotUint64 If value is not uint64 return true, otherwise return false
-func IsNotUint64(a any) bool {
-	return !IsUint64(a)
+// IsNotUint64Type If value is not uint64 return true, otherwise return false
+func IsNotUint64Type(a any) bool {
+	return !IsUint64Type(a)
 }
 
-// IsFloat If value is float32 or float64 return true, otherwise return false
-func IsFloat(a any) bool {
+// IsFloatType If value is float32 or float64 return true, otherwise return false
+func IsFloatType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && (t.Kind() == reflect.Float32 || t.Kind() == reflect.Float64)
 }
 
-// IsNotFloat If value is not float32 or float64 return true, otherwise return false
-func IsNotFloat(a any) bool {
-	return !IsFloat(a)
+// IsNotFloatType If value is not float32 or float64 return true, otherwise return false
+func IsNotFloatType(a any) bool {
+	return !IsFloatType(a)
 }
 
-// IsFloat32 If value is float32 return true, otherwise return false
-func IsFloat32(a any) bool {
+// IsFloat32Type If value is float32 return true, otherwise return false
+func IsFloat32Type(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Float32
 }
 
-// IsNotFloat32 If value is not float32 return true, otherwise return false
-func IsNotFloat32(a any) bool {
-	return !IsFloat32(a)
+// IsNotFloat32Type If value is not float32 return true, otherwise return false
+func IsNotFloat32Type(a any) bool {
+	return !IsFloat32Type(a)
 }
 
-// IsFloat64 If value is float64 return true, otherwise return false
-func IsFloat64(a any) bool {
+// IsFloat64Type If value is float64 return true, otherwise return false
+func IsFloat64Type(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Float64
 }
 
-// IsNotFloat64 If value is not float64 return true, otherwise return false
-func IsNotFloat64(a any) bool {
-	return !IsFloat64(a)
+// IsNotFloat64Type If value is not float64 return true, otherwise return false
+func IsNotFloat64Type(a any) bool {
+	return !IsFloat64Type(a)
 }
 
-// IsBool If value is bool return true, otherwise return false
-func IsBool(a any) bool {
+// IsBoolType If value is bool return true, otherwise return false
+func IsBoolType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	t := reflect.TypeOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		t = t.Elem()
 	}
 	return t != nil && t.Kind() == reflect.Bool
 }
 
-// IsNotBool If value is not bool return true, otherwise return false
-func IsNotBool(a any) bool {
-	return !IsBool(a)
+// IsNotBoolType If value is not bool return true, otherwise return false
+func IsNotBoolType(a any) bool {
+	return !IsBoolType(a)
 }
 
-// IsTime If value is time return true, otherwise return false
-func IsTime(a any) bool {
+// IsTimeType If value is time return true, otherwise return false
+func IsTimeType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	vr := reflect.ValueOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		vr = vr.Elem()
 	}
 	return vr.CanConvert(reflect.TypeOf(time.Time{}))
 }
 
-// IsNotTime If value is not time return true, otherwise return false
-func IsNotTime(a any) bool {
-	return !IsTime(a)
+// IsNotTimeType If value is not time return true, otherwise return false
+func IsNotTimeType(a any) bool {
+	return !IsTimeType(a)
 }
 
-// IsBytes If value is slice byte return true, otherwise return false
-func IsBytes(a any) bool {
+// IsBytesType If value is slice byte return true, otherwise return false
+func IsBytesType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	vr := reflect.ValueOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		vr = vr.Elem()
 	}
 	_, ok := vr.Interface().([]byte)
 	return ok
 }
 
-// IsNotBytes If value is not slice byte return true, otherwise return false
-func IsNotBytes(a any) bool {
-	return !IsBytes(a)
+// IsNotBytesType If value is not slice byte return true, otherwise return false
+func IsNotBytesType(a any) bool {
+	return !IsBytesType(a)
 }
 
-// IsError If value is error return true, otherwise return false
-func IsError(a any) bool {
+// IsErrorType If value is error return true, otherwise return false
+func IsErrorType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	vr := reflect.ValueOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		vr = vr.Elem()
 	}
 	return okCastError(a) || okCastError(vr.Interface())
 }
 
-// IsNotError If value is not error return true, otherwise return false
-func IsNotError(a any) bool {
-	return !IsError(a)
+// IsNotErrorType If value is not error return true, otherwise return false
+func IsNotErrorType(a any) bool {
+	return !IsErrorType(a)
 }
 
-// IsFile If value is os.File return true, otherwise return false
-func IsFile(a any) bool {
+// IsFileType If value is os.File return true, otherwise return false
+func IsFileType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	vr := reflect.ValueOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		vr = vr.Elem()
 	}
 	_, ok := vr.Interface().(os.File)
 	return ok || vr.CanConvert(reflect.TypeOf(os.File{}))
 }
 
-// IsNotFile If value is os.File return true, otherwise return false
-func IsNotFile(a any) bool {
-	return !IsFile(a)
+// IsNotFileType If value is os.File return true, otherwise return false
+func IsNotFileType(a any) bool {
+	return !IsFileType(a)
 }
 
-// IsReader If value is io.Reader return true, otherwise return false
-func IsReader(a any) bool {
+// IsReaderType If value is io.Reader return true, otherwise return false
+func IsReaderType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	vr := reflect.ValueOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		vr = vr.Elem()
 	}
 	_, ok := vr.Interface().(bytes.Reader)
@@ -486,36 +584,36 @@ func IsReader(a any) bool {
 	return ok || ok2 || ok3 || ok4
 }
 
-// IsNotReader If value is io.Reader return true, otherwise return false
-func IsNotReader(a any) bool {
-	return !IsReader(a)
+// IsNotReaderType If value is io.Reader return true, otherwise return false
+func IsNotReaderType(a any) bool {
+	return !IsReaderType(a)
 }
 
-// IsBuffer If value is bytes.Buffer return true, otherwise return false
-func IsBuffer(a any) bool {
+// IsBufferType If value is bytes.Buffer return true, otherwise return false
+func IsBufferType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	vr := reflect.ValueOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		vr = vr.Elem()
 	}
 	_, ok := vr.Interface().(bytes.Buffer)
 	return ok || vr.CanConvert(reflect.TypeOf(bytes.Buffer{}))
 }
 
-// IsNotBuffer If value is bytes.Buffer return true, otherwise return false
-func IsNotBuffer(a any) bool {
-	return !IsBuffer(a)
+// IsNotBufferType If value is bytes.Buffer return true, otherwise return false
+func IsNotBufferType(a any) bool {
+	return !IsBufferType(a)
 }
 
-// IsObjectId If value is primitive.ObjectID return true, otherwise return false
-func IsObjectId(a any) bool {
+// IsObjectIdType If value is primitive.ObjectID return true, otherwise return false
+func IsObjectIdType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	r := reflect.ValueOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		r = r.Elem()
 	}
 	s, ok := r.Interface().(string)
@@ -528,27 +626,27 @@ func IsObjectId(a any) bool {
 	return r.Type().String() == "primitive.ObjectID" && r.CanConvert(reflect.TypeOf(primitive.ObjectID{}))
 }
 
-// IsNotObjectId If value is not primitive.ObjectID return true, otherwise return false
-func IsNotObjectId(a any) bool {
-	return !IsObjectId(a)
+// IsNotObjectIdType If value is not primitive.ObjectID return true, otherwise return false
+func IsNotObjectIdType(a any) bool {
+	return !IsObjectIdType(a)
 }
 
-// IsPrimitiveDateTime If value is primitive.DateTime return true, otherwise return false
-func IsPrimitiveDateTime(a any) bool {
+// IsPrimitiveDateTimeType If value is primitive.DateTime return true, otherwise return false
+func IsPrimitiveDateTimeType(a any) bool {
 	if IsNil(a) {
 		return false
 	}
 	r := reflect.ValueOf(a)
-	if IsPointer(a) || IsInterface(a) {
+	if IsPointerType(a) || IsInterfaceType(a) {
 		r = r.Elem()
 	}
 	return r.Type().String() == "primitive.DateTime" &&
 		r.CanConvert(reflect.TypeOf(primitive.NewDateTimeFromTime(time.Time{})))
 }
 
-// IsNotPrimitiveDateTime If value is not primitive.DateTime return true, otherwise return false
-func IsNotPrimitiveDateTime(a any) bool {
-	return !IsPrimitiveDateTime(a)
+// IsNotPrimitiveDateTimeType If value is not primitive.DateTime return true, otherwise return false
+func IsNotPrimitiveDateTimeType(a any) bool {
+	return !IsPrimitiveDateTimeType(a)
 }
 
 func okCastError(a any) bool {

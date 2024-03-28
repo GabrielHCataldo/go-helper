@@ -104,32 +104,32 @@ func TestIsNotPostalCodePerCountry(t *testing.T) {
 }
 
 func TestIsObjectId(t *testing.T) {
-	result := IsObjectId(primitive.NilObjectID)
-	log.Println("IsObjectId:", result)
-	result = IsObjectId([]uint8{12, 32, 34, 123})
-	log.Println("IsObjectId:", result)
-	result = IsObjectId("ashaushas")
-	log.Println("IsObjectId:", result)
-	result = IsObjectId(primitive.NewObjectID())
-	log.Println("IsObjectId:", result)
-	result = IsObjectId(primitive.NewObjectID().Hex())
-	log.Println("IsObjectId:", result)
+	result := IsObjectIdType(primitive.NilObjectID)
+	log.Println("IsObjectIdType:", result)
+	result = IsObjectIdType([]uint8{12, 32, 34, 123})
+	log.Println("IsObjectIdType:", result)
+	result = IsObjectIdType("ashaushas")
+	log.Println("IsObjectIdType:", result)
+	result = IsObjectIdType(primitive.NewObjectID())
+	log.Println("IsObjectIdType:", result)
+	result = IsObjectIdType(primitive.NewObjectID().Hex())
+	log.Println("IsObjectIdType:", result)
 }
 
 func TestIsNotObjectId(t *testing.T) {
 	v := ""
-	result := IsNotObjectId(v)
-	log.Println("IsNotObjectId:", result)
+	result := IsNotObjectIdType(v)
+	log.Println("IsNotObjectIdType:", result)
 }
 
 func TestIsPrimitiveDateTime(t *testing.T) {
-	result := IsPrimitiveDateTime(primitive.DateTime(0))
-	log.Println("IsPrimitiveDateTime:", result)
+	result := IsPrimitiveDateTimeType(primitive.DateTime(0))
+	log.Println("IsPrimitiveDateTimeType:", result)
 }
 
 func TestIsNotPrimitiveDateTime(t *testing.T) {
-	result := IsNotPrimitiveDateTime("")
-	log.Println("IsNotPrimitiveDateTime:", result)
+	result := IsNotPrimitiveDateTimeType("")
+	log.Println("IsNotPrimitiveDateTimeType:", result)
 }
 
 func TestIsBase64(t *testing.T) {

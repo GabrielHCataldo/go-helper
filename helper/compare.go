@@ -38,7 +38,7 @@ func IsNotEqualsLen(a any, len int) bool {
 // Contains if values passed in parameters B and C contain the value of parameter A, it returns true, otherwise
 // it returns false
 func Contains(a, b any, c ...any) bool {
-	if IsSlice(a) {
+	if IsSliceType(a) {
 		return containsSlice(false, a, b, c...)
 	}
 	return contains(false, a, b, c...)
@@ -53,7 +53,7 @@ func NotContains(a, b any, c ...any) bool {
 // ContainsIgnoreCase if values passed in parameters B and C contain the value of parameter A, it returns true, otherwise
 // it returns false
 func ContainsIgnoreCase(a, b any, c ...any) bool {
-	if IsSlice(a) {
+	if IsSliceType(a) {
 		return containsSlice(true, a, b, c...)
 	}
 	return contains(true, a, b, c...)
@@ -207,7 +207,7 @@ func containsSlice(ignoreCase bool, a, b any, c ...any) bool {
 
 func getRealValue(a any) any {
 	ra := reflect.ValueOf(a)
-	if IsPointer(a) {
+	if IsPointerType(a) {
 		ra = ra.Elem()
 	}
 	return ra.Interface()

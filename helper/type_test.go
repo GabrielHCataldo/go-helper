@@ -12,373 +12,373 @@ import (
 )
 
 func TestIsPointer(t *testing.T) {
-	result := IsPointer(initTestStruct())
+	result := IsPointerType(initTestStruct())
 	log.Println("IsPointer:", result)
 }
 
 func TestIsNotPointer(t *testing.T) {
-	result := IsNotPointer(initTestStruct())
-	log.Println("IsNotPointer:", result)
+	result := IsNotPointerType(initTestStruct())
+	log.Println("IsNotPointerType:", result)
 }
 
 func TestIsFunc(t *testing.T) {
 	var v *func()
-	result := IsFunc(v)
-	log.Println("IsFunc:", result)
+	result := IsFuncType(v)
+	log.Println("IsFuncType:", result)
 	v = ConvertToPointer(func() {})
-	result = IsFunc(v)
-	log.Println("IsFunc:", result)
+	result = IsFuncType(v)
+	log.Println("IsFuncType:", result)
 }
 
 func TestIsNotFunc(t *testing.T) {
 	v := func() {}
-	result := IsNotFunc(&v)
+	result := IsNotFuncType(&v)
 	log.Println("IsNotFunc:", result)
 }
 
 func TestIsChan(t *testing.T) {
 	var v *chan struct{}
-	result := IsChan(v)
+	result := IsChanType(v)
 	log.Println("IsChannel:", result)
 	v = ConvertToPointer(make(chan struct{}))
-	result = IsChan(v)
+	result = IsChanType(v)
 	log.Println("IsChannel:", result)
 }
 
 func TestIsNotChan(t *testing.T) {
 	v := func() {}
-	result := IsNotChan(&v)
-	log.Println("IsNotChan:", result)
+	result := IsNotChanType(&v)
+	log.Println("IsNotChanType:", result)
 }
 
 func TestIsInterface(t *testing.T) {
 	var v *interface{}
-	result := IsInterface(v)
-	log.Println("IsInterface:", result)
+	result := IsInterfaceType(v)
+	log.Println("IsInterfaceType:", result)
 	v2 := make(chan interface{}, 1)
-	result = IsInterface(&v2)
-	log.Println("IsInterface:", result)
+	result = IsInterfaceType(&v2)
+	log.Println("IsInterfaceType:", result)
 }
 
 func TestIsNotInterface(t *testing.T) {
 	v := func() {}
-	result := IsNotInterface(&v)
-	log.Println("IsNotInterface:", result)
+	result := IsNotInterfaceType(&v)
+	log.Println("IsNotInterfaceType:", result)
 }
 
 func TestIsJson(t *testing.T) {
-	result := IsJson(initPointerNil())
-	log.Println("IsJson:", result)
-	result = IsJson(initTestStruct())
-	log.Println("IsJson:", result)
-	result = IsJson(time.Now())
-	log.Println("IsJson:", result)
-	result = IsJson(errors.New("test error value string"))
-	log.Println("IsJson:", result)
+	result := IsJsonType(initPointerNil())
+	log.Println("IsJsonType:", result)
+	result = IsJsonType(initTestStruct())
+	log.Println("IsJsonType:", result)
+	result = IsJsonType(time.Now())
+	log.Println("IsJsonType:", result)
+	result = IsJsonType(errors.New("test error value string"))
+	log.Println("IsJsonType:", result)
 }
 
 func TestIsNotJson(t *testing.T) {
 	v := func() {}
-	result := IsNotJson(&v)
-	log.Println("IsNotJson:", result)
+	result := IsNotJsonType(&v)
+	log.Println("IsNotJsonType:", result)
 }
 
 func TestIsMap(t *testing.T) {
-	result := IsMap(initPointerNil())
-	log.Println("IsMap:", result)
-	result = IsMap(initTestMap())
-	log.Println("IsMap:", result)
+	result := IsMapType(initPointerNil())
+	log.Println("IsMapType:", result)
+	result = IsMapType(initTestMap())
+	log.Println("IsMapType:", result)
 }
 
 func TestIsNotMap(t *testing.T) {
 	v := func() {}
-	result := IsNotMap(&v)
+	result := IsNotMapType(&v)
 	log.Println("IsNotMap:", result)
 }
 
 func TestIsStruct(t *testing.T) {
-	result := IsStruct(initPointerNil())
-	log.Println("IsStruct:", result)
-	result = IsStruct(initTestStruct())
-	log.Println("IsStruct:", result)
-	result = IsStruct(time.Now())
-	log.Println("IsStruct:", result)
+	result := IsStructType(initPointerNil())
+	log.Println("IsStructType:", result)
+	result = IsStructType(initTestStruct())
+	log.Println("IsStructType:", result)
+	result = IsStructType(time.Now())
+	log.Println("IsStructType:", result)
 }
 
 func TestIsNotStruct(t *testing.T) {
 	v := func() {}
-	result := IsNotStruct(&v)
-	log.Println("IsNotStruct:", result)
+	result := IsNotStructType(&v)
+	log.Println("IsNotStructType:", result)
 }
 
 func TestIsSlice(t *testing.T) {
-	result := IsSlice(initPointerNil())
-	log.Println("IsSlice:", result)
-	result = IsSlice(ConvertToPointer([]any{"test", 123}))
-	log.Println("IsSlice:", result)
+	result := IsSliceType(initPointerNil())
+	log.Println("IsSliceType:", result)
+	result = IsSliceType(ConvertToPointer([]any{"test", 123}))
+	log.Println("IsSliceType:", result)
 }
 
 func TestIsNotSlice(t *testing.T) {
 	v := func() {}
-	result := IsNotSlice(&v)
+	result := IsNotSliceType(&v)
 	log.Println("IsNotSlice:", result)
 }
 
 func TestIsString(t *testing.T) {
-	result := IsString(initPointerNil())
-	log.Println("IsString:", result)
-	result = IsString(ConvertToPointer("string text"))
-	log.Println("IsString:", result)
+	result := IsStringType(initPointerNil())
+	log.Println("IsStringType:", result)
+	result = IsStringType(ConvertToPointer("string text"))
+	log.Println("IsStringType:", result)
 }
 
 func TestIsNotString(t *testing.T) {
 	v := func() {}
-	result := IsNotString(&v)
+	result := IsNotStringType(&v)
 	log.Println("IsNotString:", result)
 }
 
 func TestIsInt(t *testing.T) {
-	result := IsInt(initPointerNil())
-	log.Println("IsInt:", result)
-	result = IsInt(ConvertToPointer(123))
-	log.Println("IsInt:", result)
+	result := IsIntType(initPointerNil())
+	log.Println("IsIntType:", result)
+	result = IsIntType(ConvertToPointer(123))
+	log.Println("IsIntType:", result)
 }
 
 func TestIsNotInt(t *testing.T) {
 	v := func() {}
-	result := IsNotInt(&v)
-	log.Println("IsNotInt:", result)
+	result := IsNotIntType(&v)
+	log.Println("IsNotIntType:", result)
 }
 
 func TestIsInt8(t *testing.T) {
-	result := IsInt8(initPointerNil())
-	log.Println("IsInt8:", result)
-	result = IsInt8(ConvertToPointer(123))
-	log.Println("IsInt8:", result)
+	result := IsInt8Type(initPointerNil())
+	log.Println("IsInt8Type:", result)
+	result = IsInt8Type(ConvertToPointer(123))
+	log.Println("IsInt8Type:", result)
 }
 
 func TestIsNotInt8(t *testing.T) {
 	v := func() {}
-	result := IsNotInt8(&v)
-	log.Println("IsNotInt8:", result)
+	result := IsNotInt8Type(&v)
+	log.Println("IsNotInt8Type:", result)
 }
 
 func TestIsInt16(t *testing.T) {
-	result := IsInt16(initPointerNil())
-	log.Println("IsInt16:", result)
-	result = IsInt16(ConvertToPointer(123))
-	log.Println("IsInt16:", result)
+	result := IsInt16Type(initPointerNil())
+	log.Println("IsInt16Type:", result)
+	result = IsInt16Type(ConvertToPointer(123))
+	log.Println("IsInt16Type:", result)
 }
 
 func TestIsNotInt16(t *testing.T) {
 	v := func() {}
-	result := IsNotInt16(&v)
-	log.Println("IsNotInt16:", result)
+	result := IsNotInt16Type(&v)
+	log.Println("IsNotInt16Type:", result)
 }
 
 func TestIsInt32(t *testing.T) {
-	result := IsInt32(initPointerNil())
-	log.Println("IsInt32:", result)
-	result = IsInt32(ConvertToPointer(123))
-	log.Println("IsInt32:", result)
+	result := IsInt32Type(initPointerNil())
+	log.Println("IsInt32Type:", result)
+	result = IsInt32Type(ConvertToPointer(123))
+	log.Println("IsInt32Type:", result)
 }
 
 func TestIsNotInt32(t *testing.T) {
 	v := func() {}
-	result := IsNotInt32(&v)
-	log.Println("IsNotInt32:", result)
+	result := IsNotInt32Type(&v)
+	log.Println("IsNotInt32Type:", result)
 }
 
 func TestIsInt64(t *testing.T) {
-	result := IsInt64(initPointerNil())
-	log.Println("IsInt64:", result)
-	result = IsInt64(ConvertToPointer(123))
-	log.Println("IsInt64:", result)
+	result := IsInt64Type(initPointerNil())
+	log.Println("IsInt64Type:", result)
+	result = IsInt64Type(ConvertToPointer(123))
+	log.Println("IsInt64Type:", result)
 }
 
 func TestIsNotInt64(t *testing.T) {
 	v := func() {}
-	result := IsNotInt64(&v)
-	log.Println("IsNotInt64:", result)
+	result := IsNotInt64Type(&v)
+	log.Println("IsNotInt64Type:", result)
 }
 
 func TestIsUint(t *testing.T) {
-	result := IsUint(initPointerNil())
-	log.Println("IsUint:", result)
-	result = IsUint(ConvertToPointer(123))
-	log.Println("IsUint:", result)
+	result := IsUintType(initPointerNil())
+	log.Println("IsUintType:", result)
+	result = IsUintType(ConvertToPointer(123))
+	log.Println("IsUintType:", result)
 }
 
 func TestIsNotUint(t *testing.T) {
 	v := 123
-	result := IsNotUint(&v)
+	result := IsNotUintType(&v)
 	log.Println("IsNotUint:", result)
 }
 
 func TestIsUint8(t *testing.T) {
-	result := IsUint8(initPointerNil())
-	log.Println("IsUint8:", result)
-	result = IsUint8(ConvertToPointer(123))
-	log.Println("IsUint8:", result)
+	result := IsUint8Type(initPointerNil())
+	log.Println("IsUint8Type:", result)
+	result = IsUint8Type(ConvertToPointer(123))
+	log.Println("IsUint8Type:", result)
 }
 
 func TestIsNotUint8(t *testing.T) {
 	v := 123
-	result := IsNotUint8(&v)
-	log.Println("IsNotUint8:", result)
+	result := IsNotUint8Type(&v)
+	log.Println("IsNotUint8Type:", result)
 }
 
 func TestIsUint16(t *testing.T) {
-	result := IsUint16(initPointerNil())
-	log.Println("IsUint16:", result)
-	result = IsUint16(ConvertToPointer(123))
-	log.Println("IsUint16:", result)
+	result := IsUint16Type(initPointerNil())
+	log.Println("IsUint16Type:", result)
+	result = IsUint16Type(ConvertToPointer(123))
+	log.Println("IsUint16Type:", result)
 }
 
 func TestIsNotUint16(t *testing.T) {
 	v := 123
-	result := IsNotUint16(&v)
-	log.Println("IsNotUint16:", result)
+	result := IsNotUint16Type(&v)
+	log.Println("IsNotUint16Type:", result)
 }
 
 func TestIsUint32(t *testing.T) {
-	result := IsUint32(initPointerNil())
-	log.Println("IsUint32:", result)
-	result = IsUint32(ConvertToPointer(123))
-	log.Println("IsUint32:", result)
+	result := IsUint32Type(initPointerNil())
+	log.Println("IsUint32Type:", result)
+	result = IsUint32Type(ConvertToPointer(123))
+	log.Println("IsUint32Type:", result)
 }
 
 func TestIsNotUint32(t *testing.T) {
 	v := 123
-	result := IsNotUint32(&v)
-	log.Println("IsNotUint32:", result)
+	result := IsNotUint32Type(&v)
+	log.Println("IsNotUint32Type:", result)
 }
 
 func TestIsUint64(t *testing.T) {
-	result := IsUint64(initPointerNil())
-	log.Println("IsUint64:", result)
-	result = IsUint64(ConvertToPointer(123))
-	log.Println("IsUint64:", result)
+	result := IsUint64Type(initPointerNil())
+	log.Println("IsUint64Type:", result)
+	result = IsUint64Type(ConvertToPointer(123))
+	log.Println("IsUint64Type:", result)
 }
 
 func TestIsNotUint64(t *testing.T) {
 	v := 123
-	result := IsNotUint64(&v)
-	log.Println("IsNotUint64:", result)
+	result := IsNotUint64Type(&v)
+	log.Println("IsNotUint64Type:", result)
 }
 
 func TestIsFloat(t *testing.T) {
-	result := IsFloat(initPointerNil())
-	log.Println("IsFloat:", result)
-	result = IsFloat(ConvertToPointer(123.23))
-	log.Println("IsFloat:", result)
+	result := IsFloatType(initPointerNil())
+	log.Println("IsFloatType:", result)
+	result = IsFloatType(ConvertToPointer(123.23))
+	log.Println("IsFloatType:", result)
 }
 
 func TestIsNotFloat(t *testing.T) {
 	v := 123.23
-	result := IsNotFloat(&v)
-	log.Println("IsNotFloat:", result)
+	result := IsNotFloatType(&v)
+	log.Println("IsNotFloatType:", result)
 }
 
 func TestIsFloat32(t *testing.T) {
-	result := IsFloat32(initPointerNil())
-	log.Println("IsFloat32:", result)
-	result = IsFloat32(ConvertToPointer(123.23))
-	log.Println("IsFloat32:", result)
+	result := IsFloat32Type(initPointerNil())
+	log.Println("IsFloat32Type:", result)
+	result = IsFloat32Type(ConvertToPointer(123.23))
+	log.Println("IsFloat32Type:", result)
 }
 
 func TestIsNotFloat32(t *testing.T) {
 	v := 123.23
-	result := IsNotFloat32(&v)
-	log.Println("IsNotFloat32:", result)
+	result := IsNotFloat32Type(&v)
+	log.Println("IsNotFloat32Type:", result)
 }
 
 func TestIsFloat64(t *testing.T) {
-	result := IsFloat64(initPointerNil())
-	log.Println("IsFloat64:", result)
-	result = IsFloat32(ConvertToPointer(123.23))
-	log.Println("IsFloat64:", result)
+	result := IsFloat64Type(initPointerNil())
+	log.Println("IsFloat64Type:", result)
+	result = IsFloat32Type(ConvertToPointer(123.23))
+	log.Println("IsFloat64Type:", result)
 }
 
 func TestIsNotFloat64(t *testing.T) {
 	v := 123.23
-	result := IsNotFloat64(&v)
-	log.Println("IsNotFloat64:", result)
+	result := IsNotFloat64Type(&v)
+	log.Println("IsNotFloat64Type:", result)
 }
 
 func TestIsBool(t *testing.T) {
-	result := IsBool(initPointerNil())
-	log.Println("IsBool:", result)
-	result = IsBool(true)
-	log.Println("IsBool:", result)
+	result := IsBoolType(initPointerNil())
+	log.Println("IsBoolType:", result)
+	result = IsBoolType(true)
+	log.Println("IsBoolType:", result)
 }
 
 func TestIsNotBool(t *testing.T) {
 	v := true
-	result := IsNotBool(&v)
-	log.Println("IsNotBool:", result)
+	result := IsNotBoolType(&v)
+	log.Println("IsNotBoolType:", result)
 }
 
 func TestIsTime(t *testing.T) {
-	result := IsTime(initPointerNil())
-	log.Println("IsTime:", result)
-	result = IsTime(ConvertToPointer(time.Now()))
-	log.Println("IsTime:", result)
-	result = IsTime(primitive.NewDateTimeFromTime(time.Now()))
-	log.Println("IsTime:", result)
-	result = IsTime(primitive.Timestamp{
+	result := IsTimeType(initPointerNil())
+	log.Println("IsTimeType:", result)
+	result = IsTimeType(ConvertToPointer(time.Now()))
+	log.Println("IsTimeType:", result)
+	result = IsTimeType(primitive.NewDateTimeFromTime(time.Now()))
+	log.Println("IsTimeType:", result)
+	result = IsTimeType(primitive.Timestamp{
 		T: uint32(time.Now().Unix()),
 		I: 0,
 	})
-	log.Println("IsTime:", result)
+	log.Println("IsTimeType:", result)
 }
 
 func TestIsNotTime(t *testing.T) {
 	v := time.Now()
-	result := IsNotTime(&v)
-	log.Println("IsNotTime:", result)
+	result := IsNotTimeType(&v)
+	log.Println("IsNotTimeType:", result)
 }
 
 func TestIsBytes(t *testing.T) {
-	result := IsBytes(initPointerNil())
-	log.Println("IsBytes:", result)
-	result = IsBytes(ConvertToPointer([]byte{}))
-	log.Println("IsBytes:", result)
+	result := IsBytesType(initPointerNil())
+	log.Println("IsBytesType:", result)
+	result = IsBytesType(ConvertToPointer([]byte{}))
+	log.Println("IsBytesType:", result)
 }
 
 func TestIsNotBytes(t *testing.T) {
 	var v []byte
-	result := IsNotBytes(&v)
-	log.Println("IsNotBytes:", result)
+	result := IsNotBytesType(&v)
+	log.Println("IsNotBytesType:", result)
 }
 
 func TestIsError(t *testing.T) {
-	result := IsError(initPointerNil())
-	log.Println("IsError:", result)
-	result = IsError(ConvertToPointer(errors.New("test error value")))
-	log.Println("IsError:", result)
+	result := IsErrorType(initPointerNil())
+	log.Println("IsErrorType:", result)
+	result = IsErrorType(ConvertToPointer(errors.New("test error value")))
+	log.Println("IsErrorType:", result)
 }
 
 func TestIsNotError(t *testing.T) {
 	v := "test error value"
-	result := IsNotError(&v)
-	log.Println("IsNotError:", result)
+	result := IsNotErrorType(&v)
+	log.Println("IsNotErrorType:", result)
 }
 
 func TestIsFile(t *testing.T) {
 	var v any
 	v, _ = os.Open("../gopher-helper.png")
-	result := IsFile(initPointerNil())
-	log.Println("IsFile:", result)
-	result = IsFile(v)
-	log.Println("IsFile:", result)
+	result := IsFileType(initPointerNil())
+	log.Println("IsFileType:", result)
+	result = IsFileType(v)
+	log.Println("IsFileType:", result)
 }
 
 func TestIsNotFile(t *testing.T) {
 	var v any
 	v, _ = os.Open("../gopher-helper.png")
-	result := IsNotFile(&v)
-	log.Println("IsNotFile:", result)
+	result := IsNotFileType(&v)
+	log.Println("IsNotFileType:", result)
 }
 
 func TestIsReader(t *testing.T) {
@@ -386,38 +386,38 @@ func TestIsReader(t *testing.T) {
 	r := bytes.NewReader(bs)
 	var v any
 	v = r
-	result := IsReader(initPointerNil())
-	log.Println("IsReader:", result)
-	result = IsReader(v)
-	log.Println("IsReader:", result)
-	result = IsReader(io.Reader(r))
-	log.Println("IsReader:", result)
-	result = IsReader(io.NopCloser(r))
-	log.Println("IsReader:", result)
+	result := IsReaderType(initPointerNil())
+	log.Println("IsReaderType:", result)
+	result = IsReaderType(v)
+	log.Println("IsReaderType:", result)
+	result = IsReaderType(io.Reader(r))
+	log.Println("IsReaderType:", result)
+	result = IsReaderType(io.NopCloser(r))
+	log.Println("IsReaderType:", result)
 }
 
 func TestIsNotReader(t *testing.T) {
 	bs, _ := os.ReadFile("../gopher-helper.png")
 	var v any
 	v = bytes.NewBuffer(bs)
-	result := IsNotReader(v)
-	log.Println("IsNotReader:", result)
+	result := IsNotReaderType(v)
+	log.Println("IsNotReaderType:", result)
 }
 
 func TestIsBuffer(t *testing.T) {
 	bs, _ := os.ReadFile("../gopher-helper.png")
 	var v any
 	v = bytes.NewBuffer(bs)
-	result := IsBuffer(initPointerNil())
-	log.Println("IsBuffer:", result)
-	result = IsBuffer(v)
-	log.Println("IsBuffer:", result)
+	result := IsBufferType(initPointerNil())
+	log.Println("IsBufferType:", result)
+	result = IsBufferType(v)
+	log.Println("IsBufferType:", result)
 }
 
 func TestIsNotBuffer(t *testing.T) {
 	bs, _ := os.ReadFile("../gopher-helper.png")
 	var v any
 	v = bytes.NewBuffer(bs)
-	result := IsNotBuffer(v)
-	log.Println("IsNotBuffer:", result)
+	result := IsNotBufferType(v)
+	log.Println("IsNotBufferType:", result)
 }

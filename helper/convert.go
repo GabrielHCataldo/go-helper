@@ -4,9 +4,9 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
-	jsoniter "github.com/json-iterator/go"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io"
 	"log"
@@ -31,11 +31,11 @@ func Len(a any) int {
 	var i int
 	a = getRealValue(a)
 	r := reflect.ValueOf(a)
-	if IsSlice(a) {
+	if IsSliceType(a) {
 		i = r.Len()
-	} else if IsStruct(a) {
+	} else if IsStructType(a) {
 		i = r.NumField()
-	} else if IsMap(a) {
+	} else if IsMapType(a) {
 		i = len(r.MapKeys())
 	} else {
 		i = len(SimpleConvertToString(a))
@@ -63,7 +63,7 @@ func ConvertToObjectId(a any) (primitive.ObjectID, error) {
 		return primitive.NilObjectID, errors.New("error convert to objectId: value is nil")
 	}
 	v := reflect.ValueOf(a)
-	if IsPointer(a) {
+	if IsPointerType(a) {
 		v = v.Elem()
 	}
 	var objectId primitive.ObjectID
@@ -96,7 +96,7 @@ func ConvertToPrimitiveDateTime(a any) (primitive.DateTime, error) {
 	canConvert := v.CanConvert(reflect.TypeOf(primitive.DateTime(0)))
 	if canConvert {
 		dateTime = v.Convert(reflect.TypeOf(primitive.DateTime(0))).Interface().(primitive.DateTime)
-	} else if IsTime(a) {
+	} else if IsTimeType(a) {
 		dateTime = primitive.NewDateTimeFromTime(v.Interface().(time.Time))
 	}
 	return dateTime, nil
@@ -203,24 +203,24 @@ func ConvertToString(a any) (string, error) {
 		return "", errors.New("error convert to string: value is nil")
 	}
 	v := reflect.ValueOf(a)
-	if IsPointer(a) {
+	if IsPointerType(a) {
 		v = v.Elem()
 	}
-	if IsString(a) {
+	if IsStringType(a) {
 		return v.String(), nil
-	} else if IsBytes(a) {
+	} else if IsBytesType(a) {
 		return string(v.Interface().([]byte)), nil
-	} else if IsTime(a) {
+	} else if IsTimeType(a) {
 		t := v.Interface().(time.Time)
 		return t.Format(time.RFC3339Nano), nil
-	} else if IsFile(a) {
+	} else if IsFileType(a) {
 		f := v.Interface().(os.File)
 		b, err := ConvertFileToBytes(&f)
 		return string(b), err
-	} else if IsBuffer(a) {
+	} else if IsBufferType(a) {
 		bf := v.Interface().(bytes.Buffer)
 		return string(bf.Bytes()), nil
-	} else if IsReader(a) {
+	} else if IsReaderType(a) {
 		if r, ok := v.Interface().(bytes.Reader); ok {
 			bs, err := io.ReadAll(&r)
 			return string(bs), err
@@ -233,15 +233,15 @@ func ConvertToString(a any) (string, error) {
 			bs, err := io.ReadAll(r)
 			return string(bs), err
 		}
-	} else if IsError(a) {
+	} else if IsErrorType(a) {
 		return a.(error).Error(), nil
-	} else if IsObjectId(a) {
+	} else if IsObjectIdType(a) {
 		return v.Interface().(primitive.ObjectID).Hex(), nil
-	} else if IsPrimitiveDateTime(a) {
+	} else if IsPrimitiveDateTimeType(a) {
 		t := v.Interface().(primitive.DateTime)
 		return t.Time().UTC().Format(time.RFC3339Nano), nil
-	} else if IsJson(a) || IsInterface(a) {
-		b, err := jsoniter.ConfigDefault.Marshal(v.Interface())
+	} else if IsJsonType(a) || IsInterfaceType(a) {
+		b, err := json.Marshal(v.Interface())
 		return string(b), err
 	}
 	return convertToStringByType(v.Interface())
@@ -263,7 +263,7 @@ func ConvertToInt(a any) (int, error) {
 		v = v.Elem()
 	}
 	va := v.Interface()
-	if IsJson(a) {
+	if IsJsonType(a) {
 		va = SimpleConvertToString(va)
 	}
 	return convertToIntByType(va)
@@ -285,7 +285,7 @@ func ConvertToFloat(a any) (float64, error) {
 		v = v.Elem()
 	}
 	va := v.Interface()
-	if IsJson(a) {
+	if IsJsonType(a) {
 		va = SimpleConvertToString(va)
 	}
 	return convertToFloatByType(va)
@@ -307,7 +307,7 @@ func ConvertToBool(a any) (bool, error) {
 		v = v.Elem()
 	}
 	va := v.Interface()
-	if IsJson(a) {
+	if IsJsonType(a) {
 		va = SimpleConvertToString(va)
 	}
 	return convertToBoolByType(v.Interface())
@@ -328,7 +328,7 @@ func ConvertToTime(a any) (time.Time, error) {
 	if v.Type().Kind() == reflect.Pointer {
 		v = v.Elem()
 	}
-	if IsJson(a) || IsInterface(a) || IsTime(a) {
+	if IsJsonType(a) || IsInterfaceType(a) || IsTimeType(a) {
 		canConvert := v.CanConvert(reflect.TypeOf(time.Time{}))
 		if canConvert {
 			return v.Convert(reflect.TypeOf(time.Time{})).Interface().(time.Time), nil
@@ -349,8 +349,8 @@ func SimpleConvertToTime(a any) time.Time {
 func ConvertToBytes(a any) ([]byte, error) {
 	if IsNil(a) {
 		return []byte{}, errors.New("error convert to bytes: value is nil")
-	} else if (IsJson(a) || IsInterface(a)) && IsNotError(a) && IsNotBytes(a) {
-		return jsoniter.ConfigDefault.Marshal(a)
+	} else if (IsJsonType(a) || IsInterfaceType(a)) && IsNotErrorType(a) && IsNotBytesType(a) {
+		return json.Marshal(a)
 	} else {
 		s, err := ConvertToString(a)
 		return []byte(s), err
@@ -460,7 +460,7 @@ func SimpleConvertToBase64(a any) string {
 func ConvertToDest(a, dest any) error {
 	if IsNil(a) {
 		return errors.New("error convert string to dest: value is nil")
-	} else if IsNotPointer(dest) {
+	} else if IsNotPointerType(dest) {
 		return errors.New("error convert string to dest: dest is not a pointer")
 	}
 	v := reflect.ValueOf(a)
@@ -469,37 +469,37 @@ func ConvertToDest(a, dest any) error {
 	}
 	vInterface := v.Interface()
 	rDest := reflect.ValueOf(dest)
-	if IsInt(dest) {
+	if IsIntType(dest) {
 		i, err := ConvertToInt(vInterface)
 		rs := reflect.ValueOf(i)
 		converted := rs.Convert(rDest.Elem().Type())
 		rDest.Elem().Set(converted)
 		return err
-	} else if IsFloat(dest) {
+	} else if IsFloatType(dest) {
 		f, err := ConvertToFloat(vInterface)
 		rs := reflect.ValueOf(f)
 		converted := rs.Convert(rDest.Elem().Type())
 		rDest.Elem().Set(converted)
 		return err
-	} else if IsBool(dest) {
+	} else if IsBoolType(dest) {
 		b, err := ConvertToBool(vInterface)
 		rs := reflect.ValueOf(b)
 		converted := rs.Convert(rDest.Elem().Type())
 		rDest.Elem().Set(converted)
 		return err
-	} else if IsString(dest) {
+	} else if IsStringType(dest) {
 		s, err := ConvertToString(vInterface)
 		rs := reflect.ValueOf(s)
 		converted := rs.Convert(rDest.Elem().Type())
 		rDest.Elem().Set(converted)
 		return err
-	} else if IsTime(dest) {
+	} else if IsTimeType(dest) {
 		tm, err := ConvertToTime(vInterface)
 		rs := reflect.ValueOf(tm)
 		converted := rs.Convert(rDest.Elem().Type())
 		rDest.Elem().Set(converted)
 		return err
-	} else if IsFile(dest) {
+	} else if IsFileType(dest) {
 		f, err := ConvertToFile(vInterface)
 		if IsNil(err) {
 			rs := reflect.ValueOf(ConvertPointerToValue(f))
@@ -507,37 +507,37 @@ func ConvertToDest(a, dest any) error {
 			rDest.Elem().Set(converted)
 		}
 		return err
-	} else if IsReader(dest) {
+	} else if IsReaderType(dest) {
 		r, err := ConvertToReader(vInterface)
 		rs := reflect.ValueOf(ConvertPointerToValue(r))
 		converted := rs.Convert(rDest.Elem().Type())
 		rDest.Elem().Set(converted)
 		return err
-	} else if IsBuffer(dest) {
+	} else if IsBufferType(dest) {
 		bf, err := ConvertToBuffer(vInterface)
 		rs := reflect.ValueOf(ConvertPointerToValue(bf))
 		converted := rs.Convert(rDest.Elem().Type())
 		rDest.Elem().Set(converted)
 		return err
-	} else if IsObjectId(dest) {
+	} else if IsObjectIdType(dest) {
 		bf, err := ConvertToObjectId(vInterface)
 		rs := reflect.ValueOf(bf)
 		converted := rs.Convert(rDest.Elem().Type())
 		rDest.Elem().Set(converted)
 		return err
-	} else if IsPrimitiveDateTime(dest) {
+	} else if IsPrimitiveDateTimeType(dest) {
 		pdt, err := ConvertToPrimitiveDateTime(vInterface)
 		rs := reflect.ValueOf(pdt)
 		converted := rs.Convert(rDest.Elem().Type())
 		rDest.Elem().Set(converted)
 		return err
-	} else if IsJson(dest) {
+	} else if IsJsonType(dest) {
 		b, _ := ConvertToBytes(a)
-		return jsoniter.ConfigDefault.Unmarshal(b, dest)
-	} else if IsInterface(dest) {
-		if IsJson(a) || IsStringMap(a) || IsStringSlice(a) {
+		return json.Unmarshal(b, dest)
+	} else if IsInterfaceType(dest) {
+		if IsJson(a) {
 			b, _ := ConvertToBytes(a)
-			return jsoniter.ConfigDefault.Unmarshal(b, dest)
+			return json.Unmarshal(b, dest)
 		} else {
 			rs := reflect.ValueOf(a)
 			converted := rs.Convert(rDest.Elem().Type())

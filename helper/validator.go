@@ -98,20 +98,20 @@ func validatePostalCode(fl validator.FieldLevel) bool {
 }
 
 func validateMongoDb(fl validator.FieldLevel) bool {
-	if IsSlice(fl.Field().Interface()) {
+	if IsSliceType(fl.Field().Interface()) {
 		for i := 0; i < fl.Field().Len(); i++ {
 			fieldValueSlice := fl.Field().Index(i).Interface()
-			if IsNotObjectId(fieldValueSlice) {
+			if IsNotObjectIdType(fieldValueSlice) {
 				return false
 			}
 		}
 		return true
 	}
-	return IsObjectId(fl.Field().Interface())
+	return IsObjectIdType(fl.Field().Interface())
 }
 
 func validateEnum(fl validator.FieldLevel) bool {
-	if IsSlice(fl.Field().Interface()) {
+	if IsSliceType(fl.Field().Interface()) {
 		for i := 0; i < fl.Field().Len(); i++ {
 			fieldValueSlice, ok := fl.Field().Index(i).Interface().(BaseEnum)
 			if !ok || !fieldValueSlice.IsEnumValid() {

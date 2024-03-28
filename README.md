@@ -3,7 +3,7 @@ Go Helper
 <!--suppress ALL -->
 <img align="right" src="gopher-helper.png" alt="">
 
-[![Project status](https://img.shields.io/badge/version-v1.6.4-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.6.4)
+[![Project status](https://img.shields.io/badge/version-v1.6.5-vividgreen.svg)](https://github.com/GabrielHCataldo/go-helper/releases/tag/v1.6.5)
 [![Go Report Card](https://goreportcard.com/badge/github.com/GabrielHCataldo/go-helper)](https://goreportcard.com/report/github.com/GabrielHCataldo/go-helper)
 [![Coverage Status](https://coveralls.io/repos/GabrielHCataldo/go-helper/badge.svg?branch=main&service=github)](https://coveralls.io/github/GabrielHCataldo/go-helper?branch=main)
 [![Open Source Helpers](https://www.codetriage.com/gabrielhcataldo/go-helper/badges/users.svg)](https://www.codetriage.com/gabrielhcataldo/go-helper)
@@ -221,31 +221,31 @@ func main() {
     var a any = map[string]any{}
     
     // for negative use IsNotMap
-    isMap := helper.IsMap(a)
+    isMap := helper.IsMapType(a)
     log.Println("is map?", isMap)
     
     a = "value1"
 
     // for negative use IsNotString
-    isString := helper.IsString(a)
+    isString := helper.IsStringType(a)
     log.Println("is string?", isString)
     
     a = 12
 	
-    // for negative use IsNotInt
-    isInt := helper.IsInt(a)
+    // for negative use IsNotIntType
+    isInt := helper.IsIntType(a)
     log.Println("is int?", isInt)
     
     a = true
 
-    // for negative use IsNotBool
-    isBool := helper.IsBool(a)
+    // for negative use IsNotBoolType
+    isBool := helper.IsBoolType(a)
     log.Println("is bool?", isBool)
     
     a = time.Now()
 
-    // for negative use IsNotTime
-    isTime := helper.IsTime(a)
+    // for negative use IsNotTimeType
+    isTime := helper.IsTimeType(a)
     log.Println("is time?", isTime)
 }
 ```
