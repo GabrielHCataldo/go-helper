@@ -241,6 +241,26 @@ func IsNotSliceType(a any) bool {
 	return !IsSliceType(a)
 }
 
+// IsSliceOfMapsType If value is slice or array of maps return true, otherwise return false
+func IsSliceOfMapsType(a any) bool {
+	if IsNil(a) {
+		return false
+	}
+	t := reflect.TypeOf(a)
+	if IsPointerType(a) || IsInterfaceType(a) {
+		t = t.Elem()
+	}
+	if IsNotSliceType(a) {
+		return false
+	}
+	return t != nil && (t.Elem().Kind() == reflect.Map)
+}
+
+// IsNotSliceOfMapsType If value is not slice or array of maps return true, otherwise return false
+func IsNotSliceOfMapsType(a any) bool {
+	return !IsSliceOfMapsType(a)
+}
+
 // IsStringType If value is string return true, otherwise return false
 func IsStringType(a any) bool {
 	if IsNil(a) {
