@@ -123,7 +123,7 @@ func GetFileJson(uri string, dest any) error {
 	if err != nil {
 		return err
 	}
-	return jsoniter.Unmarshal(bytes, dest)
+	return jsoniter.ConfigDefault.Unmarshal(bytes, dest)
 }
 
 // RandomNumberStr generate random numbers string by min and max parameters
