@@ -10,6 +10,8 @@ var customValidate *validator.Validate
 func Validate() *validator.Validate {
 	if customValidate == nil {
 		customValidate = validator.New()
+		_ = customValidate.RegisterValidation("url", validateUrl)
+		_ = customValidate.RegisterValidation("url_path", validateUrlPath)
 		_ = customValidate.RegisterValidation("enum", validateEnum)
 		_ = customValidate.RegisterValidation("phone_us", validatePhoneUs)
 		_ = customValidate.RegisterValidation("phone_br", validatePhoneBr)
@@ -28,6 +30,9 @@ func Validate() *validator.Validate {
 		_ = customValidate.RegisterValidation("cnpj", validateCnpj)
 		_ = customValidate.RegisterValidation("cpfcnpj", validateCpfCnpj)
 		_ = customValidate.RegisterValidation("mongodb", validateMongoDb)
+		_ = customValidate.RegisterValidation("duration", validateDuration)
+		_ = customValidate.RegisterValidation("byte_unit", validateByteUnit)
+		_ = customValidate.RegisterValidation("megabyte_unit", validateMegabyteUnit)
 	}
 	return customValidate
 }
@@ -110,6 +115,18 @@ func validateMongoDb(fl validator.FieldLevel) bool {
 	return IsObjectIdType(fl.Field().Interface())
 }
 
+func validateDuration(fl validator.FieldLevel) bool {
+	return IsTimeDurationType(fl.Field().Interface())
+}
+
+func validateByteUnit(fl validator.FieldLevel) bool {
+	return IsByteUnit(fl.Field().Interface())
+}
+
+func validateMegabyteUnit(fl validator.FieldLevel) bool {
+	return IsMegabyteUnit(fl.Field().Interface())
+}
+
 func validateEnum(fl validator.FieldLevel) bool {
 	if IsSliceType(fl.Field().Interface()) {
 		for i := 0; i < fl.Field().Len(); i++ {
@@ -122,4 +139,30 @@ func validateEnum(fl validator.FieldLevel) bool {
 	}
 	value, ok := fl.Field().Interface().(BaseEnum)
 	return ok && value.IsEnumValid()
+}
+
+func validateUrl(fl validator.FieldLevel) bool {
+	if IsSliceType(fl.Field().Interface()) {
+		for i := 0; i < fl.Field().Len(); i++ {
+			fieldValueSlice := fl.Field().Index(i).Interface()
+			if IsNotUrl(fieldValueSlice) {
+				return false
+			}
+		}
+		return true
+	}
+	return IsUrl(fl.Field().Interface())
+}
+
+func validateUrlPath(fl validator.FieldLevel) bool {
+	if IsSliceType(fl.Field().Interface()) {
+		for i := 0; i < fl.Field().Len(); i++ {
+			fieldValueSlice := fl.Field().Index(i).Interface()
+			if IsNotUrlPath(fieldValueSlice) {
+				return false
+			}
+		}
+		return true
+	}
+	return IsUrlPath(fl.Field().Interface())
 }

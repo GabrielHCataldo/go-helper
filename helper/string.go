@@ -23,6 +23,18 @@ func IsLetter(a any) bool {
 	return regex.MatchString(s)
 }
 
+// IsUrlPath check any value is url path ex: "/api/users"
+func IsUrlPath(a any) bool {
+	s := SimpleConvertToString(a)
+	regex := regexp.MustCompile(`^/([^/\s]*)+(/[^/\s]+)*$`)
+	return regex.MatchString(s)
+}
+
+// IsNotUrlPath check any value is not url path
+func IsNotUrlPath(a any) bool {
+	return !IsUrlPath(a)
+}
+
 // GetFirstLastName get first and last name by string value or string pointer, ex: Gabriel Henrique Cataldo -> Gabriel Cataldo.
 func GetFirstLastName(a any) string {
 	s := SimpleConvertToString(a)

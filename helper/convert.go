@@ -345,6 +345,24 @@ func SimpleConvertToTime(a any) time.Time {
 	return t
 }
 
+// ConvertToTimeDuration convert any value to time duration
+func ConvertToTimeDuration(a any) (time.Duration, error) {
+	if IsNil(a) {
+		return 0, errors.New("error convert to time: value is nil")
+	} else if IsIntType(a) {
+		return time.Duration(SimpleConvertToInt(a)), nil
+	}
+
+	s := SimpleConvertToString(a)
+	return time.ParseDuration(s)
+}
+
+// SimpleConvertToTimeDuration convert any value to time duration, if err return empty value
+func SimpleConvertToTimeDuration(a any) time.Duration {
+	d, _ := ConvertToTimeDuration(a)
+	return d
+}
+
 // ConvertToBytes convert any value to bytes
 func ConvertToBytes(a any) ([]byte, error) {
 	if IsNil(a) {

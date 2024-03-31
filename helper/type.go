@@ -109,6 +109,30 @@ func IsNotTime(a any) bool {
 	return !IsTime(a)
 }
 
+// IsByteUnit check if value is string byte unit (ex: "12MB") return true, otherwise return false.
+func IsByteUnit(a any) bool {
+	s := SimpleConvertToString(a)
+	_, err := ConvertByteUnitStrToFloat(s)
+	return err == nil
+}
+
+// IsNotByteUnit check if value is not string byte unit (ex: "12MB") return true, otherwise return false.
+func IsNotByteUnit(a any) bool {
+	return !IsByteUnit(a)
+}
+
+// IsMegabyteUnit check if value is string megabyte unit (ex: "12TB") return true, otherwise return false.
+func IsMegabyteUnit(a any) bool {
+	s := SimpleConvertToString(a)
+	_, err := ConvertMegaByteUnitStrToFloat(s)
+	return err == nil
+}
+
+// IsNotMegabyteUnit check if value is not string megabyte unit (ex: "12MB") return true, otherwise return false.
+func IsNotMegabyteUnit(a any) bool {
+	return !IsMegabyteUnit(a)
+}
+
 // IsPointerType If value is pointer return true, otherwise return false
 func IsPointerType(a any) bool {
 	t := reflect.TypeOf(a)
@@ -533,6 +557,20 @@ func IsTimeType(a any) bool {
 // IsNotTimeType If value is not time return true, otherwise return false
 func IsNotTimeType(a any) bool {
 	return !IsTimeType(a)
+}
+
+// IsTimeDurationType If value is time duration return true, otherwise return false
+func IsTimeDurationType(a any) bool {
+	if IsNil(a) {
+		return false
+	}
+	_, err := ConvertToTimeDuration(a)
+	return err == nil
+}
+
+// IsNotTimeDurationType If value is not time duration return true, otherwise return false
+func IsNotTimeDurationType(a any) bool {
+	return !IsTimeDurationType(a)
 }
 
 // IsBytesType If value is slice byte return true, otherwise return false
