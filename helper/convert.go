@@ -481,87 +481,82 @@ func ConvertToDest(a, dest any) error {
 	} else if IsNotPointerType(dest) {
 		return errors.New("error convert string to dest: dest is not a pointer")
 	}
+
 	v := reflect.ValueOf(a)
 	if v.Type().Kind() == reflect.Pointer {
 		v = v.Elem()
 	}
 	vInterface := v.Interface()
 	rDest := reflect.ValueOf(dest)
+
 	if IsIntType(dest) {
 		i, err := ConvertToInt(vInterface)
-		rs := reflect.ValueOf(i)
-		converted := rs.Convert(rDest.Elem().Type())
-		rDest.Elem().Set(converted)
+		if IsNil(err) {
+			setReflectDest(i, rDest)
+		}
 		return err
 	} else if IsFloatType(dest) {
 		f, err := ConvertToFloat(vInterface)
-		rs := reflect.ValueOf(f)
-		converted := rs.Convert(rDest.Elem().Type())
-		rDest.Elem().Set(converted)
+		if IsNil(err) {
+			setReflectDest(f, rDest)
+		}
 		return err
 	} else if IsBoolType(dest) {
 		b, err := ConvertToBool(vInterface)
-		rs := reflect.ValueOf(b)
-		converted := rs.Convert(rDest.Elem().Type())
-		rDest.Elem().Set(converted)
+		if IsNil(err) {
+			setReflectDest(b, rDest)
+		}
 		return err
 	} else if IsStringType(dest) {
 		s, err := ConvertToString(vInterface)
-		rs := reflect.ValueOf(s)
-		converted := rs.Convert(rDest.Elem().Type())
-		rDest.Elem().Set(converted)
+		if IsNil(err) {
+			setReflectDest(s, rDest)
+		}
 		return err
 	} else if IsTimeType(dest) {
 		tm, err := ConvertToTime(vInterface)
-		rs := reflect.ValueOf(tm)
-		converted := rs.Convert(rDest.Elem().Type())
-		rDest.Elem().Set(converted)
+		if IsNil(err) {
+			setReflectDest(tm, rDest)
+		}
 		return err
 	} else if IsFileType(dest) {
 		f, err := ConvertToFile(vInterface)
 		if IsNil(err) {
-			rs := reflect.ValueOf(ConvertPointerToValue(f))
-			converted := rs.Convert(rDest.Elem().Type())
-			rDest.Elem().Set(converted)
+			setReflectDest(ConvertPointerToValue(f), rDest)
 		}
 		return err
 	} else if IsReaderType(dest) {
 		r, err := ConvertToReader(vInterface)
-		rs := reflect.ValueOf(ConvertPointerToValue(r))
-		converted := rs.Convert(rDest.Elem().Type())
-		rDest.Elem().Set(converted)
+		if IsNil(err) {
+			setReflectDest(ConvertPointerToValue(r), rDest)
+		}
 		return err
 	} else if IsBufferType(dest) {
 		bf, err := ConvertToBuffer(vInterface)
-		rs := reflect.ValueOf(ConvertPointerToValue(bf))
-		converted := rs.Convert(rDest.Elem().Type())
-		rDest.Elem().Set(converted)
+		if IsNil(err) {
+			setReflectDest(ConvertPointerToValue(bf), rDest)
+		}
 		return err
 	} else if IsObjectIdType(dest) {
-		bf, err := ConvertToObjectId(vInterface)
-		rs := reflect.ValueOf(bf)
-		converted := rs.Convert(rDest.Elem().Type())
-		rDest.Elem().Set(converted)
+		o, err := ConvertToObjectId(vInterface)
+		if IsNil(err) {
+			setReflectDest(o, rDest)
+		}
 		return err
 	} else if IsPrimitiveDateTimeType(dest) {
 		pdt, err := ConvertToPrimitiveDateTime(vInterface)
-		rs := reflect.ValueOf(pdt)
-		converted := rs.Convert(rDest.Elem().Type())
-		rDest.Elem().Set(converted)
+		if IsNil(err) {
+			setReflectDest(pdt, rDest)
+		}
 		return err
 	} else if IsJsonType(dest) {
-		b, _ := ConvertToBytes(a)
-		return json.Unmarshal(b, dest)
-	} else if IsInterfaceType(dest) {
-		if IsJson(a) {
-			b, _ := ConvertToBytes(a)
+		b, err := ConvertToBytes(a)
+		if IsNil(err) {
 			return json.Unmarshal(b, dest)
-		} else {
-			rs := reflect.ValueOf(a)
-			converted := rs.Convert(rDest.Elem().Type())
-			rDest.Elem().Set(converted)
-			return nil
 		}
+		return err
+	} else if IsInterfaceType(dest) {
+		return convertToInterfaceDest(a, dest)
 	} else {
 		return errors.New("error convert to dest: unknown value dest")
 	}
@@ -570,6 +565,40 @@ func ConvertToDest(a, dest any) error {
 // SimpleConvertToDest convert value to dest param without error
 func SimpleConvertToDest(a, dest any) {
 	_ = ConvertToDest(a, dest)
+}
+
+func convertToInterfaceDest(a, dest any) error {
+	rDest := reflect.ValueOf(dest)
+	if IsInt(a) {
+		i, err := ConvertToInt(a)
+		if IsNil(err) {
+			setReflectDest(i, rDest)
+		}
+	} else if IsFloat(a) {
+		f, err := ConvertToFloat(a)
+		if IsNil(err) {
+			setReflectDest(f, rDest)
+		}
+	} else if IsBool(a) {
+		b, err := ConvertToFloat(a)
+		if IsNil(err) {
+			setReflectDest(b, rDest)
+		}
+	} else if IsTime(a) {
+		tm, err := ConvertToTime(a)
+		if IsNil(err) {
+			setReflectDest(tm, rDest)
+		}
+		return err
+	} else if IsJson(a) {
+		b, _ := ConvertToBytes(a)
+		return json.Unmarshal(b, dest)
+	} else {
+		rs := reflect.ValueOf(a)
+		converted := rs.Convert(rDest.Elem().Type())
+		rDest.Elem().Set(converted)
+	}
+	return nil
 }
 
 func convertToBytes(qty float64, unit string) (float64, error) {
@@ -829,6 +858,12 @@ func convertToTimeByType(a any) (time.Time, error) {
 	default:
 		return time.Time{}, errors.New("error convert to parse time from type: " + reflect.TypeOf(a).Kind().String())
 	}
+}
+
+func setReflectDest(a any, rDest reflect.Value) {
+	rs := reflect.ValueOf(a)
+	converted := rs.Convert(rDest.Elem().Type())
+	rDest.Elem().Set(converted)
 }
 
 func closeFile(f *os.File) {
