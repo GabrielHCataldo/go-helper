@@ -580,7 +580,7 @@ func convertToInterfaceDest(a, dest any) error {
 			setReflectDest(f, rDest)
 		}
 	} else if IsBool(a) {
-		b, err := ConvertToFloat(a)
+		b, err := ConvertToBool(a)
 		if IsNil(err) {
 			setReflectDest(b, rDest)
 		}
