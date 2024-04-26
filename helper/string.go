@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"os"
 	"regexp"
 	"strconv"
@@ -34,6 +35,26 @@ func IsUrlPath(a any) bool {
 // IsNotUrlPath check any value is not url path
 func IsNotUrlPath(a any) bool {
 	return !IsUrlPath(a)
+}
+
+// IsHttpMethod checks whether the given value represents a valid HTTP method.
+// It converts the value to a string and compares it with predefined HTTP method constants.
+// Returns true if the value is a valid HTTP method, otherwise returns false.
+func IsHttpMethod(a any) bool {
+	method := SimpleConvertToString(a)
+	switch method {
+	case http.MethodGet, http.MethodPost, http.MethodHead, http.MethodPut, http.MethodDelete, http.MethodConnect,
+		http.MethodOptions, http.MethodTrace, http.MethodPatch:
+		return true
+	}
+	return false
+}
+
+// IsNotHttpMethod checks whether the given value is not a valid HTTP method.
+// It negates the result of the IsHttpMethod function.
+// Returns true if the value is not a valid HTTP method, otherwise returns false.
+func IsNotHttpMethod(a any) bool {
+	return !IsHttpMethod(a)
 }
 
 // GetFirstLastName get first and last name by string value or string pointer, ex: Gabriel Henrique Cataldo -> Gabriel Cataldo.

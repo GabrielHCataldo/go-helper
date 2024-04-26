@@ -10,7 +10,7 @@ var customValidate *validator.Validate
 func Validate() *validator.Validate {
 	if customValidate == nil {
 		customValidate = validator.New()
-		_ = customValidate.RegisterValidation("url", validateUrl)
+		_ = customValidate.RegisterValidation("http_method", validateHttpMethod)
 		_ = customValidate.RegisterValidation("url_path", validateUrlPath)
 		_ = customValidate.RegisterValidation("enum", validateEnum)
 		_ = customValidate.RegisterValidation("phone_us", validatePhoneUs)
@@ -141,28 +141,10 @@ func validateEnum(fl validator.FieldLevel) bool {
 	return ok && value.IsEnumValid()
 }
 
-func validateUrl(fl validator.FieldLevel) bool {
-	if IsSliceType(fl.Field().Interface()) {
-		for i := 0; i < fl.Field().Len(); i++ {
-			fieldValueSlice := fl.Field().Index(i).Interface()
-			if IsNotUrl(fieldValueSlice) {
-				return false
-			}
-		}
-		return true
-	}
-	return IsUrl(fl.Field().Interface())
+func validateUrlPath(fl validator.FieldLevel) bool {
+	return IsUrlPath(fl.Field().Interface())
 }
 
-func validateUrlPath(fl validator.FieldLevel) bool {
-	if IsSliceType(fl.Field().Interface()) {
-		for i := 0; i < fl.Field().Len(); i++ {
-			fieldValueSlice := fl.Field().Index(i).Interface()
-			if IsNotUrlPath(fieldValueSlice) {
-				return false
-			}
-		}
-		return true
-	}
-	return IsUrlPath(fl.Field().Interface())
+func validateHttpMethod(fl validator.FieldLevel) bool {
+	return IsHttpMethod(fl.Field().Interface())
 }
