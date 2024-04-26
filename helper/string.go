@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -77,6 +78,21 @@ func CleanAllRepeatSpaces(v string) string {
 	v = regex.ReplaceAllString(v, " ")
 	v = regex2.ReplaceAllString(v, "")
 	return v
+}
+
+// CompactString compact string representation of a value.
+// If the value is a valid JSON, it will be compacted to a single line of JSON string.
+// Otherwise, it removes all repeated spaces from the string representation of the value.
+func CompactString(a any) string {
+	bs := SimpleConvertToBytes(a)
+	if IsJson(bs) {
+		var buffer bytes.Buffer
+		err := json.Compact(&buffer, bs)
+		if IsNil(err) {
+			return buffer.String()
+		}
+	}
+	return CleanAllRepeatSpaces(string(bs))
 }
 
 // Sprintln get all values convert to text string
