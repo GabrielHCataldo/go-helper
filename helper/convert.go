@@ -492,41 +492,37 @@ func ConvertToGzipBase64(a any) (string, error) {
 	return base64.StdEncoding.EncodeToString(gzipBuffer.Bytes()), nil
 }
 
-func ConvertGzipBase64ToDest(a, dest any) error {
+func ConvertGzipBase64ToBytes(a any) ([]byte, error) {
 	s64, err := ConvertToString(a)
 	if IsNotNil(err) {
-		return err
+		return nil, err
 	}
 
 	decoded, err := base64.StdEncoding.DecodeString(s64)
 	if IsNotNil(err) {
-		return err
+		return nil, err
 	}
 
 	gr, err := gzip.NewReader(bytes.NewBuffer(decoded))
 	if IsNotNil(err) {
-		return err
+		return nil, err
 	}
 	defer gr.Close()
 
-	res, err := io.ReadAll(gr)
-	if IsNotNil(err) {
-		return err
-	}
-
-	return ConvertToDest(res, dest)
+	return io.ReadAll(gr)
 }
 
 func ConvertGzipBase64ToString(a any) (string, error) {
-	var s string
-	err := ConvertGzipBase64ToDest(a, &s)
-	return s, err
+	bs, err := ConvertGzipBase64ToBytes(a)
+	return string(bs), err
 }
 
-func ConvertGzipBase64ToBytes(a any) ([]byte, error) {
-	var bs []byte
-	err := ConvertGzipBase64ToDest(a, &bs)
-	return bs, err
+func ConvertGzipBase64ToDest(a, dest any) error {
+	bs, err := ConvertGzipBase64ToBytes(a)
+	if err != nil {
+		return err
+	}
+	return ConvertToDest(bs, dest)
 }
 
 // ConvertToDest convert value to dest param
