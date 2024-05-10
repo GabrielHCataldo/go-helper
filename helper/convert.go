@@ -693,134 +693,107 @@ func convertToMegaBytes(qty float64, unit string) (float64, error) {
 }
 
 func convertToStringByType(a any) (string, error) {
-	switch t := a.(type) {
-	case int:
-		return strconv.Itoa(t), nil
-	case int8:
-		return strconv.Itoa(int(t)), nil
-	case uint:
-		return strconv.Itoa(int(t)), nil
-	case uint8:
-		return strconv.Itoa(int(t)), nil
-	case int16:
-		return strconv.Itoa(int(t)), nil
-	case uint16:
-		return strconv.Itoa(int(t)), nil
-	case int32:
-		return strconv.Itoa(int(t)), nil
-	case uint32:
-		return strconv.Itoa(int(t)), nil
-	case int64:
-		return strconv.Itoa(int(t)), nil
-	case uint64:
-		return strconv.Itoa(int(t)), nil
-	case bool:
-		return strconv.FormatBool(t), nil
-	case float32:
-		return strconv.FormatFloat(float64(t), 'f', -1, 32), nil
-	case float64:
-		return strconv.FormatFloat(t, 'f', -1, 64), nil
+	val := reflect.ValueOf(a)
+	switch val.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return strconv.FormatInt(val.Int(), 10), nil
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return strconv.FormatUint(val.Uint(), 10), nil
+	case reflect.Float32, reflect.Float64:
+		return strconv.FormatFloat(val.Float(), 'f', -1, 64), nil
+	case reflect.Bool:
+		return strconv.FormatBool(val.Bool()), nil
 	default:
-		v := reflect.ValueOf(a)
-		canConvert := v.CanConvert(reflect.TypeOf(""))
-		if canConvert {
-			return v.Convert(reflect.TypeOf("")).Interface().(string), nil
+		if val.CanInterface() {
+			if stringer, ok := val.Interface().(fmt.Stringer); ok {
+				return stringer.String(), nil
+			}
 		}
 		return "", errors.New("error convert to string from type: " + reflect.TypeOf(a).Kind().String())
 	}
 }
 
 func convertToIntByType(a any) (int, error) {
-	switch t := a.(type) {
-	case int:
-		return t, nil
-	case int8:
-		return int(t), nil
-	case uint:
-		return int(t), nil
-	case uint8:
-		return int(t), nil
-	case int16:
-		return int(t), nil
-	case uint16:
-		return int(t), nil
-	case int32:
-		return int(t), nil
-	case uint32:
-		return int(t), nil
-	case int64:
-		return int(t), nil
-	case uint64:
-		return int(t), nil
-	case float32:
-		return int(t), nil
-	case float64:
-		return int(t), nil
-	case string:
-		f, err := strconv.ParseFloat(t, 64)
-		return int(f), err
-	default:
-		v := reflect.ValueOf(a)
-		canConvert := v.CanConvert(reflect.TypeOf(0))
-		if canConvert {
-			return v.Convert(reflect.TypeOf(0)).Interface().(int), nil
+	val := reflect.ValueOf(a)
+	switch val.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return int(val.Int()), nil
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return int(val.Uint()), nil
+	case reflect.Float32, reflect.Float64:
+		return int(val.Float()), nil
+	case reflect.String:
+		v, err := strconv.ParseInt(val.String(), 10, 64)
+		if err != nil {
+			return 0, err
 		}
-		return 0, errors.New("error convert to int from type: " + reflect.TypeOf(a).Kind().String())
+		return int(v), nil
+	default:
+		if val.CanInterface() {
+			if stringer, ok := val.Interface().(fmt.Stringer); ok {
+				v, err := strconv.ParseInt(stringer.String(), 10, 64)
+				if err != nil {
+					return 0, err
+				}
+				return int(v), nil
+			}
+		}
 	}
+	return 0, fmt.Errorf("error convert to int from type: %s", val.Type().String())
 }
 
 func convertToFloatByType(a any) (float64, error) {
-	switch t := a.(type) {
-	case int:
-		return float64(t), nil
-	case int8:
-		return float64(t), nil
-	case uint:
-		return float64(t), nil
-	case uint8:
-		return float64(t), nil
-	case int16:
-		return float64(t), nil
-	case uint16:
-		return float64(t), nil
-	case int32:
-		return float64(t), nil
-	case uint32:
-		return float64(t), nil
-	case int64:
-		return float64(t), nil
-	case uint64:
-		return float64(t), nil
-	case float32:
-		return float64(t), nil
-	case float64:
-		return t, nil
-	case string:
-		return strconv.ParseFloat(t, 64)
-	default:
-		v := reflect.ValueOf(a)
-		canConvert := v.CanConvert(reflect.TypeOf(0.0))
-		if canConvert {
-			return v.Convert(reflect.TypeOf(0.0)).Interface().(float64), nil
+	val := reflect.ValueOf(a)
+	switch val.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return float64(val.Int()), nil
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return float64(val.Uint()), nil
+	case reflect.Float32, reflect.Float64:
+		return val.Float(), nil
+	case reflect.String:
+		v, err := strconv.ParseFloat(val.String(), 64)
+		if err != nil {
+			return 0, err
 		}
-		return 0, errors.New("error convert to float from type: " + reflect.TypeOf(a).Kind().String())
+		return v, nil
+	default:
+		if val.CanInterface() {
+			if stringer, ok := val.Interface().(fmt.Stringer); ok {
+				v, err := strconv.ParseFloat(stringer.String(), 64)
+				if err != nil {
+					return 0, err
+				}
+				return v, nil
+			}
+		}
 	}
+	return 0, fmt.Errorf("error convert to float from type: %s", val.Type().String())
 }
 
 func convertToBoolByType(a any) (bool, error) {
-	switch t := a.(type) {
-	case bool:
-		return t, nil
-	case string:
-		return strconv.ParseBool(t)
-	default:
-		v := reflect.ValueOf(a)
-		canConvert := v.CanConvert(reflect.TypeOf(true))
-		if canConvert {
-			return v.Convert(reflect.TypeOf(true)).Interface().(bool), nil
+	val := reflect.ValueOf(a)
+	switch val.Kind() {
+	case reflect.Bool:
+		return val.Bool(), nil
+	case reflect.String:
+		v, err := strconv.ParseBool(val.String())
+		if err != nil {
+			return false, err
 		}
-		return false, errors.New("error convert to bool from type: " + reflect.TypeOf(a).Kind().String())
+		return v, nil
+	default:
+		if val.CanInterface() {
+			if stringer, ok := val.Interface().(fmt.Stringer); ok {
+				v, err := strconv.ParseBool(stringer.String())
+				if err != nil {
+					return false, err
+				}
+				return v, nil
+			}
+		}
 	}
+	return false, fmt.Errorf("error convert to bool from type: %s", val.Type().String())
 }
 
 func convertToTimeByType(a any) (time.Time, error) {

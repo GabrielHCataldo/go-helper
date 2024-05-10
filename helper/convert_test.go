@@ -106,7 +106,7 @@ func TestConvertToString(t *testing.T) {
 }
 
 func TestSimpleConvertToString(t *testing.T) {
-	result := SimpleConvertToString("")
+	result := SimpleConvertToString(exampleEnumInt1)
 	log.Println("SimpleConvertToString:", result)
 }
 

@@ -1477,6 +1477,10 @@ func initListTestEquals() []testGenericValues {
 			value: []any{"testaT", "testAt"},
 		},
 		{
+			name:  "enum",
+			value: []any{exampleEnumStr1, ""},
+		},
+		{
 			name:  "struct",
 			value: []any{structTest, structTest},
 		},
