@@ -318,6 +318,16 @@ func TestSimpleConvertToBase64(t *testing.T) {
 	log.Println("SimpleConvertToBase64:", result)
 }
 
+func TestConvertToCompactBase64(t *testing.T) {
+	base64, err := ConvertToGzipBase64("test file")
+	log.Println("ConvertToCompactBase64:", base64, "err:", err)
+}
+
+func TestConvertCompactBase64ToString(t *testing.T) {
+	s, err := ConvertGzipBase64ToString("H4sIAAAAAAAA/ypJLS5RSMvMSQUEAAD//8FrZPIJAAAA")
+	log.Println("ConvertCompactBase64ToString:", s, "err:", err)
+}
+
 func TestConvertToDest(t *testing.T) {
 	for _, tt := range initListTestConvertToDest() {
 		t.Run(tt.name, func(t *testing.T) {

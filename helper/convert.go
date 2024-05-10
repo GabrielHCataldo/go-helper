@@ -3,6 +3,7 @@ package helper
 import (
 	"bufio"
 	"bytes"
+	"compress/gzip"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
@@ -472,6 +473,60 @@ func ConvertToBase64(a any) (string, error) {
 func SimpleConvertToBase64(a any) string {
 	s, _ := ConvertToBase64(a)
 	return s
+}
+
+func ConvertToGzipBase64(a any) (string, error) {
+	bs, err := ConvertToBytes(a)
+	if IsNotNil(err) {
+		return "", err
+	}
+
+	var gzipBuffer bytes.Buffer
+	gz := gzip.NewWriter(&gzipBuffer)
+	if _, err = gz.Write(bs); IsNotNil(err) {
+		return "", err
+	} else if err = gz.Close(); IsNotNil(err) {
+		return "", err
+	}
+
+	return base64.StdEncoding.EncodeToString(gzipBuffer.Bytes()), nil
+}
+
+func ConvertGzipBase64ToDest(a, dest any) error {
+	s64, err := ConvertToString(a)
+	if IsNotNil(err) {
+		return err
+	}
+
+	decoded, err := base64.StdEncoding.DecodeString(s64)
+	if IsNotNil(err) {
+		return err
+	}
+
+	gr, err := gzip.NewReader(bytes.NewBuffer(decoded))
+	if IsNotNil(err) {
+		return err
+	}
+	defer gr.Close()
+
+	res, err := io.ReadAll(gr)
+	if IsNotNil(err) {
+		return err
+	}
+
+	return ConvertToDest(res, dest)
+}
+
+func ConvertGzipBase64ToString(a any) (string, error) {
+	var s string
+	err := ConvertGzipBase64ToDest(a, &s)
+	return s, err
+}
+
+func ConvertGzipBase64ToBytes(a any) ([]byte, error) {
+	var bs []byte
+	err := ConvertGzipBase64ToDest(a, &bs)
+	return bs, err
 }
 
 // ConvertToDest convert value to dest param

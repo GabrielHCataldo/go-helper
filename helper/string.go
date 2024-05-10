@@ -116,53 +116,6 @@ func CompactString(a any) string {
 	return CleanAllRepeatSpaces(string(bs))
 }
 
-func CamelCaseString(a any) string {
-	s := SimpleConvertToString(a)
-
-	wordBoundary := regexp.MustCompile("[^a-zA-Z0-9]+")
-	words := wordBoundary.Split(s, -1)
-
-	for i := 0; i < len(words); i++ {
-		if words[i] == "" {
-			continue
-		}
-		if i == 0 {
-			words[i] = strings.ToLower(words[i])
-		} else {
-			words[i] = strings.Title(words[i])
-		}
-	}
-
-	return strings.Join(words, "")
-}
-
-func SnakeCaseString(a any) string {
-	s := SimpleConvertToString(a)
-
-	matchFirstCap := regexp.MustCompile("(.)([A-Z][a-z]+)")
-	matchAllCap := regexp.MustCompile("([a-z0-9])([A-Z])")
-	snake := matchFirstCap.ReplaceAllString(s, "${1}_$2")
-	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
-
-	//remove all non-alphanumeric character except underscores
-	snake = regexp.MustCompile("[^a-zA-Z0-9_]+").ReplaceAllString(snake, "_")
-
-	return strings.ToLower(snake)
-}
-
-func KebabCaseString(a any) string {
-	s := SimpleConvertToString(a)
-
-	matchFirstCap := regexp.MustCompile("(.)([A-Z][a-z]+)")
-	matchAllCap := regexp.MustCompile("([a-z0-9])([A-Z])")
-
-	kebab := matchFirstCap.ReplaceAllString(s, "${1}-$2")
-	kebab = matchAllCap.ReplaceAllString(kebab, "${1}-${2}")
-	kebab = regexp.MustCompile("[^a-zA-Z0-9-]+").ReplaceAllString(kebab, "-")
-
-	return strings.ToLower(kebab)
-}
-
 // Sprintln get all values convert to text string
 func Sprintln(a ...any) string {
 	var ac []any
