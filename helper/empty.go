@@ -77,6 +77,14 @@ func ReturnNonEmptyValue[T any](a ...T) T {
 	return result
 }
 
+func IsNotNilAndNotEmpty(a any, b ...any) bool {
+	return IsNotNil(a, b...) && IsNotEmpty(a, b...)
+}
+
+func IsNilOrEmpty(a any, b ...any) bool {
+	return IsNil(a, b...) || IsEmpty(a, b)
+}
+
 func isReflectZero(a any) bool {
 	elem := reflect.ValueOf(a)
 	if IsPointerType(a) || IsInterfaceType(a) {

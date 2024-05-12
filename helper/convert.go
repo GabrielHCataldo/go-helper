@@ -475,21 +475,45 @@ func SimpleConvertToBase64(a any) string {
 	return s
 }
 
-func ConvertToGzipBase64(a any) (string, error) {
+func ConvertToGzip(a any) ([]byte, error) {
 	bs, err := ConvertToBytes(a)
 	if IsNotNil(err) {
-		return "", err
+		return nil, err
 	}
 
 	var gzipBuffer bytes.Buffer
 	gz := gzip.NewWriter(&gzipBuffer)
-	if _, err = gz.Write(bs); IsNotNil(err) {
-		return "", err
-	} else if err = gz.Close(); IsNotNil(err) {
-		return "", err
+	defer gz.Close()
+
+	_, err = gz.Write(bs)
+	if IsNotNil(err) {
+		return nil, err
 	}
 
-	return base64.StdEncoding.EncodeToString(gzipBuffer.Bytes()), nil
+	return gzipBuffer.Bytes(), nil
+}
+
+func ConvertGzipToBytes(a any) ([]byte, error) {
+	bs, err := ConvertToBytes(a)
+	if IsNotNil(err) {
+		return nil, err
+	}
+
+	reader, err := gzip.NewReader(bytes.NewReader(bs))
+	if IsNotNil(err) {
+		return nil, err
+	}
+	defer reader.Close()
+
+	return io.ReadAll(reader)
+}
+
+func ConvertToGzipBase64(a any) (string, error) {
+	bs, err := ConvertToGzip(a)
+	if IsNotNil(err) {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(bs), nil
 }
 
 func ConvertGzipBase64ToBytes(a any) ([]byte, error) {
@@ -503,13 +527,7 @@ func ConvertGzipBase64ToBytes(a any) ([]byte, error) {
 		return nil, err
 	}
 
-	gr, err := gzip.NewReader(bytes.NewBuffer(decoded))
-	if IsNotNil(err) {
-		return nil, err
-	}
-	defer gr.Close()
-
-	return io.ReadAll(gr)
+	return ConvertGzipToBytes(decoded)
 }
 
 func ConvertGzipBase64ToString(a any) (string, error) {
