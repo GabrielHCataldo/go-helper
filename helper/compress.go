@@ -34,14 +34,6 @@ func CompressWithGzipToBase64(a any) (string, error) {
 	return ConvertToBase64(bs)
 }
 
-func CompressWithGzipToDest(a, dest any) error {
-	bs, err := DecompressFromBase64WithGzip(a)
-	if err != nil {
-		return err
-	}
-	return ConvertToDest(bs, dest)
-}
-
 func CompressWithDeflate(a any) ([]byte, error) {
 	bs, err := ConvertToBytes(a)
 	if IsNotNil(err) {
@@ -116,4 +108,36 @@ func DecompressFromBase64WithDeflate(a any) ([]byte, error) {
 	}
 
 	return DecompressWithDeflate(decoded)
+}
+
+func DecompressWithGzipToDest(a, dest any) error {
+	bs, err := DecompressWithGzip(a)
+	if err != nil {
+		return err
+	}
+	return ConvertToDest(bs, dest)
+}
+
+func DecompressWithDeflateToDest(a, dest any) error {
+	bs, err := DecompressWithDeflate(a)
+	if err != nil {
+		return err
+	}
+	return ConvertToDest(bs, dest)
+}
+
+func DecompressFromBase64WithGzipToDest(a, dest any) error {
+	bs, err := DecompressFromBase64WithGzip(a)
+	if err != nil {
+		return err
+	}
+	return ConvertToDest(bs, dest)
+}
+
+func DecompressFromBase64WithDeflateToDest(a, dest any) error {
+	bs, err := DecompressFromBase64WithGzip(a)
+	if err != nil {
+		return err
+	}
+	return ConvertToDest(bs, dest)
 }
