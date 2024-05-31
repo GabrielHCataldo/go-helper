@@ -101,19 +101,27 @@ func CleanAllRepeatSpaces(v string) string {
 	return v
 }
 
-// CompactString compact string representation of a value.
-// If the value is a valid JSON, it will be compacted to a single line of JSON string.
-// Otherwise, it removes all repeated spaces from the string representation of the value.
-func CompactString(a any) string {
-	bs := SimpleConvertToBytes(a)
+func CompactString(a any) (string, error) {
+	bs, err := ConvertToBytes(a)
+	if IsNotNil(err) {
+		return "", err
+	}
+
 	if IsJson(bs) {
 		var buffer bytes.Buffer
-		err := json.Compact(&buffer, bs)
-		if IsNil(err) {
-			return buffer.String()
+		err = json.Compact(&buffer, bs)
+		if IsNotNil(err) {
+			return "", err
 		}
+		return buffer.String(), nil
 	}
-	return CleanAllRepeatSpaces(string(bs))
+
+	return CleanAllRepeatSpaces(string(bs)), nil
+}
+
+func SimpleCompactString(a any) string {
+	s, _ := CompactString(a)
+	return s
 }
 
 // Sprintln get all values convert to text string
