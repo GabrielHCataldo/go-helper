@@ -474,6 +474,26 @@ func SimpleConvertToBase64(a any) string {
 	return s
 }
 
+func ConvertBase64ToString(a any) (string, error) {
+	if IsNil(a) {
+		return "", errors.New("error convert base64 to string: value is nil")
+	}
+	s, err := ConvertToString(a)
+	if IsNotNil(err) {
+		return "", err
+	}
+	decode, err := base64.StdEncoding.DecodeString(s)
+	if IsNotNil(err) {
+		return "", err
+	}
+	return string(decode), nil
+}
+
+func SimpleConvertBase64ToString(a any) string {
+	s, _ := ConvertBase64ToString(a)
+	return s
+}
+
 // ConvertToDest convert value to dest param
 func ConvertToDest(a, dest any) error {
 	if IsNil(a) {
